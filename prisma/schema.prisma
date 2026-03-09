@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String   @default("Admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  type      String   @default("text")
+  label     String?
+  group     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HeroSection {
+  id          String   @id @default(cuid())
+  badge       String?
+  headline    String
+  subheadline String?
+  description String?
+  ctaLinks    String   @default("[]")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutSection {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String?
+  bio         String
+  skills      String   @default("[]")
+  highlights  String   @default("[]")
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String  @id @default(cuid())
+  title       String
+  slug        String  @unique
+  description String
+  longDesc    String?
+  useCase     String?
+  icon        String?
+  priceType   String  @default("request")
+  price       Float?
+  ctaType     String  @default("contact")
+  ctaLabel    String?
+  featured    Boolean @default(false)
+  isActive    Boolean @default(true)
+  order       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductCategory {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  icon     String?
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id           String          @id @default(cuid())
+  title        String
+  slug         String          @unique
+  shortDesc    String?
+  description  String?
+  price        Float
+  oldPrice     Float?
+  coverImage   String?
+  featured     Boolean         @default(false)
+  status       String          @default("draft")
+  purchaseType String          @default("instant")
+  deliveryNote String?
+  payMethods   String          @default("[]")
+  categoryId   String?
+  category     ProductCategory? @relation(fields: [categoryId], references: [id])
+  files        ProductFile[]
+  orderItems   OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductFile {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  fileUrl   String
+  fileSize  Int?
+  fileType  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PortfolioProject {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  longDesc    String?
+  thumbnail   String?
+  tags        String   @default("[]")
+  links       String   @default("[]")
+  featured    Boolean  @default(false)
+  status      String   @default("published")
+  order       Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogCategory {
+  id    String     @id @default(cuid())
+  name  String
+  slug  String     @unique
+  posts BlogPost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id         String       @id @default(cuid())
+  title      String
+  slug       String       @unique
+  excerpt    String?
+  content    String
+  coverImage String?
+  status     String       @default("draft")
+  featured   Boolean      @default(false)
+  views      Int          @default(0)
+  readTime   Int?
+  categoryId String?
+  category   BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags       String       @default("[]")
+  metaTitle  String?
+  metaDesc   String?
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  isArchived Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  buyerName       String
+  buyerEmail      String
+  buyerPhone      String
+  notes           String?
+  paymentMethod   String
+  paymentStatus   String      @default("pending")
+  orderStatus     String      @default("pending")
+  transactionRef  String?
+  proofImageUrl   String?
+  totalAmount     Float
+  items           OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  price     Float
+  quantity  Int     @default(1)
+
+  createdAt DateTime @default(now())
+}
+
+model PaymentSetting {
+  id           String   @id @default(cuid())
+  method       String   @unique
+  label        String
+  isActive     Boolean  @default(true)
+  instructions String?
+  destination  String?
+  logoUrl      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id       String  @id @default(cuid())
+  platform String
+  label    String
+  url      String
+  icon     String?
+  isActive Boolean @default(true)
+  order    Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SeoSetting {
+  id          String   @id @default(cuid())
+  page        String   @unique
+  title       String?
+  description String?
+  ogImage     String?
+  keywords    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  discount   Int
+  isActive   Boolean   @default(true)
+  usageLimit Int?
+  usageCount Int       @default(0)
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  source    String   @default("newsletter")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

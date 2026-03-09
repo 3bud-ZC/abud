@@ -1,0 +1,47 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          script_stop: true
+          script: |
+            set -e
+            APP_DIR="/home/abdullah/abud-platform"
+            echo ">>> [1/6] الانتقال لمجلد المشروع..."
+            cd $APP_DIR
+
+            echo ">>> [2/6] نسخة احتياطية للـ database..."
+            cp prisma/dev.db prisma/dev.db.backup.$(date +%Y%m%d_%H%M%S) 2>/dev/null || true
+
+            echo ">>> [3/6] تحديث الكود من GitHub..."
+            git pull origin main
+
+            echo ">>> [4/6] تثبيت الـ dependencies..."
+            npm ci --omit=dev
+
+            echo ">>> [5/6] بناء المشروع..."
+            npm run build
+
+            echo ">>> [6/6] إعادة تشغيل PM2..."
+            pm2 reload abud-platform || pm2 start ecosystem.config.js --env production
+            pm2 save
+
+            echo "✅ تم النشر بنجاح!"
