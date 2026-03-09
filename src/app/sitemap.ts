@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let blogRoutes: MetadataRoute.Sitemap = [];
   let productRoutes: MetadataRoute.Sitemap = [];
+  let portfolioRoutes: MetadataRoute.Sitemap = [];
 
   try {
     const posts = await prisma.blogPost.findMany({
@@ -42,9 +43,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.75,
     }));
+
+    const projects = await prisma.portfolioProject.findMany({
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+    portfolioRoutes = projects.map(p => ({
+      url: `${BASE}/portfolio/${p.slug}`,
+      lastModified: p.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
+    }));
   } catch {
     // silently continue if DB unavailable at build time
   }
 
-  return [...staticRoutes, ...blogRoutes, ...productRoutes];
+  return [...staticRoutes, ...blogRoutes, ...productRoutes, ...portfolioRoutes];
 }

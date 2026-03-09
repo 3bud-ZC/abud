@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     description: "40+ أداة ومصدر مجاني للمطورين والمستقلين وعشاق الأمن السيبراني",
     url: "/resources",
   },
+  alternates: { canonical: "https://abud.fun/resources" },
 };
 
 export default function ResourcesLayout({ children }: { children: React.ReactNode }) {

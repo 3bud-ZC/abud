@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     description: "أدلة ومنتجات رقمية احترافية للمطورين والمستقلين — أسعار بالجنيه المصري",
     url: "/store",
   },
+  alternates: { canonical: "https://abud.fun/store" },
 };
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {

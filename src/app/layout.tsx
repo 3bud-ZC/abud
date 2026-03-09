@@ -35,11 +35,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "ABUD" }],
   creator: "ABUD",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun"),
+  alternates: { canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun" },
   openGraph: {
     type: "website",
     locale: "ar_EG",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun",
     siteName: "ABUD Platform",
     title: "ABUD | صانع تقني وباني حلول رقمية",
     description: "صانع تقني • باني حلول رقمية • بعقلية سيبرانية",
@@ -64,7 +65,8 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning className={`${tajawal.variable} ${ibmPlexArabic.variable}`}>
       <head>
-        <meta name="theme-color" content="#050508" />
+          <meta name="theme-color" content="#050508" />
+        <meta name="google-site-verification" content="" />
       </head>
       <body className="bg-[#050508] text-[#f8f8ff] antialiased">
         <MotionProvider>

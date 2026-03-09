@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     description: "مطور Full-Stack وصانع منتجات رقمية — بعقلية سيبرانية وشغف حقيقي بالتقنية",
     url: "/about",
   },
+  alternates: { canonical: "https://abud.fun/about" },
 };
 
 export default function AboutLayout({ children }: { children: React.ReactNode }) {

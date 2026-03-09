@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     description: "تحدث معي حول مشروعك — أرد على الرسائل خلال 24 ساعة",
     url: "/contact",
   },
+  alternates: { canonical: "https://abud.fun/contact" },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

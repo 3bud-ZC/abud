@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     url: "/blog",
     type: "website",
   },
+  alternates: { canonical: "https://abud.fun/blog" },
 };
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
