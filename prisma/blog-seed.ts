@@ -93,9 +93,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          host: \${{ secrets.VPS_HOST }}
+          username: \${{ secrets.VPS_USER }}
+          password: \${{ secrets.VPS_PASSWORD }}
           script: |
             cd /app && git pull
             npm install && npm run build
