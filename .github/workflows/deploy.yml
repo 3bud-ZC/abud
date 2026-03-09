@@ -35,7 +35,7 @@ jobs:
             git pull origin main
 
             echo ">>> [4/6] تثبيت الـ dependencies..."
-            npm ci --omit=dev
+            npm ci
 
             echo ">>> [5/6] بناء المشروع..."
             npm run build
