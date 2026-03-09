@@ -12,6 +12,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:blog-seed": "tsx prisma/blog-seed.ts",
+    "db:products-seed": "tsx prisma/products-seed.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force && npm run db:seed"
   },
