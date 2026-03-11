@@ -22,38 +22,56 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
 
 export const metadata: Metadata = {
   title: {
-    default: "ABUD | صانع تقني وباني حلول رقمية",
+    default: "ABUD | AI Tools, Digital Solutions & Automation",
     template: "%s | ABUD",
   },
-  description: "صانع تقني • باني حلول رقمية • بعقلية سيبرانية. أبني المواقع والأدوات والأنظمة الذكية.",
+  description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
   keywords: [
-    "ABUD", "تطوير مواقع", "ذكاء اصطناعي", "برمجة", "منتجات رقمية", "تقنية",
-    "make money online", "AI tools", "digital products", "online business", "freelancing",
-    "passive income", "automation tools", "productivity tools", "online income ideas",
-    "cybersecurity", "web development", "full stack developer", "telegram bots",
-    "أمن سيبراني", "فريلانس", "دخل سلبي", "أتمتة", "كسب المال أونلاين",
+    "ABUD", "AI tools", "digital solutions", "automation", "web development", "digital products",
+    "online business", "freelancing", "passive income", "cybersecurity", "telegram bots",
+    "full stack developer", "Next.js", "React", "productivity tools", "online income",
+    "تطوير مواقع", "ذكاء اصطناعي", "منتجات رقمية", "أتمتة", "أمن سيبراني", "فريلانس",
   ],
-  authors: [{ name: "ABUD" }],
+  authors: [{ name: "ABUD", url: "https://abud.fun" }],
   creator: "ABUD",
+  publisher: "ABUD",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun"),
   alternates: { canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun" },
+  icons: {
+    icon: [
+      { url: "/icon?id=32",  sizes: "32x32",   type: "image/png" },
+      { url: "/icon?id=192", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+    shortcut: "/icon?id=32",
+  },
   openGraph: {
     type: "website",
     locale: "ar_EG",
+    alternateLocale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun",
-    siteName: "ABUD Platform",
-    title: "ABUD | صانع تقني وباني حلول رقمية",
-    description: "صانع تقني • باني حلول رقمية • بعقلية سيبرانية",
+    siteName: "ABUD",
+    title: "ABUD | AI Tools, Digital Solutions & Automation",
+    description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ABUD - AI Tools & Digital Solutions",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ABUD | صانع تقني وباني حلول رقمية",
-    description: "صانع تقني • باني حلول رقمية • بعقلية سيبرانية",
+    title: "ABUD | AI Tools, Digital Solutions & Automation",
+    description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true },
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 

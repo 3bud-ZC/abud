@@ -6,12 +6,24 @@ import JsonLd from "@/components/JsonLd";
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "Person",
+  "@type": "Organization",
+  "@id": "https://abud.fun/#organization",
   name: "ABUD",
   url: "https://abud.fun",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://abud.fun/logo.svg",
+    width: 512,
+    height: 512,
+  },
+  image: "https://abud.fun/logo.svg",
+  description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
   email: "abed@abud.fun",
-  jobTitle: "Full-Stack Developer & Digital Product Creator",
-  description: "صانع تقني • باني حلول رقمية • بعقلية سيبرانية. أبني المواقع والأدوات والأنظمة الذكية.",
+  founder: {
+    "@type": "Person",
+    name: "ABUD",
+    jobTitle: "Full-Stack Developer & Digital Product Creator",
+  },
   sameAs: [
     "https://github.com/3bud-ZC",
     "https://t.me/abud_dev",
