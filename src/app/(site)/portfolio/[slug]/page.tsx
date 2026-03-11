@@ -8,6 +8,7 @@ import {
   BarChart3, ExternalLink, Github, Tag as TagIcon,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 interface LongDesc {
   category?: string;
@@ -80,6 +81,10 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     <div className="pt-20 pb-20">
       {/* Back */}
       <div className="max-w-4xl mx-auto px-4 pt-8 pb-4">
+        <Breadcrumb items={[
+          { label: "الأعمال", href: "/portfolio" },
+          { label: project.title },
+        ]} />
         <Link href="/portfolio"
           className="inline-flex items-center gap-2 text-sm transition-colors group text-[#606070] hover:text-[#c084fc]"
         >

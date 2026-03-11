@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import BlogSalesFunnel from "@/components/ui/BlogSalesFunnel";
 import ReadingProgress from "@/components/ui/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = await prisma.blogPost.findUnique({
@@ -57,6 +58,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
       <div className="pt-20 pb-20">
         <div className="max-w-2xl mx-auto px-4 py-10">
+          <Breadcrumb items={[
+            { label: "المدونة", href: "/blog" },
+            { label: post.title },
+          ]} />
           <Link href="/blog"
             className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 mb-10 group text-[#505070] hover:text-[#c084fc]">
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

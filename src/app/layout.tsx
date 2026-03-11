@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Tajawal, IBM_Plex_Sans_Arabic } from "next/font/google";
 import MotionProvider from "@/components/providers/MotionProvider";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const tajawal = Tajawal({
   subsets: ["arabic"],
@@ -91,6 +92,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       </head>
+      <GoogleAnalytics />
       <body className="bg-[#050508] text-[#f8f8ff] antialiased">
         <MotionProvider>
           {children}

@@ -5,6 +5,7 @@ import { Package, ArrowRight, ShoppingCart, Star, CheckCircle, Zap, Shield } fro
 import { formatPrice } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import JsonLd from "@/components/JsonLd";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({
@@ -57,6 +58,10 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
 
       <div className="pt-20 pb-20">
         <div className="max-w-5xl mx-auto px-4 py-10">
+          <Breadcrumb items={[
+            { label: "المتجر", href: "/store" },
+            { label: product.title },
+          ]} />
           <Link href="/store" className="inline-flex items-center gap-2 text-[#a0a0b8] hover:text-purple-400 transition-colors mb-8 text-sm">
             <ArrowRight className="w-4 h-4" />
             العودة للمتجر
