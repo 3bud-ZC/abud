@@ -39,11 +39,12 @@ export const metadata: Metadata = {
   alternates: { canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun" },
   icons: {
     icon: [
-      { url: "/icon?id=32",  sizes: "32x32",   type: "image/png" },
-      { url: "/icon?id=192", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.ico",       sizes: "any",      type: "image/x-icon" },
+      { url: "/icon",              sizes: "32x32",   type: "image/png" },
+      { url: "/apple-icon",        sizes: "180x180", type: "image/png" },
     ],
-    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
-    shortcut: "/icon?id=32",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
   openGraph: {
     type: "website",
@@ -83,8 +84,12 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning className={`${tajawal.variable} ${ibmPlexArabic.variable}`}>
       <head>
-          <meta name="theme-color" content="#050508" />
+        <meta name="theme-color" content="#050508" />
         <meta name="google-site-verification" content="" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       </head>
       <body className="bg-[#050508] text-[#f8f8ff] antialiased">
         <MotionProvider>
