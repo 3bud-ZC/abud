@@ -1,12 +1,10 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import JsonLd from "@/components/JsonLd";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowLeft, Layers, CheckCircle2, Zap, Code2, Target, Lightbulb,
+  ArrowLeft, CheckCircle2, Zap, Code2, Target, Lightbulb,
   BarChart3, ExternalLink, Github, Tag as TagIcon,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
@@ -52,34 +50,12 @@ function CategoryBadge({ category }: { category?: string }) {
   );
 }
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
+export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
+  const project = await prisma.portfolioProject.findUnique({
+    where: { slug: params.slug },
+  });
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch(`/api/portfolio/${params.slug}`);
-        if (!res.ok) { router.push("/portfolio"); return; }
-        const data = await res.json();
-        setProject(data.project);
-      } catch { router.push("/portfolio"); }
-      finally { setLoading(false); }
-    }
-    if (params.slug) load();
-  }, [params.slug, router]);
-
-  if (loading) {
-    return (
-      <div className="pt-20 min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-purple-600 border-t-transparent animate-spin" />
-      </div>
-    );
-  }
-
-  if (!project) return null;
+  if (!project) notFound();
 
   const tags: string[] = Array.isArray(project.tags) ? project.tags : (() => { try { return JSON.parse(project.tags as string); } catch { return []; } })();
   const links: string[] = Array.isArray(project.links) ? project.links : (() => { try { return JSON.parse(project.links as string); } catch { return []; } })();
@@ -88,15 +64,24 @@ export default function ProjectDetailPage() {
     try { ld = JSON.parse(project.longDesc); } catch { ld = {}; }
   }
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://abud.fun" },
+      { "@type": "ListItem", position: 2, name: "الأعمال", item: "https://abud.fun/portfolio" },
+      { "@type": "ListItem", position: 3, name: project.title, item: `https://abud.fun/portfolio/${project.slug}` },
+    ],
+  };
+
   return (
+    <>
+      <JsonLd data={breadcrumbSchema} />
     <div className="pt-20 pb-20">
       {/* Back */}
       <div className="max-w-4xl mx-auto px-4 pt-8 pb-4">
         <Link href="/portfolio"
-          className="inline-flex items-center gap-2 text-sm transition-colors group"
-          style={{ color: "#606070" }}
-          onMouseEnter={e => (e.currentTarget.style.color = "#c084fc")}
-          onMouseLeave={e => (e.currentTarget.style.color = "#606070")}
+          className="inline-flex items-center gap-2 text-sm transition-colors group text-[#606070] hover:text-[#c084fc]"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1 duration-200" />
           Back to Portfolio
@@ -211,16 +196,10 @@ export default function ProjectDetailPage() {
               </div>
               <ul className="space-y-3">
                 {ld.features.map((feat, i) => (
-                  <motion.li key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06, duration: 0.35 }}
-                    viewport={{ once: true }}
-                    className="flex items-start gap-3"
-                  >
+                  <li key={i} className="flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-sky-400 flex-shrink-0 mt-0.5" />
                     <span className="text-sm leading-relaxed" style={{ color: "#9090b0" }}>{feat}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -264,17 +243,10 @@ export default function ProjectDetailPage() {
               </div>
               <div className="grid sm:grid-cols-2 gap-3">
                 {ld.results.map((r, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.07, duration: 0.35 }}
-                    viewport={{ once: true }}
-                    className="flex items-start gap-2.5 p-3 rounded-xl"
-                    style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}
-                  >
+                  <div key={i} className="flex items-start gap-2.5 p-3 rounded-xl" style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)" }}>
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span className="text-sm" style={{ color: "#a0c0b0" }}>{r}</span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -305,5 +277,6 @@ export default function ProjectDetailPage() {
         </AnimatedSection>
       </div>
     </div>
+    </>
   );
 }
