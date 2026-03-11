@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);
-  const articleRef = useRef<HTMLDivElement | null>(null);
+  const articleRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     articleRef.current = document.querySelector("article");
