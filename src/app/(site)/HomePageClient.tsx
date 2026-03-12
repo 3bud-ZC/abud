@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -76,24 +76,24 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
         <div className="absolute inset-0 bg-grid opacity-30" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_20%_80%,rgba(109,40,217,0.08)_0%,transparent_60%)]" />
 
-        <motion.div
+        <m.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-1/4 left-1/5 w-72 h-72 rounded-full bg-purple-700/10 blur-[80px] pointer-events-none"
         />
-        <motion.div
+        <m.div
           animate={{ scale: [1.2, 1, 1.2], opacity: [0.15, 0.3, 0.15] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
           className="absolute bottom-1/4 right-1/5 w-[28rem] h-[28rem] rounded-full bg-violet-900/10 blur-[100px] pointer-events-none"
         />
-        <motion.div
+        <m.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-purple-600/8 blur-[120px] pointer-events-none"
         />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
@@ -111,9 +111,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <span className="text-purple-300 text-sm font-medium tracking-wide">
               مطوّر ويب متكامل • منتجات رقمية احترافية • حلول مدفوعة بالذكاء
             </span>
-          </motion.div>
+          </m.div>
 
-          <motion.h1
+          <m.h1
             initial={{ opacity: 1, y: 20, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
@@ -129,9 +129,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <span className="text-white/90 block" style={{ fontSize: "clamp(1.5rem, 4.5vw, 3rem)", fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.35, marginTop: "0.35em" }}>
               أُحوِّل أفكارك إلى منتجات رقمية احترافية
             </span>
-          </motion.h1>
+          </m.h1>
 
-          <motion.p
+          <m.p
             initial={{ opacity: 1, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
@@ -139,9 +139,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             style={{ color: "#8888a8", fontSize: "1.05rem" }}
           >
             أبني مواقع ويب، أدوات ذكاء اصطناعي، وأنظمة أتمتة متكاملة — بجودة عالمية وأداء استثنائي.
-          </motion.p>
+          </m.p>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 1, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
@@ -158,9 +158,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
               <Package className="w-3.5 h-3.5" />
               <span>المتجر</span>
             </Link>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
@@ -187,28 +187,28 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 {label}
               </span>
             ))}
-          </motion.div>
+          </m.div>
         </div>
 
-        <motion.div
+        <m.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
           <div className="w-6 h-10 rounded-full border-2 border-purple-600/40 flex items-start justify-center p-1.5">
-            <motion.div
+            <m.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
               className="w-1.5 h-1.5 rounded-full bg-purple-500"
             />
           </div>
-        </motion.div>
+        </m.div>
       </section>
 
       {/* ── STATS ── */}
       <section className="py-16 relative" style={{ borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)", background: "rgba(4,4,8,0.7)" }}>
         <div className="max-w-3xl mx-auto px-4">
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -216,7 +216,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             className="grid grid-cols-2 md:grid-cols-4 gap-6"
           >
             {stats.map(({ value, label }) => (
-              <motion.div key={label} variants={item} className="text-center">
+              <m.div key={label} variants={item} className="text-center">
                 <div
                   className="font-black mb-1.5 text-transparent bg-clip-text"
                   style={{ backgroundImage: "linear-gradient(135deg, #f0e6ff 0%, #a855f7 100%)", fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.03em" }}
@@ -224,9 +224,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   {value}
                 </div>
                 <div style={{ color: "#8080a0", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -253,7 +253,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                       ))}
                     </div>
                   </div>
-                  <motion.div
+                  <m.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-4 rounded-2xl border border-purple-600/10 border-dashed"
@@ -301,7 +301,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             </p>
           </AnimatedSection>
 
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -309,7 +309,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
             {services.map(({ icon: Icon, title, desc, color }) => (
-              <motion.div
+              <m.div
                 key={title}
                 variants={item}
                 whileHover={{ y: -5 }}
@@ -322,9 +322,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 </div>
                 <h3 className="text-white font-bold text-sm mb-2 group-hover:text-purple-200 transition-colors leading-snug">{title}</h3>
                 <p style={{ color: "#8888a8", fontSize: "0.8rem", lineHeight: 1.65 }}>{desc}</p>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
 
           <AnimatedSection className="text-center mt-10">
             <Link href="/services" className="btn-primary inline-flex gap-2">
@@ -347,7 +347,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <p className="section-subtitle text-center">أدوات ومنتجات رقمية جاهزة تحتاجها الآن</p>
           </AnimatedSection>
 
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -357,7 +357,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             {products.map((p) => {
               const discount = p.oldPrice && p.oldPrice > p.price ? Math.round((1 - p.price / p.oldPrice) * 100) : null;
               return (
-                <motion.div key={p.id} variants={item} whileHover={{ y: -5 }} className="glass-card overflow-hidden group flex flex-col">
+                <m.div key={p.id} variants={item} whileHover={{ y: -5 }} className="glass-card overflow-hidden group flex flex-col">
                   <Link href={`/store/${p.slug}`} className="flex-1">
                     <div className="aspect-video bg-[#080810] flex items-center justify-center relative overflow-hidden" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                       {p.coverImage ? (
@@ -388,10 +388,10 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                       <ShoppingBag className="w-3.5 h-3.5" />اشتري الآن
                     </Link>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
-          </motion.div>
+          </m.div>
 
           <AnimatedSection className="text-center mt-10">
             <Link href="/store" className="btn-outline inline-flex gap-2">
@@ -413,7 +413,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <h2 className="section-title mt-4">آخر المقالات</h2>
           </AnimatedSection>
 
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -421,7 +421,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             className="space-y-2.5"
           >
             {posts.map((post) => (
-              <motion.div key={post.id} variants={item} whileHover={{ x: -3 }}>
+              <m.div key={post.id} variants={item} whileHover={{ x: -3 }}>
                 <Link href={`/blog/${post.slug}`} className="group flex items-center justify-between gap-4 p-4 rounded-2xl transition-colors"
                   style={{ background: "rgba(10,10,16,0.7)", border: "1px solid rgba(255,255,255,0.045)", borderTop: "1px solid rgba(255,255,255,0.07)" }}
                 >
@@ -440,9 +440,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   </div>
                   <ChevronLeft className="w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 group-hover:translate-x-[-2px]" style={{ color: "rgba(147,51,234,0.35)" }} />
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
 
           <AnimatedSection className="text-center mt-10">
             <Link href="/blog" className="btn-outline inline-flex gap-2">
@@ -465,7 +465,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <p className="section-subtitle text-center">+40 مصدر مختار للمطورين، المستقلين، وعشاق الأمن السيبراني</p>
           </AnimatedSection>
 
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -480,7 +480,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
               { label: "الأمن السيبراني", Icon: Shield,        color: "#f87171", bg: "rgba(248,113,113,0.1)",count: 6  },
               { label: "بناء المواقع",    Icon: Globe,         color: "#67e8f9", bg: "rgba(6,182,212,0.1)",  count: 7  },
             ].map(({ label, Icon, color, bg, count }) => (
-              <motion.div key={label} variants={item} whileHover={{ y: -4 }}>
+              <m.div key={label} variants={item} whileHover={{ y: -4 }}>
                 <Link href="/resources"
                   className="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all duration-200 block"
                   style={{ background: "rgba(10,8,18,0.8)", border: "1px solid rgba(28,20,48,0.8)" }}
@@ -493,9 +493,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   <span className="text-xs font-semibold leading-tight" style={{ color: "#b0b0c8" }}>{label}</span>
                   <span className="text-[10px]" style={{ color: "#7878a0" }}>{count} مصادر</span>
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
 
           <AnimatedSection className="text-center">
             <Link href="/resources" className="btn-outline inline-flex gap-2 text-sm">
@@ -518,7 +518,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <p className="section-subtitle text-center">+30 عميل راضٍ — هذا ما يقولونه</p>
           </AnimatedSection>
 
-          <motion.div
+          <m.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -526,7 +526,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
             {testimonials.map((t, i) => (
-              <motion.div
+              <m.div
                 key={i}
                 variants={item}
                 whileHover={{ y: -4 }}
@@ -550,9 +550,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                     <div className="text-xs" style={{ color: "#7878a0" }}>{t.role}</div>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -589,9 +589,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                     <span className="font-semibold text-sm" style={{ color: openFaq === i ? "#e2d4f8" : "#c0c0d8" }}>
                       {f.q}
                     </span>
-                    <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.22 }}>
+                    <m.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.22 }}>
                       <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: openFaq === i ? "#c084fc" : "#505070" }} />
-                    </motion.div>
+                    </m.div>
                   </button>
                   {openFaq === i && (
                     <div className="px-5 pb-5 text-sm leading-relaxed" style={{ color: "#707090", borderTop: "1px solid rgba(28,28,48,0.6)" }}>
@@ -679,14 +679,14 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             </p>
 
             {newsletterDone ? (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center justify-center gap-2 py-4 px-6 rounded-2xl"
                 style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.25)" }}
               >
                 <span className="text-green-400 text-sm font-medium">✓ شكرًا! سنتواصل معك قريبًا.</span>
-              </motion.div>
+              </m.div>
             ) : (
               <form
                 onSubmit={async e => {
