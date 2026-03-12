@@ -114,9 +114,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
+            initial={{ opacity: 1, y: 20, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
             className="font-black mb-6"
             style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", lineHeight: 1.02, letterSpacing: "-0.03em" }}
           >
@@ -132,19 +132,19 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 1, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-xl mx-auto mb-10 leading-relaxed"
-            style={{ color: "#7070a0", fontSize: "1.05rem" }}
+            style={{ color: "#8888a8", fontSize: "1.05rem" }}
           >
             أبني مواقع ويب، أدوات ذكاء اصطناعي، وأنظمة أتمتة متكاملة — بجودة عالمية وأداء استثنائي.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 1, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap items-center justify-center gap-3"
           >
             <Link href="/portfolio" className="btn-primary gap-2 text-sm py-2.5 px-6">
@@ -223,7 +223,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 >
                   {value}
                 </div>
-                <div style={{ color: "#484860", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
+                <div style={{ color: "#8080a0", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -321,7 +321,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-white font-bold text-sm mb-2 group-hover:text-purple-200 transition-colors leading-snug">{title}</h3>
-                <p style={{ color: "#606070", fontSize: "0.8rem", lineHeight: 1.65 }}>{desc}</p>
+                <p style={{ color: "#8888a8", fontSize: "0.8rem", lineHeight: 1.65 }}>{desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -379,7 +379,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                       <h3 className="text-white font-bold text-sm mb-2 group-hover:text-purple-200 transition-colors leading-snug">{p.title}</h3>
                       <div className="flex items-baseline gap-2">
                         <span className="font-black text-lg" style={{ color: "#c084fc", letterSpacing: "-0.02em" }}>{p.price} ج.م</span>
-                        {p.oldPrice && <span className="text-xs line-through" style={{ color: "#404060" }}>{p.oldPrice} ج.م</span>}
+                        {p.oldPrice && <span className="text-xs line-through" style={{ color: "#7070a0" }}>{p.oldPrice} ج.م</span>}
                       </div>
                     </div>
                   </Link>
@@ -491,7 +491,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                     <Icon className="w-5 h-5" style={{ color }} />
                   </div>
                   <span className="text-xs font-semibold leading-tight" style={{ color: "#b0b0c8" }}>{label}</span>
-                  <span className="text-[10px]" style={{ color: "#505070" }}>{count} مصادر</span>
+                  <span className="text-[10px]" style={{ color: "#7878a0" }}>{count} مصادر</span>
                 </Link>
               </motion.div>
             ))}
@@ -547,7 +547,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   </div>
                   <div>
                     <div className="text-white text-xs font-semibold">{t.name}</div>
-                    <div className="text-xs" style={{ color: "#505070" }}>{t.role}</div>
+                    <div className="text-xs" style={{ color: "#7878a0" }}>{t.role}</div>
                   </div>
                 </div>
               </motion.div>
@@ -626,7 +626,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
                   ابدأ رحلتك الرقمية اليوم
                 </h2>
-                <p className="mb-8 leading-relaxed" style={{ color: "#606070", fontSize: "0.95rem" }}>
+                <p className="mb-8 leading-relaxed" style={{ color: "#8888a8", fontSize: "0.95rem" }}>
                   منتجات رقمية جاهزة، أو خدمات مخصصة — كل ما تحتاجه لبناء حضورك الرقمي.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
@@ -652,7 +652,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                       </div>
                     ))}
                   </div>
-                  <span style={{ color: "#484860", fontSize: "0.75rem" }}>+30 عميل سعيد</span>
+                  <span style={{ color: "#8080a0", fontSize: "0.75rem" }}>+30 عميل سعيد</span>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                   </div>
@@ -674,7 +674,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             <h2 className="font-black text-white mb-2" style={{ fontSize: "clamp(1.4rem,3.5vw,2rem)", letterSpacing: "-0.02em" }}>
               اشترك في النشرة البريدية
             </h2>
-            <p className="mb-6 text-sm leading-relaxed" style={{ color: "#606070" }}>
+            <p className="mb-6 text-sm leading-relaxed" style={{ color: "#8888a8" }}>
               نصائح أسبوعية عن الذكاء الاصطناعي، المنتجات الرقمية، والفريلانس — مباشرةً في بريدك.
             </p>
 
@@ -710,7 +710,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   onChange={e => setNewsletterEmail(e.target.value)}
                   placeholder="بريدك الإلكتروني"
                   dir="ltr"
-                  className="flex-1 rounded-xl px-4 py-3 text-white text-sm placeholder-[#505070] outline-none transition-all"
+                  className="flex-1 rounded-xl px-4 py-3 text-white text-sm placeholder-[#7070a0] outline-none transition-all"
                   style={{ background: "rgba(12,12,20,0.9)", border: "1px solid rgba(35,35,55,0.8)" }}
                   onFocus={e => (e.target.style.borderColor = "rgba(147,51,234,0.5)")}
                   onBlur={e => (e.target.style.borderColor = "rgba(35,35,55,0.8)")}
@@ -721,7 +721,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 </button>
               </form>
             )}
-            <p className="text-xs mt-3" style={{ color: "#404060" }}>بدون إزعاج — يمكنك إلغاء الاشتراك في أي وقت.</p>
+            <p className="text-xs mt-3" style={{ color: "#7070a0" }}>بدون إزعاج — يمكنك إلغاء الاشتراك في أي وقت.</p>
           </AnimatedSection>
         </div>
       </section>
