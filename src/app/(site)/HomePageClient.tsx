@@ -114,9 +114,9 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
           </m.div>
 
           <m.h1
-            initial={{ opacity: 1, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 1, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
             className="font-black mb-6"
             style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", lineHeight: 1.02, letterSpacing: "-0.03em" }}
           >
