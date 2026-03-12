@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Zap, Heart, Github, Twitter, Instagram, Youtube, Send } from "lucide-react";
 
 const footerLinks = {
@@ -51,7 +51,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map(({ icon: Icon, href, label }) => (
-                <motion.a
+                <m.a
                   key={label}
                   href={href}
                   target="_blank"
@@ -61,13 +61,13 @@ export default function Footer() {
                   className="w-8 h-8 rounded-lg bg-[#1a1a2e] border border-[#2a2a3e] flex items-center justify-center text-[#a0a0b8] hover:text-purple-400 hover:border-purple-600/40 hover:bg-purple-600/10 transition-all duration-300"
                 >
                   <Icon className="w-4 h-4" />
-                </motion.a>
+                </m.a>
               ))}
             </div>
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">الصفحات</h4>
+            <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">الصفحات</h3>
             <ul className="space-y-2.5">
               {footerLinks.pages.map(({ href, label }) => (
                 <li key={href}>
@@ -84,7 +84,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">الخدمات</h4>
+            <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">الخدمات</h3>
             <ul className="space-y-2.5">
               {footerLinks.services.map(({ href, label }) => (
                 <li key={href}>
@@ -101,7 +101,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">تواصل معي</h4>
+            <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">تواصل معي</h3>
             <div className="space-y-3">
               <p className="text-[#a0a0b8] text-sm">للمشاريع والاستفسارات:</p>
               <Link
@@ -127,7 +127,7 @@ export default function Footer() {
             <span>في مصر</span>
           </p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="text-[#606080] text-xs hover:text-purple-400 transition-colors">
+            <Link href="/privacy-policy" className="text-[#606080] text-xs hover:text-purple-400 transition-colors">
               سياسة الخصوصية
             </Link>
             <Link href="/terms" className="text-[#606080] text-xs hover:text-purple-400 transition-colors">

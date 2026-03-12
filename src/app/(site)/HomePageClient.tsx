@@ -434,7 +434,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                       <h3 className="text-white font-semibold text-sm group-hover:text-purple-200 transition-colors leading-snug mb-1">{post.title}</h3>
                       <div className="flex items-center gap-2">
                         {post.category && <span className="tag-pill" style={{ padding: "0.1rem 0.6rem", fontSize: "0.65rem" }}>{post.category.name}</span>}
-                        <span style={{ color: "#383850", fontSize: "0.7rem" }}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</span>
+                        <span style={{ color: "#8888aa", fontSize: "0.7rem" }}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</span>
                       </div>
                     </div>
                   </div>
