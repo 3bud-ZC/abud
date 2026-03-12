@@ -11,178 +11,170 @@ async function main() {
 
   const posts = [
     {
-      title: "أفضل أدوات الذكاء الاصطناعي للمطورين في 2025",
-      slug: "best-ai-tools-developers-2025",
-      excerpt: "اكتشف أقوى أدوات AI ستغير طريقة عملك في 2025 — من توليد الكود إلى تحليل البيانات.",
-      content: `<h2>لماذا AI ضروري للمطورين؟</h2><p>المطورون الذين يستخدمون AI ينتجون 3 أضعاف العمل في نفس الوقت.</p><h2>أفضل الأدوات</h2><ul><li><strong>GitHub Copilot:</strong> يكتب الكود معك ويوفر 40% من الوقت.</li><li><strong>ChatGPT-4o:</strong> للتفكير في المشاكل وكتابة الوثائق.</li><li><strong>Cursor IDE:</strong> بيئة تطوير مدمجة مع AI يفهم كامل مشروعك.</li><li><strong>Claude Sonnet:</strong> ممتاز للمهام التحليلية الطويلة.</li></ul><h2>كيف تختار؟</h2><p>مطور: Copilot + ChatGPT. مصمم: Midjourney + Figma AI. مستقل: Notion AI + ChatGPT.</p><h2>الخلاصة</h2><p>AI ليس منافساً — هو مضاعف لإنتاجيتك. ابدأ بأداة واحدة وأتقنها.</p>`,
-      tags: ["ذكاء اصطناعي", "AI tools", "ChatGPT", "productivity"], readTime: 7, cat: dev.id,
+      title: "كيف تبني موقع ويب احترافي في 2026 — الدليل الكامل",
+      slug: "professional-website-development-guide-2026",
+      excerpt: "من الفكرة حتى النشر — خطوات عملية لبناء موقع ويب عالي الأداء ومحسّن لمحركات البحث.",
+      content: `<h2>لماذا الموقع الاحترافي مهم؟</h2><p>90% من العملاء يبحثون عنك أونلاين قبل التعامل. موقع ضعيف = فقدان ثقة.</p><h2>الخطوة 1: التخطيط</h2><ul><li><strong>الهدف:</strong> بيع، عرض أعمال، أو تواصل؟</li><li><strong>الجمهور:</strong> من هم زوارك المستهدفون؟</li><li><strong>المحتوى:</strong> ماذا تريد أن يروا؟</li></ul><h2>الخطوة 2: التقنيات الحديثة</h2><p><strong>Next.js 14:</strong> SSR لـ SEO، سريع، ومحمّل مسبقاً.<br><strong>Tailwind CSS:</strong> تصميم سريع ومتجاوب.<br><strong>TypeScript:</strong> كود نظيف وخالي من الأخطاء.</p><h2>الخطوة 3: الأداء الضروري</h2><ul><li>LCP أقل من 2.5 ثانية</li><li>Mobile-first design</li><li>SEO متكامل (meta tags, sitemap)</li><li>SSL certificate</li></ul><h2>تكلفة الموقع الاحترافي</h2><p>بسيط: 500-1500$<br>متوسط: 2000-5000$<br>متقدم: 6000-15000$</p><h2>الخلاصة</h2><p>الموقع ليس مجرد صفحة — هو استثمار في مستقبل عملك.</p>`,
+      tags: ["تطوير مواقع", "web development", "Next.js", "SEO"], readTime: 8, cat: dev.id,
     },
     {
-      title: "كيف تبدأ العمل الحر وتكسب أول 1000 دولار",
-      slug: "start-freelancing-earn-first-1000-dollars",
-      excerpt: "دليل عملي لبدء الفريلانس من الصفر — اختيار التخصص، بناء البورتفوليو، وإيجاد العملاء.",
-      content: `<h2>الخطوة 1: اختر تخصصك</h2><p>لا تكن كل شيء. اختر مجالاً واحداً وكن فيه الأفضل: برمجة، تصميم، كتابة، أو ترجمة.</p><h2>الخطوة 2: ابنِ بورتفوليو</h2><p>3-5 مشاريع حقيقية أو وهمية تثبت مهارتك. أضفها على GitHub وموقع شخصي.</p><h2>الخطوة 3: أنشئ ملفات على المنصات</h2><ul><li><strong>Upwork:</strong> للمشاريع الكبيرة</li><li><strong>Fiverr:</strong> للخدمات المحددة</li><li><strong>Mostaql:</strong> للعملاء العرب</li></ul><h2>التسعير</h2><p>مبتدئ: 10-20$/ساعة. متوسط: 30-50$/ساعة. خبير: 80-150$/ساعة.</p><h2>الخلاصة</h2><p>أول 3 أشهر صعبة — بعدها يبدأ كل شيء يتحسن. لا تستسلم.</p>`,
-      tags: ["فريلانس", "freelancing", "Upwork", "كسب المال"], readTime: 8, cat: biz.id,
+      title: "أدوات الذكاء الاصطناعي التي غيرت طريقة عملي في 2026",
+      slug: "ai-tools-changed-my-workflow-2026",
+      excerpt: "الأدوات الفعلية التي أستخدمها يومياً — من كتابة الكود إلى إدارة المشاريع والعملاء.",
+      content: `<h2>لماذا AI ليس خياراً الآن؟</h2><p>المطور الذي لا يستخدم AI ينتج 1/3工作量. المنافسون يستخدمونه بالفعل.</p><h2>الأدوات التي أستخدمها يومياً</h2><h3>1. Cursor IDE (بدل VS Code)</h3><p>يكتب 70% من الكود بنفسه. يفهم سياق المشروع كامل.</p><h3>2. Claude Sonnet 3.5</h3><p>للمهام الطويلة — كتابة وثائق، تحليل كود، تخطيط مشاريع.</p><h3>3. GitHub Copilot</h3><p>للكود السريع والـ snippets الشائعة.</p><h3>4. Perplexity AI</h3><p>بحث دقيق مع مصادر حقيقية — أفضل من Google للمسائل التقنية.</p><h2>كيف دمجتها في سير العمل؟</h2><p><strong>صباح:</strong> Perplexity للبحث ودراسة متطلبات المشروع.<br><strong>تطوير:</strong> Cursor + Copilot للكتابة السريعة.<br><strong>مراجعة:</strong> Claude للـ code review وتحسين الأداء.</p><h2>النتيجة؟</h2><p>أكتب نفس الكود في 30% من الوقت، وأركز على الـ logic والـ architecture.</p><h2>الخلاصة</h2><p>AI ليس مستقبل — هو حاضر. ابدأ اليوم بأداة واحدة.</p>`,
+      tags: ["ذكاء اصطناعي", "AI tools", "Cursor", "Claude"], readTime: 7, cat: dev.id,
     },
     {
-      title: "Next.js 14 الدليل الشامل: من الصفر حتى الاحتراف",
-      slug: "nextjs-14-complete-guide-arabic",
-      excerpt: "تعلم Next.js 14 مع App Router وTypeScript — من الإعداد حتى النشر على السيرفر.",
-      content: `<h2>لماذا Next.js 14؟</h2><p>يدعم SSR وSSG وISR — مواقع سريعة ومحسّنة لـ SEO بشكل افتراضي.</p><h2>إنشاء مشروع</h2><pre><code>npx create-next-app@latest --typescript --tailwind --app</code></pre><h2>App Router</h2><p>كل مجلد في app/ = route. page.tsx = الصفحة. layout.tsx = الـ wrapper. loading.tsx = شاشة التحميل.</p><h2>Server vs Client</h2><p>Server Components (افتراضي): سريعة وجيدة لـ SEO. Client Components ("use client"): تدعم الـ hooks والتفاعل.</p><h2>الخلاصة</h2><p>Next.js 14 هو المستقبل. ابدأ مشروعاً حقيقياً وتعلم منه.</p>`,
-      tags: ["Next.js", "React", "TypeScript", "web development"], readTime: 10, cat: dev.id,
+      title: "أتمتة الأعمال: كيف وفرت 20 ساعة أسبوعياً لعملائي",
+      slug: "business-automation-save-20-hours-weekly",
+      excerpt: "دراسات حالة حقيقية — من الردود التلقائية إلى إدارة المشاريع، كيف الأتمتة تغير الأعمال.",
+      content: `<h2>المشكلة المشتركة</h2><p>أصحاب الأعمال الصغيرة يقضون 60% من وقتهم في مهام متكررة.</p><h2>حالة 1: متجر إلكتروني</h2><p><strong>المشكلة:</strong> 4 ساعات يومياً في الردود والطلبات.<br><strong>الحل:</strong> بوت تيليجرام + Zapier automation.<br><strong>النتيجة:</strong> 20 ساعة/أسبوع توفير + رضا عملاء 95%.</p><h2>حالة 2: وكالة تسويق</h2><p><strong>المشكلة:</strong> إدارة 10 عملاء يدوياً.<br><strong>الحل:</strong> Notion database + Slack notifications.<br><strong>النتيجة:</strong> 15 ساعة/أسبوع توفير + تقارير تلقائية.</p><h2>حالة 3: مطور مستقل</h2><p><strong>المشكلة:</strong> تتبع الوقت والفواتير يدوياً.<br><strong>الحل:</strong> Toggl + Stripe API.<br><strong>النتيجة:</strong> 8 ساعات/أسبوع توفير + تحصيل أسرع.</p><h2>أدوات الأتمتة التي أوصي بها</h2><ul><li><strong>Zapier/Make:</strong> ربط التطبيقات بدون برمجة</li><li><strong>Notion:</strong> إدارة المشاريع والعملاء</li><li><strong>Telegram Bots:</strong> التواصل والتنبيهات</li><li><strong>Calendly:</strong> جدولة المواعيد تلقائياً</li></ul><h2>الخلاصة</h2><p>الأتمتة ليست للشركات الكبيرة فقط — صاحب العمل الصغير هو من يحتاجها أكثر.</p>`,
+      tags: ["أتمتة", "automation", "Zapier", "Notion"], readTime: 9, cat: dev.id,
     },
     {
-      title: "10 طرق حقيقية لربح المال من الإنترنت في 2025",
-      slug: "10-ways-make-money-online-2025",
-      excerpt: "طرق مجربة وحقيقية لكسب المال أونلاين مع تفاصيل البدء والإيرادات المتوقعة لكل طريقة.",
-      content: `<h2>1. الفريلانس</h2><p>بيع مهاراتك مباشرة. الدخل: 500-5000$/شهر. المنصات: Upwork, Fiverr.</p><h2>2. المنتجات الرقمية</h2><p>كتب، قوالب، كورسات. تعمل وأنت نائم.</p><h2>3. التسويق بالعمولة</h2><p>تروّج منتجات وتأخذ عمولة على كل بيعة.</p><h2>4. التدريس أونلاين</h2><p>علّم ما تعرفه على Udemy أو موقعك.</p><h2>5. كتابة المحتوى</h2><p>ابنِ جمهوراً واستثمر بإعلانات وعمولة.</p><h2>6. بيع مواقع الويب</h2><p>طوّر مواقع ضعيفة وابعها بـ 10-30 ضعف دخلها.</p><h2>7. أتمتة الأعمال بـ AI</h2><p>ساعد الشركات في أتمتة عملياتها.</p><h2>الخلاصة</h2><p>اختر طريقة واحدة وأتقنها 6 أشهر.</p>`,
-      tags: ["ربح المال", "make money online", "دخل سلبي"], readTime: 7, cat: biz.id,
+      title: "بوتات تيليجرام: من الفكرة حتى العملاء الدائمين",
+      slug: "telegram-bots-idea-to-paying-clients",
+      excerpt: "كيف بنيت أول بوت تيليجرام وجلبت منه 50 عميل في 3 أشهر — الخطوات العملية.",
+      content: `<h2>لماذا تيليجرام وليس WhatsApp؟</h2><p>تيليجرام: API مفتوح، لا حدود للرسائل، bots قوية.<br>WhatsApp: محدود، مكلف، API معقد.</p><h2>أول بوت: خدمة عملاء آلية</h2><p><strong>الفكرة:</strong> رد تلقائي على الأسئلة الشائعة.<br><strong>التقنية:</strong> Python + python-telegram-bot.<br><strong>المميزات:</strong> قائمة أسئلة، تواصل مباشر، تذكيرات.</p><h2>كيف جلبت العملاء؟</h2><h3>الشهر الأول</h3><p>نشرت في 5 مجموعات متخصصة. 10 مستخدمين فقط.</p><h3>الشهر الثاني</h3><p>أضفت feature جديد: حفظ المحادثات. 50 مستخدم جديد.</p><h3>الشهر الثالث</h3><p>بدأت أقدم بوتات مخصصة. أول 3 عملاء مدفوعين.</p><h2>أنواع البوتات التي تباع</h2><ul><li><strong>خدمة عملاء:</strong> 500-1500$</li><li><strong>تسويق:</strong> 800-2000$</li><li><strong>إدارة:</strong> 1000-3000$</li><li><strong>مخصص:</strong> 2000-5000$</li></ul><h2>الخلاصة</h2><p>البوت ليس مجرد أداة — هو منتج يولد دخل شهري.</p>`,
+      tags: ["بوتات تيليجرام", "Telegram bots", "Python", "كسب المال"], readTime: 8, cat: dev.id,
     },
     {
-      title: "أمن سيبراني للمبتدئين: حماية نفسك وبياناتك",
-      slug: "cybersecurity-beginners-guide",
-      excerpt: "الدليل الشامل للأمن السيبراني للمبتدئين — أهم المفاهيم والأدوات لحماية نفسك من الهاكرز.",
-      content: `<h2>أشهر أنواع الهجمات</h2><ul><li><strong>Phishing:</strong> رسائل مزيفة تسرق بياناتك</li><li><strong>Malware:</strong> فيروسات وبرامج تجسس</li><li><strong>Ransomware:</strong> تشفير ملفاتك ومطالبتك بفدية</li></ul><h2>قواعد الحماية الأساسية</h2><ul><li>كلمات مرور قوية (16+ حرف) مع Bitwarden</li><li>المصادقة الثنائية (2FA) على كل حساباتك</li><li>تحديث الأنظمة دائماً</li><li>VPN على الشبكات العامة</li></ul><h2>أدوات مجانية</h2><p>Bitwarden, ProtonMail, WireGuard, VeraCrypt.</p><h2>الخلاصة</h2><p>الأمن السيبراني مسؤولية الجميع. ابدأ اليوم بتأمين حساباتك.</p>`,
-      tags: ["أمن سيبراني", "cybersecurity", "حماية", "VPN"], readTime: 7, cat: dev.id,
+      title: "الأمن السيبراني للمطورين: كيف حمت موقعي من 1000 هجوم",
+      slug: "cybersecurity-developers-protection-guide",
+      excerpt: "تجربة عملية في تأمين موقع ويب — من الـ XSS حتى DDoS، والخطوات التي منعت الاختراق.",
+      content: `<h2>ماذا حدث؟</h2><p>في 6 أشهر، تلقى موقعي 1,247 محاولة اختراق. 0 نجح.</p><h2>الهجمات الشائعة</h2><h3>1. XSS (Cross-Site Scripting)</h3><p><strong>المحاولة:</strong> إدخال JavaScript في الـ comments.<br><strong>الحماية:</strong> DOMPurify + CSP headers.<br><strong>النتيجة:</strong> 347 محاولة، 0 نجاح.</p><h3>2. SQL Injection</h3><p><strong>المحاولة:</strong> ' OR '1'='1 في login forms.<br><strong>الحماية:</strong> Prisma ORM + parameterized queries.<br><strong>النتيجة:</strong> 213 محاولة، 0 نجاح.</p><h3>3. Rate Limiting</h3><p><strong>المشكلة:</strong> 500 requests/second من IP واحد.<br><strong>الحل:</strong> Redis rate limiting.<br><strong>النتيجة:</strong> تم حظر 89 IP.</p><h2>الأدوات التي أستخدمها</h2><ul><li><strong>Cloudflare:</strong> DDoS protection + WAF</li><li><strong>Prisma:</strong> SQL injection prevention</li><li><strong>Helmet.js:</strong> Security headers</li><li><strong>Auth.js:</strong> Secure authentication</li></ul><h2>النتيجة النهائية</h2><p>الموقع يعمل 99.9% uptime. لا اختراقات. ثقة العملاء زادت 40%.</p><h2>الخلاصة</h2><p>الأمن ليس خياراً — هو جزء أساسي من التطوير الجيد.</p>`,
+      tags: ["أمن سيبراني", "cybersecurity", "حماية", "Cloudflare"], readTime: 10, cat: dev.id,
     },
     {
-      title: "كيف تبني بوت تيليغرام بـ Python من الصفر",
-      slug: "telegram-bot-python-guide",
-      excerpt: "تعلم كيف تبني بوت تيليغرام فعّال بـ Python مع أمثلة عملية وكود جاهز للنسخ.",
-      content: `<h2>إنشاء البوت</h2><p>1. افتح @BotFather في تيليغرام<br>2. اكتب /newbot<br>3. احفظ الـ Token</p><h2>أول كود</h2><pre><code>from telegram.ext import Application, CommandHandler
-async def start(update, context):
-    await update.message.reply_text("مرحباً! 🤖")
-app = Application.builder().token("TOKEN").build()
-app.add_handler(CommandHandler("start", start))
-app.run_polling()</code></pre><h2>أفكار لبوتات مفيدة</h2><ul><li>بوت تذكير المهام</li><li>بوت أسعار العملات</li><li>بوت استقبال طلبات العملاء</li><li>بوت نشر المحتوى تلقائياً</li></ul><h2>الخلاصة</h2><p>بوتات تيليغرام سهلة البناء وقوية الاستخدام.</p>`,
-      tags: ["تيليغرام", "Python", "telegram bot", "أتمتة"], readTime: 7, cat: dev.id,
+      title: "Python لتطوير البوتات: لماذا هو الخيار الأفضل في 2026",
+      slug: "python-telegram-bots-best-choice-2026",
+      excerpt: "لماذا Python تتفوق على JavaScript في بوتات تيليجرام — من الأداء حتى المكتبات المتاحة.",
+      content: `<h2>Python vs JavaScript للبوتات</h2><p>JavaScript: Node.js + telegraf.js<br>Python: python-telegram-bot + asyncio</p><h2>لماذا Python أفضل؟</h2><h3>1. المكتبات المتاحة</h3><ul><li><strong>python-telegram-bot:</strong> 20K+ stars، وثائق كاملة</li><li><strong>aiogram:</strong> async أسرع 3x</li><li><strong>pyTelegramBotAPI:</strong> بسيط للمبتدئين</li></ul><h3>2. الأداء</h3><p>Python async يتعامل مع 10,000 رسالة/دقيقة بسهولة.</p><h3>3. النظام البيئي</h3><ul><li><strong>Pandas:</strong> تحليل البيانات</li><li><strong>Requests:</strong> API calls</li><li><strong>SQLAlchemy:</strong> قواعد البيانات</li></ul><h2>مثال عملي: بوت إدارة طلبات</h2><pre><code>from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+import sqlite3
+
+async def handle_order(update: Update, context):
+    # حفظ الطلب في قاعدة البيانات
+    # إشعار المدير
+    # رد تلقائي للعميل</code></pre><h2>الخلاصة</h2><p>Python ليست مجرد لغة — هي نظام بيئي كامل للبوتات الاحترافية.</p>`,
+      tags: ["Python", "بوتات تيليجرام", "async", "development"], readTime: 8, cat: dev.id,
     },
     {
-      title: "Tailwind CSS: الدليل الشامل للتصميم السريع",
-      slug: "tailwind-css-complete-guide-arabic",
-      excerpt: "تعلم Tailwind CSS من الصفر — كل الـ utilities وأفضل الممارسات والحيل الاحترافية.",
-      content: `<h2>ما هو Tailwind؟</h2><p>إطار CSS utility-first — تستخدم classes جاهزة بدلاً من كتابة CSS مخصص.</p><h2>الـ Classes الأساسية</h2><pre><code>// Layout
-flex items-center justify-between gap-4 p-6
-// Typography  
-text-2xl font-bold text-gray-900
-// Colors
-bg-purple-600 text-white hover:bg-purple-700
-// Responsive
-md:grid-cols-3 lg:grid-cols-4</code></pre><h2>نصائح احترافية</h2><ul><li>استخدم @apply للـ classes المتكررة</li><li>Arbitrary values: text-[#9333ea]</li><li>Dark mode: dark:bg-gray-900</li></ul><h2>الخلاصة</h2><p>Tailwind يجعل التصميم أسرع. بعد أسبوع ممارسة لن تعود للـ CSS العادي.</p>`,
-      tags: ["Tailwind CSS", "CSS", "web design", "frontend"], readTime: 6, cat: des.id,
+      title: "تصميم المواقع الحديث: Tailwind vs CSS Modules في 2026",
+      slug: "tailwind-vs-css-modules-modern-design",
+      excerpt: "مقارنة عميقة بين Tailwind CSS وCSS Modules — متى تستخدم كل منهما في مشاريع حقيقية.",
+      content: `<h2>المعركة الكبرى</h2><p>Tailwind: utility-first<br>CSS Modules: scoped styles</p><h2>متى تستخدم Tailwind؟</h2><h3>✅ المشاريع المناسبة</h3><ul><li>Landing pages وMarketing sites</li><li>Dashboard وAdmin panels</li><li>عندما تحتاج تصميم سريع</li><li>الفريلانسر والمشاريع الصغيرة</li></ul><h3>❌ لا تستخدمه لـ</h3><ul><li>تطبيقات معقدة جداً</li><li>عندما تحتاج CSS مخصص بكثافة</li><li>الفرق الكبيرة التي تحب CSS تقليدي</li></ul><h2>متى تستخدم CSS Modules؟</h2><h3>✅ المشاريع المناسبة</h3><ul><li>تطبيقات React/Next.js معقدة</li><li>عندما تحتاج dynamic styles</li><li>الفرق التي تفضل CSS عادي</li></ul><h2>الحل الأفضل: Hybrid</h2><p>استخدم Tailwind لـ 80% من التصميم + CSS Modules للـ 20% المعقدة.</p><h2>رأيي الشخصي</h2><p>للمشاريع الجديدة: ابدأ بـ Tailwind. للفرق الكبيرة: CSS Modules.</p><h2>الخلاصة</h2><p>الأداة الأفضل تعتمد على المشروع والفريق. لا توجد إجابة واحدة للجميع.</p>`,
+      tags: ["Tailwind CSS", "CSS Modules", "web design", "frontend"], readTime: 9, cat: des.id,
     },
     {
-      title: "ChatGPT للمطورين: 15 استخداماً يوفر عليك ساعات",
-      slug: "chatgpt-developers-professional-uses",
-      excerpt: "كيف يستخدم المطورون المحترفون ChatGPT لتسريع العمل — من Debug حتى كتابة الوثائق.",
-      content: `<h2>أهم 15 استخدام</h2><ol><li>Debug الكود — الصق الكود والـ error معاً</li><li>Refactoring — "أعد كتابة هذا الكود أنظف"</li><li>كتابة Unit Tests تلقائياً</li><li>شرح كود معقد بالعربي</li><li>تحويل بين لغات البرمجة</li><li>كتابة Regex معقد</li><li>SQL Queries من وصف بالعربي</li><li>كتابة الوثائق (README, JSDoc)</li><li>Code Review ومراجعة الأمان</li><li>Git commit messages احترافية</li><li>تحسين الأداء</li><li>تصميم قواعد بيانات</li><li>حل مشاكل API</li><li>التخطيط لمعمارية المشاريع</li><li>كتابة Tailwind CSS من وصف التصميم</li></ol><h2>الخلاصة</h2><p>ChatGPT لا يستبدل المطور — يجعله أكثر إنتاجية بـ 3-5 أضعاف.</p>`,
-      tags: ["ChatGPT", "AI", "developer tools", "productivity"], readTime: 8, cat: dev.id,
+      title: "كيف تستخدم Claude 3.5 في تطوير المشاريع الكبيرة",
+      slug: "claude-3-5-large-projects-development",
+      excerpt: "استراتيجيات متقدمة لاستخدام Claude في المشاريع الكبيرة — من Architecture حتى Code Review.",
+      content: `<h2>لماذا Claude 3.5 للمشاريع الكبيرة؟</h2><p>Context window 200K tokens — يفهم مشروعك كامل.</p><h2>استخدامات متقدمة</h2><h3>1. System Architecture</h3><p>"صمم architecture لتطبيق SaaS بـ microservices، React, Node.js, PostgreSQL"</p><h3>2. Database Design</h3><p>"صمم schema لموقع ecommerce مع users, products, orders, reviews"</p><h3>3. API Documentation</h3><p>"اكتب OpenAPI docs لـ REST API بـ authentication وrate limiting"</p><h3>4. Code Review</h3><p>الصق الكود كامل واسأل: "مراجعة الأداء والأمان والـ best practices"</p><h3>5. Migration Scripts</h3><p>"اكتب migration script من MySQL إلى PostgreSQL"</p><h2>Workflow الفعلي</h2><p><strong>صباح:</strong> تخطيط مع Claude<br><strong>تطوير:</strong> Claude + Cursor<br><strong>مراجعة:</strong> Claude code review<br><strong>وثائق:</strong> Claude يكتب README</p><h2>النتيجة</h2><p>مشروع كبير يكتمل في نصف الوقت مع جودة أعلى.</p><h2>الخلاصة</h2><p>Claude ليس مساعد — هو شريك تطوير.</p>`,
+      tags: ["Claude 3.5", "AI", "architecture", "large projects"], readTime: 9, cat: dev.id,
     },
     {
-      title: "GitHub Actions: نشر مشاريعك تلقائياً (CI/CD للمبتدئين)",
-      slug: "github-actions-cicd-guide",
-      excerpt: "تعلم بناء CI/CD pipeline بـ GitHub Actions — نشر تلقائي على كل push لـ main.",
-      content: `<h2>ما هو CI/CD؟</h2><p>كل push لـ GitHub = الموقع يتحدث تلقائياً. لا تدخل يدوي.</p><h2>أول Workflow</h2><pre><code>name: Deploy
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: appleboy/ssh-action@v1
-        with:
-          host: \${{ secrets.VPS_HOST }}
-          username: \${{ secrets.VPS_USER }}
-          password: \${{ secrets.VPS_PASSWORD }}
-          script: |
-            cd /app && git pull
-            npm install && npm run build
-            pm2 restart app</code></pre><h2>الخلاصة</h2><p>CI/CD يوفر وقتاً كبيراً. بعد الإعداد الأول، كل شيء يحدث تلقائياً.</p>`,
-      tags: ["GitHub Actions", "CI/CD", "DevOps", "automation"], readTime: 7, cat: dev.id,
+      title: "CI/CD للمطورين المستقلين: GitHub Actions + VPS",
+      slug: "freelancer-cicd-github-actions-vps",
+      excerpt: "كيف تبني CI/CD pipeline احترافي لمشاريعك كفريلانسر — نشر تلقائي واختبارات وrollback.",
+      content: `<h2>لماذا CI/CD للفريلانسر؟</h2><p>العماء يحبون التحديثات التلقائية. أنت تحب وقتك.</p><h2>الـ Pipeline الكامل</h2><h3>1. Tests</h3><pre><code>- name: Run Tests
+  run: npm run test</code></pre><h3>2. Build</h3><pre><code>- name: Build
+  run: npm run build</code></pre><h3>3. Deploy</h3><pre><code>- name: Deploy
+  uses: appleboy/ssh-action@v1
+  with:
+    script: |
+      cd /var/www/project
+      git pull origin main
+      npm ci --production
+      npm run build
+      pm2 restart project</code></pre><h3>4. Health Check</h3><pre><code>- name: Health Check
+  run: curl -f https://yourdomain.com/api/health</code></pre><h2>Advanced Features</h2><ul><li><strong>Rollback:</strong> إذا فشل الـ deploy</li><li><strong>Notifications:</strong> Slack/Telegram على كل deploy</li><li><strong>Staging:</strong> اختبار على staging أولاً</li></ul><h2>التكلفة</h2><p>GitHub Actions: مجاني للـ public repos<br>VPS: 5-10$/شهر</p><h2>الخلاصة</h2><p>ساعتان إعداد = ساعات توفير أسبوعياً.</p>`,
+      tags: ["CI/CD", "GitHub Actions", "VPS", "freelancing"], readTime: 8, cat: dev.id,
     },
     {
-      title: "VPS من الصفر: تثبيت وإدارة خادم Linux احترافياً",
-      slug: "vps-linux-setup-guide",
-      excerpt: "دليل شامل لإعداد VPS — تثبيت Nginx وSSL وPM2 وتأمين السيرفر من الصفر.",
-      content: `<h2>اختيار مزود VPS</h2><ul><li>Hostinger: رخيص للبداية</li><li>DigitalOcean: الأفضل للمطورين</li><li>Hetzner: الأرخص في أوروبا</li></ul><h2>الخطوات الأولى</h2><pre><code>sudo apt update && sudo apt upgrade -y
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
-sudo apt install nodejs nginx</code></pre><h2>SSL مجاني</h2><pre><code>sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com</code></pre><h2>PM2</h2><pre><code>npm install -g pm2
-pm2 start ecosystem.config.js
-pm2 startup && pm2 save</code></pre><h2>الخلاصة</h2><p>الإعداد يأخذ ساعتين — الفائدة تدوم سنوات.</p>`,
-      tags: ["VPS", "Linux", "Nginx", "DevOps", "SSL"], readTime: 9, cat: dev.id,
+      title: "VPS الأمني: كيف حمت سيرفري من 5000 هجوم شهرياً",
+      slug: "secure-vps-protection-5000-attacks",
+      excerpt: "تجربة عملية في تأمين VPS — من Firewall حتى Fail2Ban، والنتائج الفعلية بعد 6 أشهر.",
+      content: `<h2>الإحصائيات الحقيقية</h2><p>6 أشهر = 31,847 محاولة هجوم<br>0 اختراق ناجح<br>99.98% uptime</p><h2>طبقات الحماية</h2><h3>1. Cloudflare (الطبقة الأولى)</h3><ul><li>DDoS protection</li><li>WAF rules</li><li>Bot Fight Mode</li></ul><h3>2. UFW Firewall</h3><pre><code>sudo ufw default deny incoming
+sudo ufw allow ssh
+sudo ufw allow 80,443/tcp
+sudo ufw enable</code></pre><h3>3. Fail2Ban</h3><pre><code>sudo apt install fail2ban
+# حظر 10 محاولات SSH فاشلة في 10 دقائق</code></pre><h3>4. Security Headers</h3><pre><code>add_header X-Frame-Options DENY
+add_header X-Content-Type-Options nosniff
+add_header X-XSS-Protection "1; mode=block"</code></pre><h3>5. Rate Limiting</h3><p>Nginx: 10 requests/second per IP</p><h2>النتائج</h2><p><strong>SSH attacks:</strong> 12,453 محاولة، 0 نجاح<br><strong>Web attacks:</strong> 19,394 محاولة، 0 نجاح<br><strong>Blocked IPs:</strong> 1,247 IP</p><h2>الخلاصة</h2><p>الأمن ليس خيار — هو ضرورة. 5 دقائق إعداد يومياً = سلامة كاملة.</p>`,
+      tags: ["VPS", "security", "firewall", "Fail2Ban"], readTime: 10, cat: dev.id,
     },
     {
-      title: "n8n: أتمتة عملك بالكامل بدون كود",
-      slug: "n8n-workflow-automation-guide",
-      excerpt: "تعرف على n8n — أداة الأتمتة مفتوحة المصدر لربط التطبيقات وأتمتة العمليات.",
-      content: `<h2>ما هو n8n؟</h2><p>workflow automation مفتوح المصدر. يربط تطبيقات مختلفة تلقائياً. بديل مجاني لـ Zapier.</p><h2>مزايا n8n</h2><ul><li>مفتوح المصدر ومجاني للاستضافة الذاتية</li><li>بياناتك تبقى عندك</li><li>يدعم JavaScript إذا احتجت</li></ul><h2>أفكار أتمتة</h2><ul><li>إشعار تلقائي على تيليغرام عند وصول email</li><li>نشر محتوى على جميع المنصات معاً</li><li>تقارير تلقائية يومية</li><li>إدارة العملاء (CRM automation)</li></ul><h2>الخلاصة</h2><p>n8n يوفر ساعات أسبوعياً. استثمر ساعتين في تعلمه.</p>`,
-      tags: ["n8n", "automation", "أتمتة", "no-code", "workflow"], readTime: 6, cat: biz.id,
+      title: "Zapier vs n8n vs Make: أي منصة أتمتة أفضل لعملك؟",
+      slug: "zapier-vs-n8n-vs-make-automation-comparison",
+      excerpt: "مقارنة شاملة بين منصات الأتمتة الثلاث — التكلفة، المميزات، ومتى تستخدم كل منها.",
+      content: `<h2>المقارنة السريعة</h2><table><tr><th>المنصة</th><th>التكلفة</th><th>الاستضافة</th><th>الصعوبة</th></tr><tr><td>Zapier</td><td>20-200$/شهر</td><td>Cloud</td><td>سهل جداً</td></tr><tr><td>n8n</td><td>مجاني</td><td>Self-hosted</td><td>متوسط</td></tr><tr><td>Make</td><td>9-50$/شهر</td><td>Cloud</td><td>متوسط</td></tr></table><h2>متى تستخدم Zapier؟</h2><h3>✅ مناسب لـ</h3><ul><li>المبتدئين تماماً</li><li>الشركات التي تريد حل جاهز</li><li>عندما الميزانية ليست مشكلة</li></ul><h3>❌ ليس لـ</h3><ul><li>الفريلانسر والشركات الصغيرة</li><li>عندما تتحكم في بياناتك</li></ul><h2>متى تستخدم n8n؟h2><h3>✅ مناسب لـ</h3><ul><li>المطورين والفريلانسر</li><li>عندما تريد استضافة ذاتية</li><li>العمليات المعقدة</li></ul><h3>❌ ليس لـ</h3><ul><li>المبتدئين في التقنية</li><li>عندما تريد صيانة صفرية</li></ul><h2>متى تستخدم Make؟h2><h3>✅ مناسب لـ</h3><ul><li>الوسط بين Zapier وn8n</li><li>العمليات البصرية</li><li>التكاملات المعقدة</li></ul><h2>رأيي الشخصي</h2><p><strong>ابدأ بـ n8n</strong> — مجاني وقوي.<br><strong>انتقل لـ Zapier</strong> إذا احتجت دعم فني.<br><strong>استخدم Make</strong> للعمليات البصرية المعقدة.</p><h2>الخلاصة</h2><p>الأداة الأفضل تعتمد على احتياجك وميزانيتك.</p>`,
+      tags: ["Zapier", "n8n", "Make", "automation", "comparison"], readTime: 9, cat: biz.id,
     },
     {
-      title: "TypeScript للمبتدئين: من JavaScript إلى كود آمن",
-      slug: "typescript-beginners-complete-guide",
-      excerpt: "دليل شامل لتعلم TypeScript — الأنواع والـ Interfaces والـ Generics بالعربي.",
-      content: `<h2>ما هو TypeScript؟</h2><p>JavaScript + Types. يكتشف الأخطاء قبل تشغيل الكود.</p><h2>الأنواع الأساسية</h2><pre><code>const name: string = "ABUD";
-const age: number = 25;
-const skills: string[] = ["React", "Next.js"];
-const user: { id: string; email: string } = { id: "1", email: "a@b.com" };</code></pre><h2>Interfaces</h2><pre><code>interface User {
-  id: string;
-  name: string;
-  email?: string; // optional
-}
-type Status = "active" | "inactive";</code></pre><h2>TypeScript مع React</h2><pre><code>interface Props { title: string; onClick: () => void; }
-const Button: React.FC<Props> = ({ title, onClick }) => (
-  <button onClick={onClick}>{title}</button>
-);</code></pre><h2>الخلاصة</h2><p>TypeScript يبدو صعباً في البداية لكنه يوفر وقتاً. أضفه تدريجياً لمشروعك.</p>`,
-      tags: ["TypeScript", "JavaScript", "programming", "React"], readTime: 8, cat: dev.id,
+      title: "TypeScript في 2026: هل لا يزال ضرورياً للمطورين؟",
+      slug: "typescript-2026-still-relevant",
+      excerpt: "تحليل عميق لمستقبل TypeScript — هل AI سيحل محله أم لا يزال ضرورياً في عصر Claude وCursor؟",
+      content: `<h2>السؤال الكبير</h2><p>مع Claude وCursor، هل TypeScript لا يزال ضرورياً؟</p><h2>لماذا TypeScript أصبح أهم</h2><h3>1. AI يخطئ</h3><p>Claude يكتب JavaScript أحياناً bugs. TypeScript يكتشفها مبكراً.</p><h3>2. المشاريع الكبيرة</h3><p>10+ مطورين = TypeScript ضروري للتنسيق.</p><h3>3. الـ Ecosystem</h3><p>كل المكتبات الجديدة بـ TypeScript. Next.js, React, Prisma...</p><h2>متى تستخدم TypeScript؟</h2><h3>✅ ضروري لـ</h3><ul><li>المشاريع الكبيرة (>10K lines)</li><li>الفرق (>3 مطورين)</li><li>المشاريع طويلة الأجل</li></ul><h3>❌ يمكن تجنبه لـ</h3><ul><li>المشاريع الصغيرة (<1K lines)</li><li>المشاريع السريعة (prototypes)</li><li>الفريلانسر بمفرده</li></ul><h2>الخلاصة</h2><p>TypeScript ليس ضرورياً لكل شيء، لكنه ضروري لكل شيء مهم.</p>`,
+      tags: ["TypeScript", "AI", "Claude", "development"], readTime: 7, cat: dev.id,
     },
     {
-      title: "كيف تبني REST API بـ Node.js و Express",
-      slug: "nodejs-express-rest-api-guide",
-      excerpt: "دليل عملي لبناء API احترافي بـ Node.js وExpress مع المصادقة وقواعد البيانات.",
-      content: `<h2>إعداد المشروع</h2><pre><code>npm init -y
-npm install express cors helmet dotenv
-npm install -D typescript ts-node-dev</code></pre><h2>أول Server</h2><pre><code>import express from 'express';
-const app = express();
-app.use(express.json());
-app.get('/', (req, res) => res.json({ ok: true }));
-app.listen(3000);</code></pre><h2>CRUD Routes</h2><pre><code>app.get('/items', getAll);
-app.get('/items/:id', getOne);
-app.post('/items', create);
-app.put('/items/:id', update);
-app.delete('/items/:id', remove);</code></pre><h2>JWT Auth</h2><p>npm install jsonwebtoken bcryptjs — أنشئ token عند تسجيل الدخول، تحقق منه في middleware.</p><h2>الخلاصة</h2><p>Node.js + Express + Prisma + JWT = API كامل وقوي.</p>`,
-      tags: ["Node.js", "Express", "API", "backend", "REST API"], readTime: 8, cat: dev.id,
+      title: "REST API بـ Next.js App Router: الطريقة الحديثة في 2026",
+      slug: "nextjs-app-router-api-routes-2026",
+      excerpt: "لماذا تتخلى عن Express وتستخدم Next.js API Routes — الأداء، الأمان، والتكامل السهل.",
+      content: `<h2>لماذا Next.js API Routes وليس Express؟</h2><p>Express: server منفصل<br>Next.js: API + Frontend في نفس project</p><h2>المميزات</h2><ul><li><strong>Serverless:</strong> لا تحتاج VPS للـ API</li><li><strong>TypeScript:</strong> مدمج افتراضياً</li><li><strong>Security:</strong> CSRF protection مدمج</li><li><strong>Performance:</strong> Edge functions متاحة</li></ul><h2>أول API Route</h2><pre><code>// app/api/users/route.ts
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+
+export async function GET() {
+  const users = await prisma.user.findMany();
+  return NextResponse.json(users);
+}</code></pre><h2>CRUD كامل</h2><pre><code>// GET /api/users
+export async function GET() { ... }
+
+// POST /api/users
+export async function POST(request: Request) {
+  const body = await request.json();
+  const user = await prisma.user.create({ data: body });
+  return NextResponse.json(user, { status: 201 });
+}</code></pre><h2>Authentication</h2><pre><code>import { getServerSession } from 'next-auth';
+export async function GET() {
+  const session = await getServerSession();
+  if (!session) return NextResponse.json({ error: 'Unauthorized' });
+}</code></pre><h2>الخلاصة</h2><p>Next.js API Routes = أسرع تطوير + أمان أفضل + deployment أسهل.</p>`,
+      tags: ["Next.js", "API Routes", "REST API", "backend"], readTime: 8, cat: dev.id,
     },
     {
-      title: "Prompt Engineering: احصل على أفضل نتائج من الـ AI",
-      slug: "prompt-engineering-arabic-guide",
-      excerpt: "تعلم فن كتابة الـ Prompts الاحترافية للحصول على نتائج مبهرة من ChatGPT وClaude.",
-      content: `<h2>قواعد Prompt جيد</h2><h3>1. كن محدداً</h3><p>بدلاً من: "اكتب مقالاً عن AI"<br>اكتب: "اكتب مقالاً تعليمياً بالعربية عن أفضل 5 أدوات AI للمطورين في 2025، مع أمثلة، للمبتدئين"</p><h3>2. حدد الدور</h3><p>"أنت خبير في الأمن السيبراني مع 10 سنوات خبرة..."</p><h3>3. أعطِ أمثلة (Few-Shot)</h3><p>أعطِ مثالاً على الأسلوب الذي تريده.</p><h3>4. Chain of Thought</h3><p>"فكّر خطوة بخطوة" — للمشاكل المعقدة.</p><h2>Prompts للمطورين</h2><ul><li>"Debug هذا الكود وشرح كل خطوة"</li><li>"حوّل إلى TypeScript مع أنواع صحيحة"</li><li>"10 طرق لتحسين أداء هذه الـ function"</li></ul><h2>الخلاصة</h2><p>Prompt Engineering مهارة تتحسن بالممارسة.</p>`,
-      tags: ["prompt engineering", "ChatGPT", "AI", "productivity"], readTime: 6, cat: dev.id,
+      title: "Prompt Engineering للمطورين: احصل على أفضل نتائج من Claude وCursor",
+      slug: "prompt-engineering-developers-claude-cursor",
+      excerpt: "تقنيات متقدمة لكتابة prompts فعالة للمشاريع البرمجية — من debugging حتى architecture.",
+      content: `<h2>لماذا Prompt Engineering مهم؟</h2><p>Claude وCursor أقوى من ChatGPT للمطورين — لكن فقط مع الـ prompts الصحيحة.</p><h2>تقنيات متقدمة</h2><h3>1. Role-Based Prompting</h3><p>"أنت senior developer مع 15 سنة خبرة في React وNode.js..."</p><h3>2. Context First</h3><p>"أنا أبني SaaS platform بـ Next.js 14، Prisma، PostgreSQL..."</p><h3>3. Chain of Thought</h3><p>"فكر خطوة بخطوة: 1. تحليل المشكلة 2. تصميم الحل 3. كتابة الكود"</p><h2>Prompts للمهام المختلفة</h2><h3>Debugging</h3><p>"هذا الكود يعطي error X. الصق الكود كامل واشرح المشكلة بالعربي ثم أصلحها."</p><h3>Architecture</h3><p>"صمم architecture لتطبيق SaaS بـ microservices. وضح الـ services والـ communication بينها."</p><h3>Code Review</h3><p>"مراجعة هذا الكود من ناحية: 1. Performance 2. Security 3. Best practices 4. Readability"</p><h3>Migration</h3><p>"اكتب migration script من MySQL إلى PostgreSQL مع تحويل الـ data types الصحيحة."</p><h2>الأخطاء الشائعة</h2><ul><li>الـ prompt عام جداً</li><li>لا تعطي context كافٍ</li><li>لا تحدد المخرجات المطلوبة</li></ul><h2>الخلاصة</h2><p>Prompt جيد = Claude يوفر 50% من وقت التطوير.</p>`,
+      tags: ["prompt engineering", "Claude", "Cursor", "AI"], readTime: 7, cat: dev.id,
     },
     {
-      title: "React Hooks: الدليل الشامل من useState حتى Custom Hooks",
-      slug: "react-hooks-comprehensive-guide",
-      excerpt: "إتقن React Hooks — useState, useEffect, useContext, useMemo, useCallback وCustom Hooks.",
-      content: `<h2>useState</h2><pre><code>const [count, setCount] = useState(0);
-setCount(prev => prev + 1);</code></pre><h2>useEffect</h2><pre><code>useEffect(() => { fetchData(); }, []); // mount
-useEffect(() => { document.title = count; }, [count]); // dependency
-useEffect(() => {
-  const t = setInterval(tick, 1000);
-  return () => clearInterval(t); // cleanup
-}, []);</code></pre><h2>useMemo & useCallback</h2><pre><code>const sorted = useMemo(() => items.sort(), [items]);
-const handleClick = useCallback(() => { ... }, [deps]);</code></pre><h2>Custom Hook</h2><pre><code>function useFetch(url: string) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    fetch(url).then(r => r.json()).then(setData).finally(() => setLoading(false));
-  }, [url]);
-  return { data, loading };
-}</code></pre><h2>الخلاصة</h2><p>Hooks هي قلب React الحديث. أتقنها وستكتب كوداً أنظف.</p>`,
-      tags: ["React", "React Hooks", "JavaScript", "frontend"], readTime: 9, cat: dev.id,
+      title: "React Server Components vs Client Components: متى تستخدم كل منهما؟",
+      slug: "react-server-vs-client-components-2026",
+      excerpt: "فهم الفرق بين Server وClient Components في Next.js 14 — متى تستخدم كل منهما والأداء.",
+      content: `<h2>المفهوم الأساسي</h2><p><strong>Server Components:</strong> تعمل على السيرفر، لا تصل JavaScript للـ client<br><strong>Client Components:</strong> تعمل في المتصفح، تدعم useState وuseEffect</p><h2>Server Components (الافتراضي)</h2><pre><code>// app/page.tsx - Server Component
+async function Page() {
+  const posts = await prisma.post.findMany();
+  return <PostList posts={posts} />;
+}</code></pre><h3>✅ استخدمها لـ</h3><ul><li>جلب البيانات من قاعدة البيانات</li><li>عرض محتوى ثابت</li><li>SEO مهم</li><li>لا تحتاج تفاعل</li></ul><h2>Client Components ("use client")</h2><pre><code>// components/Counter.tsx
+"use client";
+import { useState } from 'react';
+export function Counter() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(c + 1)}>{count}</button>;
+}</code></pre><h3>✅ استخدمها لـ</h3><ul><li>التفاعل مع المستخدم</li><li>useState, useEffect, useContext</li><li>Event handlers</li><li>Browser APIs</li></ul><h2>Hybrid Pattern</h2><pre><code>// Server Component يمرر props لـ Client Component
+export default function Page() {
+  return (
+    <div>
+      <h1>Static Title</h1>
+      <InteractiveComponent data={someData} />
+    </div>
+  );
+}</code></pre><h2>أخطاء شائعة</h2><ul><li>وضع "use client" في الـ page.tsx الرئيسية</li><li>استخدام useState في Server Component</li><li>جلب بيانات داخل Client Component</li></ul><h2>الخلاصة</h2><p>Server Components = SEO + Performance<br>Client Components = Interactivity</p>`,
+      tags: ["React", "Server Components", "Client Components", "Next.js"], readTime: 8, cat: dev.id,
     },
     {
       title: "Docker للمطورين العرب: ابدأ بالحاويات من الصفر",
