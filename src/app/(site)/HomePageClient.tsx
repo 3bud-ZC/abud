@@ -542,7 +542,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                 </p>
                 <div className="flex items-center gap-3 pt-3" style={{ borderTop: "1px solid rgba(28,28,48,0.8)" }}>
                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
-                    style={{ background: `${t.color}22`, border: `1px solid ${t.color}40`, color: t.color }}>
+                    style={{ background: `${t.color}22`, border: `1px solid ${t.color}40`, color: "#c4a0ff" }}>
                     {t.avatar}
                   </div>
                   <div>
