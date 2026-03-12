@@ -534,8 +534,14 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
               >
                 <div className="absolute top-0 right-0 w-20 h-20 rounded-full blur-[40px] pointer-events-none"
                   style={{ background: `${t.color}18`, transform: "translate(30%, -30%)" }} />
-                <div className="flex gap-0.5 mb-1">
-                  {[...Array(5)].map((_, s) => <Star key={s} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />)}
+                <div className="flex items-center justify-center mb-2">
+                  <Image 
+                    src="/abd-profile.jpg" 
+                    alt="Abud" 
+                    width={60}
+                    height={60}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-500/30"
+                  />
                 </div>
                 <p className="text-sm leading-relaxed flex-1" style={{ color: "#9090b0" }}>
                   &ldquo;{t.text}&rdquo;
