@@ -1,4 +1,5 @@
 const nextConfig = {
+  compress: false,
   async rewrites() {
     return [
       { source: "/favicon.ico",          destination: "/apple-icon" },
