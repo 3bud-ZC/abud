@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { BookOpen, Plus, Pencil, Trash2, X, Save } from "lucide-react";
 import { formatDate, generateSlug } from "@/lib/utils";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 interface Category { id: string; name: string; slug: string; }
 interface Post {
@@ -113,7 +114,6 @@ export default function AdminBlogPage() {
                 { label: "العنوان *", key: "title", placeholder: "عنوان المقال" },
                 { label: "الـ Slug", key: "slug", placeholder: "سيُولَّد تلقائيًا", dir: "ltr" },
                 { label: "الملخص", key: "excerpt", placeholder: "ملخص قصير" },
-                { label: "رابط الصورة", key: "coverImage", placeholder: "https://...", dir: "ltr" },
                 { label: "الوسوم (مفصولة بفواصل)", key: "tags", placeholder: "برمجة, تصميم, تقنية" },
               ].map(({ label, key, placeholder, dir }) => (
                 <div key={key}>
@@ -124,6 +124,14 @@ export default function AdminBlogPage() {
                     className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm placeholder-[#606080] outline-none transition-colors" />
                 </div>
               ))}
+              <div>
+                <label className="block text-sm text-[#a0a0b8] mb-2">صورة المقال</label>
+                <ImageUpload
+                  value={form.coverImage}
+                  onChange={(url) => F("coverImage", url)}
+                  placeholder="ارفع صورة المقال أو أدخل رابط الصورة"
+                />
+              </div>
               <div>
                 <label className="block text-sm text-[#a0a0b8] mb-1">المحتوى (HTML)</label>
                 <textarea rows={8} placeholder="<p>محتوى المقال...</p>"

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Package, Plus, Pencil, Trash2, X, Save, Upload } from "lucide-react";
 import { formatPrice, generateSlug } from "@/lib/utils";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 interface Category { id: string; name: string; slug: string; }
 interface Product {
@@ -116,7 +117,6 @@ export default function AdminProductsPage() {
                 { label: "الـ Slug", key: "slug", placeholder: "سيُولَّد تلقائيًا", dir: "ltr" },
                 { label: "السعر *", key: "price", placeholder: "0.00", type: "number", dir: "ltr" },
                 { label: "السعر الأصلي", key: "oldPrice", placeholder: "اختياري", type: "number", dir: "ltr" },
-                { label: "رابط الصورة", key: "coverImage", placeholder: "https://...", dir: "ltr" },
               ].map(({ label, key, placeholder, type, dir }) => (
                 <div key={key}>
                   <label className="block text-sm text-[#a0a0b8] mb-1">{label}</label>
@@ -126,6 +126,14 @@ export default function AdminProductsPage() {
                     className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm placeholder-[#606080] outline-none transition-colors" />
                 </div>
               ))}
+              <div>
+                <label className="block text-sm text-[#a0a0b8] mb-2">صورة المنتج</label>
+                <ImageUpload
+                  value={form.coverImage}
+                  onChange={(url) => setForm(f => ({ ...f, coverImage: url }))}
+                  placeholder="ارفع صورة المنتج أو أدخل رابط الصورة"
+                />
+              </div>
               <div>
                 <label className="block text-sm text-[#a0a0b8] mb-1">الوصف</label>
                 <textarea rows={3} placeholder="وصف المنتج"

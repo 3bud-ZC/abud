@@ -20,7 +20,7 @@ async function main() {
   console.log("✅ تم إنشاء المستخدم الإداري");
 
   // Product categories
-  const [catTools, catCourses, catTemplates] = await Promise.all([
+  const [catTools, catCourses, catTemplates, catServices] = await Promise.all([
     prisma.productCategory.upsert({
       where: { slug: "tools" },
       update: {},
@@ -35,6 +35,11 @@ async function main() {
       where: { slug: "templates" },
       update: {},
       create: { name: "قوالب", slug: "templates" },
+    }),
+    prisma.productCategory.upsert({
+      where: { slug: "services" },
+      update: {},
+      create: { name: "خدمات", slug: "services" },
     }),
   ]);
   console.log("✅ تم إنشاء تصنيفات المنتجات");
@@ -103,6 +108,96 @@ async function main() {
         status: "active",
         featured: true,
         categoryId: catCourses.id,
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: "professional-website-development-2026" },
+      update: {},
+      create: {
+        title: "تطوير موقع احترافي 2026",
+        slug: "professional-website-development-2026",
+        shortDesc: "موقع ويب احترافي بأحدث التقنيات - Next.js 14، SEO سريع، متوافق مع الجوال",
+        description: "نطور لك موقع ويب احترافي بالكامل: تصميم عصري، SEO متقدم، سرعة فائقة، لوحة تحكم، دعم فني شهر كامل",
+        price: 5000,
+        oldPrice: 7000,
+        coverImage: "https://images.unsplash.com/photo-1467232004585-a2713464baa5?w=800",
+        status: "active",
+        featured: true,
+        purchaseType: "contact",
+        categoryId: catServices.id,
+        deliveryNote: "التسليم خلال 7-14 يوم عمل",
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: "telegram-bot-development-service" },
+      update: {},
+      create: {
+        title: "بوت تيليجرام متقدم",
+        slug: "telegram-bot-development-service",
+        shortDesc: "بوت تيليجرام احترافي للتجارة الإلكترونية، خدمة العملاء، أو أتمتة الأعمال",
+        description: "نبرمج بوت تيليجرام متكامل: واجهة تفاعلية، ربط بقواعد البيانات، دفعات، إشعارات، لوحة تحكم",
+        price: 3500,
+        oldPrice: 5000,
+        coverImage: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800",
+        status: "active",
+        featured: true,
+        purchaseType: "contact",
+        categoryId: catServices.id,
+        deliveryNote: "التسليم خلال 5-10 أيام عمل",
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: "business-automation-service" },
+      update: {},
+      create: {
+        title: "أتمتة الأعمال المتكاملة",
+        slug: "business-automation-service",
+        shortDesc: "وفر 20 ساعة أسبوعياً عبر أتمتة العمليات المتكررة بـ n8n أو Zapier",
+        description: "نؤتمت عملك بالكامل: إدخال البيانات، إرسال الإيميلات، إدارة العملاء، تقارير تلقائية، تكامل التطبيقات",
+        price: 4000,
+        oldPrice: 6000,
+        coverImage: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800",
+        status: "active",
+        featured: false,
+        purchaseType: "contact",
+        categoryId: catServices.id,
+        deliveryNote: "التسليم خلال 10-15 يوم عمل",
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: "cybersecurity-protection-service" },
+      update: {},
+      create: {
+        title: "حماية وأمن سيبراني",
+        slug: "cybersecurity-protection-service",
+        shortDesc: "تأمين موقعك أو تطبيقك من الهجمات الإلكترونية بـ Cloudflare و Firewall متقدم",
+        description: "نؤمن موقعك بالكامل: حماية من DDoS، SSL، Firewall، مراجعة أمنية، تحديثات أمنية، مراقبة 24/7",
+        price: 3000,
+        oldPrice: 4500,
+        coverImage: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800",
+        status: "active",
+        featured: true,
+        purchaseType: "contact",
+        categoryId: catServices.id,
+        deliveryNote: "التسليم الفوري + المراقبة مستمرة",
+      },
+    }),
+    prisma.product.upsert({
+      where: { slug: "ai-tools-integration-service" },
+      update: {},
+      create: {
+        title: "تكامل أدوات الذكاء الاصطناعي",
+        slug: "ai-tools-integration-service",
+        shortDesc: "دمج Claude 3.5 أو ChatGPT في موقعك أو تطبيقك لتوفير الوقت وزيادة الإنتاجية",
+        description: "نكامل أدوات AI في عملك: ChatGPT API، Claude، تحليل البيانات، توليد المحتوى، دعم العملاء التلقائي",
+        price: 4500,
+        oldPrice: 6500,
+        coverImage: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800",
+        status: "active",
+        featured: false,
+        purchaseType: "contact",
+        categoryId: catServices.id,
+        deliveryNote: "التسليم خلال 7-12 يوم عمل",
       },
     }),
   ]);
