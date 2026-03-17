@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { m } from "framer-motion";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { motion as m } from "framer-motion";
+import { trackHomeHeroCTA, trackHomeFinalCTA } from "@/lib/analytics";
 import {
   ArrowLeft, Zap, Code2, Bot, BrainCircuit, Layers, Cpu,
   Star, ShoppingBag, BookOpen, MessageSquare, ChevronLeft,
@@ -147,12 +148,12 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap items-center justify-center gap-3"
           >
-            <Link href="/store" className="btn-primary gap-2 py-3 px-8">
+            <Link href="/store" className="btn-primary gap-2 py-3 px-8" onClick={() => trackHomeHeroCTA('primary', '/store')}>
               <ShoppingBag className="w-4 h-4" />
               <span className="font-bold">تصفح المنتجات الآن</span>
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <Link href="/contact" className="btn-outline gap-2 py-3 px-6">
+            <Link href="/contact" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeHeroCTA('secondary', '/contact')}>
               <MessageSquare className="w-3.5 h-3.5" />
               <span>طلب خدمة مخصصة</span>
             </Link>
@@ -634,12 +635,12 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                  <Link href="/store" className="btn-primary gap-2 py-3 px-8">
+                  <Link href="/store" className="btn-primary gap-2 py-3 px-8" onClick={() => trackHomeFinalCTA('/store')}>
                     <ShoppingBag className="w-4 h-4" />
                     <span className="font-bold">تصفح المنتجات</span>
                     <ArrowLeft className="w-4 h-4" />
                   </Link>
-                  <Link href="/contact" className="btn-outline py-3 px-6 gap-2">
+                  <Link href="/contact" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeFinalCTA('/contact')}>
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>تواصل معنا</span>
                   </Link>

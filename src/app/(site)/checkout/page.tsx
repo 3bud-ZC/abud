@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { trackCheckoutStart, trackCheckoutPaymentMethodSelected, trackCheckoutSubmit } from "@/lib/analytics";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -61,6 +62,11 @@ function CheckoutContent() {
   const payMethod = watch("paymentMethod");
 
   useEffect(() => {
+    // Track checkout start
+    if (productId) {
+      trackCheckoutStart({ product_id: productId });
+    }
+
     async function load() {
       try {
         const [pRes, payRes] = await Promise.all([
@@ -110,6 +116,13 @@ function CheckoutContent() {
   async function onSubmit(data: FormData) {
     if (!product) { toast.error("لم يتم تحديد منتج"); return; }
     if (needsProof && !proofFile) { toast.error("يرجى رفع إيصال الدفع"); return; }
+
+    // Track checkout submit
+    trackCheckoutSubmit({
+      product_id: product.id,
+      payment_method: data.paymentMethod,
+      order_value: finalPrice,
+    });
 
     setSubmitting(true);
     try {
@@ -232,7 +245,11 @@ function CheckoutContent() {
                         }`}>
                           <input type="radio" value={pay.method}
                             {...register("paymentMethod")}
-                            onChange={() => { setValue("paymentMethod", pay.method as FormData["paymentMethod"]); setSelectedMethod(pay.method); }}
+                            onChange={() => { 
+                              setValue("paymentMethod", pay.method as FormData["paymentMethod"]); 
+                              setSelectedMethod(pay.method);
+                              trackCheckoutPaymentMethodSelected(pay.method);
+                            }}
                             className="hidden" />
                           <span className="text-2xl">{m.icon}</span>
                           <span className={`text-sm font-bold ${isSelected ? "text-purple-300" : "text-white"}`}>{m.label}</span>

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { trackStorePageView, trackStoreFilterUsed, trackStoreSearchUsed, trackProductCardClick } from "@/lib/analytics";
 import {
   ShoppingBag, Search, Star, Package, Zap, Shield, Code2, BookOpen,
   Gamepad2, Wrench, FileText, Globe, Lock, MessageSquare, Download,
@@ -111,12 +112,12 @@ function FeaturedCard({ product }: { product: Product }) {
         {product.category && (
           <span className="tag-pill mb-2 inline-flex text-[10px]">{product.category.name}</span>
         )}
-        <h3 className="text-white font-black text-base mb-1.5 leading-snug group-hover:text-purple-200 transition-colors line-clamp-2"
+        <h3 className="text-white font-black text-base mb-1.5 leading-snug line-clamp-2"
           style={{ letterSpacing: "-0.02em" }}>
           {product.title}
         </h3>
         {product.shortDesc && (
-          <p className="text-xs leading-relaxed line-clamp-2 mb-4 flex-1" style={{ color: "#606080" }}>
+          <p className="text-xs leading-relaxed line-clamp-2 flex-1" style={{ color: "#606080" }}>
             {product.shortDesc}
           </p>
         )}
@@ -181,13 +182,17 @@ function ProductCard({ product }: { product: Product }) {
           {isService ? (
             <Link href={`/store/${product.slug}`}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold shadow-lg"
-              style={{ background: "rgba(6,182,212,0.85)", color: "white", backdropFilter: "blur(8px)" }}>
+              style={{ background: "rgba(6,182,212,0.85)", color: "white", backdropFilter: "blur(8px)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(6,182,212,0.95)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(6,182,212,0.85)")}>
               <MessageSquare className="w-3.5 h-3.5" /> عرض الخدمة
             </Link>
           ) : (
             <Link href={`/checkout?product=${product.id}`}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold shadow-lg"
-              style={{ background: "rgba(147,51,234,0.9)", color: "white", backdropFilter: "blur(8px)" }}>
+              style={{ background: "rgba(147,51,234,0.9)", color: "white", backdropFilter: "blur(8px)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(147,51,234,0.95)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(147,51,234,0.9)")}>
               <Zap className="w-3.5 h-3.5" /> احصل عليه
             </Link>
           )}
@@ -254,7 +259,8 @@ function ProductCard({ product }: { product: Product }) {
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200"
             style={{ background: "linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border: "1px solid rgba(6,182,212,0.35)", color: "#67e8f9", boxShadow: "0 0 12px rgba(6,182,212,0.1)" }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(6,182,212,0.28)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(6,182,212,0.25)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))"; e.currentTarget.style.boxShadow = "0 0 12px rgba(6,182,212,0.1)"; }}>
+            onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))"; e.currentTarget.style.boxShadow = "0 0 12px rgba(6,182,212,0.1)"; }}
+            onClick={() => trackProductCardClick({ product_id: product.id, product_slug: product.slug, product_type: 'contact', product_category: product.category?.name, product_price: product.price, cta_location: 'grid_card' })}>
             <MessageSquare className="w-3 h-3" /> عرض التفاصيل
           </Link>
         ) : (
@@ -262,7 +268,8 @@ function ProductCard({ product }: { product: Product }) {
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all duration-200"
             style={{ background: "linear-gradient(135deg,#9333ea,#6d28d9)", boxShadow: "0 0 16px rgba(147,51,234,0.3)" }}
             onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 0 28px rgba(147,51,234,0.55)"; e.currentTarget.style.transform = "scale(1.04)"; }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 16px rgba(147,51,234,0.3)"; e.currentTarget.style.transform = "scale(1)"; }}>
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 16px rgba(147,51,234,0.3)"; e.currentTarget.style.transform = "scale(1)"; }}
+            onClick={() => trackProductCardClick({ product_id: product.id, product_slug: product.slug, product_type: 'instant', product_category: product.category?.name, product_price: product.price, cta_location: 'grid_card' })}>
             <Zap className="w-3 h-3" /> احصل عليه الآن
           </Link>
         )}
@@ -282,11 +289,17 @@ export default function StorePage() {
   const [activeCat, setActiveCat] = useState("all");
 
   useEffect(() => {
-    fetch("/api/products?status=active")
-      .then(r => r.json())
-      .then(d => setProducts(d.products || []))
-      .catch(() => setProducts([]))
-      .finally(() => setLoading(false));
+    // Track store page view
+    trackStorePageView();
+    
+    async function load() {
+      fetch("/api/products?status=active")
+        .then(r => r.json())
+        .then(d => setProducts(d.products || []))
+        .catch(() => setProducts([]))
+        .finally(() => setLoading(false));
+    }
+    load();
   }, []);
 
   /* Derived category list */
@@ -328,6 +341,13 @@ export default function StorePage() {
 
   const digitalCount  = products.filter(p => p.purchaseType === "instant").length;
   const serviceCount  = products.filter(p => p.purchaseType === "contact").length;
+
+  function handleSearchChange(val: string) {
+    setSearch(val);
+    if (val.length >= 3) {
+      trackStoreSearchUsed(val);
+    }
+  }
 
   return (
     <div className="pt-20">
@@ -415,14 +435,14 @@ export default function StorePage() {
           <div className="relative flex-1 min-w-[160px] max-w-xs">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#505070" }} />
             <input type="text" placeholder="ابحث في المتجر..." value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={e => handleSearchChange(e.target.value)}
               className="w-full rounded-xl py-2 pr-9 pl-8 text-white text-sm placeholder-[#505070] outline-none transition-all"
               style={{ background: "rgba(12,12,20,0.9)", border: "1px solid rgba(35,35,55,0.8)" }}
               onFocus={e => (e.target.style.borderColor = "rgba(147,51,234,0.5)")}
               onBlur={e => (e.target.style.borderColor = "rgba(35,35,55,0.8)")}
             />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#505070] hover:text-white transition-colors">
+              <button onClick={() => handleSearchChange("")} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#505070] hover:text-white transition-colors">
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
@@ -431,7 +451,7 @@ export default function StorePage() {
           {/* Type tabs */}
           <div className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(12,12,20,0.9)", border: "1px solid rgba(35,35,55,0.8)" }}>
             {([["all","الكل"], ["instant","منتجات"], ["contact","خدمات"]] as [FilterType, string][]).map(([val, label]) => (
-              <button key={val} onClick={() => setFilterType(val)}
+              <button key={val} onClick={() => { setFilterType(val); trackStoreFilterUsed('type', val); }}
                 className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
                 style={filterType === val
                   ? { background: "rgba(147,51,234,0.2)", color: "#c084fc", border: "1px solid rgba(147,51,234,0.35)" }

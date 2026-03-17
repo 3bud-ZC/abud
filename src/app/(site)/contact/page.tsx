@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { trackContactFormStart, trackContactQualificationField, trackContactFormSubmit } from "@/lib/analytics";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { MessageSquare, Mail, Send, Instagram, Zap, Music2, Ghost, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
 const schema = z.object({
@@ -33,12 +34,20 @@ const socials = [
 export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [formStarted, setFormStarted] = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
   async function onSubmit(data: FormData) {
+    // Track contact form submit
+    trackContactFormSubmit({
+      inquiry_type: data.inquiryType,
+      budget_range: data.budget,
+      timeline_range: data.timeline,
+    });
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/contact", {
@@ -111,7 +120,13 @@ export default function ContactPage() {
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5">
+                <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5"
+                  onFocus={() => {
+                    if (!formStarted) {
+                      trackContactFormStart();
+                      setFormStarted(true);
+                    }
+                  }}>
                   <div className="mb-4">
                     <h2 className="text-xl font-bold text-white mb-2">أرسل رسالة</h2>
                     <p className="text-sm text-[#8888a8]">سأرد عليك خلال 24 ساعة برؤية واضحة لمشروعك. الحقول الإضافية تساعدني في تقديم عرض أدق.</p>
