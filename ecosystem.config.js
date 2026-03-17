@@ -1,14 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: "abud-platform",
+      name: "abud",
       script: "node_modules/.bin/next",
       args: "start",
-      cwd: "/home/abdullah/abud-platform",
+      cwd: "/home/abdullah/abud",
       instances: 1,
       autorestart: true,
       watch: false,
-      max_memory_restart: "512M",
+      max_memory_restart: "1G",
       env: {
         NODE_ENV: "production",
         PORT: 3000,
@@ -17,10 +17,12 @@ module.exports = {
         NODE_ENV: "production",
         PORT: 3000,
       },
-      error_file: "/home/abdullah/.pm2/logs/abud-platform-error.log",
-      out_file: "/home/abdullah/.pm2/logs/abud-platform-out.log",
-      log_file: "/home/abdullah/.pm2/logs/abud-platform.log",
+      error_file: "/home/abdullah/.pm2/logs/abud-error.log",
+      out_file: "/home/abdullah/.pm2/logs/abud-out.log",
+      log_file: "/home/abdullah/.pm2/logs/abud.log",
       time: true,
+      merge_logs: true,
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
     },
   ],
 };
