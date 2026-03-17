@@ -27,5 +27,5 @@ export default async function BlogPage() {
     }),
   ]);
 
-  return <BlogPageClient initialPosts={posts} initialCategories={categories} />;
+  return <BlogPageClient initialPosts={posts as any} initialCategories={categories} />;
 }
