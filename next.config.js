@@ -1,5 +1,7 @@
 const nextConfig = {
-  compress: false,
+  compress: true,
+  poweredByHeader: false,
+  
   async rewrites() {
     return [
       { source: "/favicon.ico",          destination: "/apple-icon" },
@@ -8,18 +10,62 @@ const nextConfig = {
       { source: "/apple-touch-icon.png", destination: "/apple-icon" },
     ];
   },
+  
   images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "api.dicebear.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
       },
     ],
   },
+  
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "abud.com"],
+      allowedOrigins: ["localhost:3000", "abud.fun", "www.abud.fun"],
     },
+  },
+  
+  async headers() {
+    return [
+      {
+        source: "/uploads/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+    ];
   },
 };
 

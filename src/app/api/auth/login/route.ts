@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createSession } from "@/lib/session";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkRateLimit(req, "auth");
+  if (!rateLimit.allowed) {
+    return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
+  }
+
   try {
     const body = await req.json();
-    console.log("Login attempt:", { email: body.email });
     
     const { email, password } = body;
     if (!email || !password) {
@@ -15,22 +20,19 @@ export async function POST(req: NextRequest) {
 
     const admin = await prisma.adminUser.findUnique({ where: { email } });
     if (!admin) {
-      console.log("Admin not found:", email);
       return NextResponse.json({ error: "بيانات الدخول غير صحيحة" }, { status: 401 });
     }
 
     const valid = await bcrypt.compare(password, admin.password);
     if (!valid) {
-      console.log("Invalid password for:", email);
       return NextResponse.json({ error: "بيانات الدخول غير صحيحة" }, { status: 401 });
     }
 
     await createSession({ userId: admin.id, email: admin.email });
-    console.log("Login successful:", email);
     const response = NextResponse.json({ ok: true, admin: { id: admin.id, name: admin.name, email: admin.email } });
     return response;
   } catch (e) {
-    console.error("Login error:", e);
-    return NextResponse.json({ error: "حدث خطأ داخلي", details: e instanceof Error ? e.message : String(e) }, { status: 500 });
+    console.error("Login error:", e instanceof Error ? e.message : "Unknown error");
+    return NextResponse.json({ error: "حدث خطأ داخلي" }, { status: 500 });
   }
 }

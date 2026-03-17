@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateOrderNumber } from "@/lib/utils";
+import { validateUploadFile, getAllowedTypesForContext, MAX_FILE_SIZE } from "@/lib/upload-validator";
 import path from "path";
 import fs from "fs/promises";
 
@@ -25,14 +26,22 @@ export async function POST(req: NextRequest) {
 
     let proofPath: string | null = null;
     if (proofFile && proofFile.size > 0) {
-      const uploadDir = process.env.UPLOAD_DIR || "./public/uploads";
+      // Validate proof file
+      const allowedTypes = getAllowedTypesForContext("proof");
+      const validation = validateUploadFile(proofFile, allowedTypes, MAX_FILE_SIZE);
+      
+      if (!validation.valid) {
+        return NextResponse.json({ error: `خطأ في ملف الإثبات: ${validation.error}` }, { status: 400 });
+      }
+
+      const uploadDir = path.join(process.cwd(), "public", "uploads");
       await fs.mkdir(uploadDir, { recursive: true });
-      const ext = proofFile.name.split(".").pop();
-      const fileName = `proof_${Date.now()}.${ext}`;
-      const filePath = path.join(uploadDir, fileName);
+      
+      const safeFileName = validation.sanitizedName!;
+      const filePath = path.join(uploadDir, safeFileName);
       const buffer = Buffer.from(await proofFile.arrayBuffer());
       await fs.writeFile(filePath, buffer);
-      proofPath = `/uploads/${fileName}`;
+      proofPath = `/uploads/${safeFileName}`;
     }
 
     const orderNumber = generateOrderNumber();
@@ -58,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, orderNumber: order.orderNumber }, { status: 201 });
   } catch (e) {
-    console.error(e);
+    console.error("Order creation error:", e instanceof Error ? e.message : String(e));
     return NextResponse.json({ error: "فشل إنشاء الطلب" }, { status: 500 });
   }
 }

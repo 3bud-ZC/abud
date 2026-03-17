@@ -3,9 +3,38 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const SESSION_COOKIE = "abud_session";
-const secret = new TextEncoder().encode(
-  process.env.SESSION_SECRET || "fallback-secret-change-in-production-32ch"
-);
+
+// Validate SESSION_SECRET
+function getSessionSecret(): Uint8Array {
+  const sessionSecret = process.env.SESSION_SECRET;
+  
+  if (!sessionSecret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "CRITICAL SECURITY ERROR: SESSION_SECRET environment variable is not set. " +
+        "Application cannot start without a secure session secret. " +
+        "Generate one using: openssl rand -base64 32"
+      );
+    } else {
+      console.warn(
+        "⚠️  WARNING: SESSION_SECRET is not set in development mode. " +
+        "This is insecure. Generate one using: openssl rand -base64 32"
+      );
+      throw new Error("SESSION_SECRET is required even in development mode for security");
+    }
+  }
+
+  if (sessionSecret.length < 32) {
+    throw new Error(
+      "SECURITY ERROR: SESSION_SECRET must be at least 32 characters long. " +
+      "Current length: " + sessionSecret.length
+    );
+  }
+
+  return new TextEncoder().encode(sessionSecret);
+}
+
+const secret = getSessionSecret();
 
 export interface SessionPayload {
   userId: string;
@@ -27,7 +56,7 @@ export async function createSession(payload: Omit<SessionPayload, "expiresAt">) 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     expires: expiresAt,
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
   });
 
@@ -74,7 +103,7 @@ export function setSessionCookie(response: NextResponse, token: string, expiresA
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     expires: expiresAt,
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
   });
 }

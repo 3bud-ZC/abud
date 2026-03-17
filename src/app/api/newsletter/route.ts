@@ -1,14 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
+import { z } from "zod";
+
+const newsletterSchema = z.object({
+  email: z.string().email("البريد الإلكتروني غير صحيح").min(5).max(100),
+  name: z.string().max(100).optional(),
+  source: z.string().max(50).optional(),
+});
 
 export async function POST(req: NextRequest) {
+  // Rate limiting
+  const rateLimit = checkRateLimit(req, "newsletter");
+  if (!rateLimit.allowed) {
+    return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
+  }
+
   try {
-    const { email, name, source } = await req.json();
-    if (!email || typeof email !== "string") {
-      return NextResponse.json({ error: "البريد الإلكتروني مطلوب" }, { status: 400 });
+    const body = await req.json();
+    
+    // Validate input
+    const validation = newsletterSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ 
+        error: validation.error.errors[0].message 
+      }, { status: 400 });
     }
+
+    const { email, name, source } = validation.data;
     const emailLower = email.trim().toLowerCase();
+    
     const existing = await prisma.newsletterSubscriber.findUnique({ where: { email: emailLower } });
     if (existing) {
       if (!existing.isActive) {
@@ -17,12 +39,13 @@ export async function POST(req: NextRequest) {
       }
       return NextResponse.json({ ok: true, message: "أنت مشترك بالفعل!" });
     }
+    
     await prisma.newsletterSubscriber.create({
       data: { email: emailLower, name: name?.trim() || null, source: source || "newsletter" },
     });
     return NextResponse.json({ ok: true, message: "تم الاشتراك بنجاح! 🎉" });
   } catch (e) {
-    console.error(e);
+    console.error("Newsletter error:", e instanceof Error ? e.message : "Unknown error");
     return NextResponse.json({ error: "حدث خطأ — حاول مجددًا" }, { status: 500 });
   }
 }
