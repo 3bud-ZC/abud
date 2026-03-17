@@ -13,8 +13,11 @@ const schema = z.object({
   name: z.string().min(2, "الاسم مطلوب"),
   email: z.string().email("بريد إلكتروني غير صحيح"),
   phone: z.string().optional(),
+  inquiryType: z.string().optional(),
+  budget: z.string().optional(),
+  timeline: z.string().optional(),
   subject: z.string().min(2, "الموضوع مطلوب"),
-  message: z.string().min(10, "الرسالة قصيرة جدًا"),
+  message: z.string().min(10, "الرسالة يجب أن تكون 10 أحرف على الأقل"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -111,7 +114,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5">
                   <div className="mb-4">
                     <h2 className="text-xl font-bold text-white mb-2">أرسل رسالة</h2>
-                    <p className="text-sm text-[#8888a8]">سأرد عليك خلال 24 ساعة برؤية واضحة لمشروعك</p>
+                    <p className="text-sm text-[#8888a8]">سأرد عليك خلال 24 ساعة برؤية واضحة لمشروعك. الحقول الإضافية تساعدني في تقديم عرض أدق.</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -140,6 +143,43 @@ export default function ContactPage() {
                       <input {...register("subject")} placeholder="موضوع رسالتك"
                         className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-3 text-white text-sm placeholder-[#606080] outline-none transition-colors" />
                       {errors.subject && <p className="text-red-400 text-xs mt-1">{errors.subject.message}</p>}
+                    </div>
+                  </div>
+
+                  <div className="grid sm:grid-cols-3 gap-4 pt-2 pb-2 border-t border-[#1a1a2e]/50">
+                    <div>
+                      <label className="block text-sm text-[#a0a0b8] mb-1.5">نوع الاستفسار</label>
+                      <select {...register("inquiryType")}
+                        className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors">
+                        <option value="">اختياري</option>
+                        <option value="product">شراء منتج</option>
+                        <option value="service">طلب خدمة</option>
+                        <option value="consultation">استشارة</option>
+                        <option value="support">دعم فني</option>
+                        <option value="other">أخرى</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-[#a0a0b8] mb-1.5">الميزانية التقريبية</label>
+                      <select {...register("budget")}
+                        className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors">
+                        <option value="">اختياري</option>
+                        <option value="under-5k">أقل من 5,000 ج.م</option>
+                        <option value="5k-15k">5,000 - 15,000 ج.م</option>
+                        <option value="15k-30k">15,000 - 30,000 ج.م</option>
+                        <option value="30k-plus">أكثر من 30,000 ج.م</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-[#a0a0b8] mb-1.5">الإطار الزمني</label>
+                      <select {...register("timeline")}
+                        className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-3 text-white text-sm outline-none transition-colors">
+                        <option value="">اختياري</option>
+                        <option value="urgent">عاجل (أسبوع)</option>
+                        <option value="soon">قريب (2-4 أسابيع)</option>
+                        <option value="flexible">مرن (شهر+)</option>
+                        <option value="planning">مجرد تخطيط</option>
+                      </select>
                     </div>
                   </div>
 

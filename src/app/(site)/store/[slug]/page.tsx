@@ -98,7 +98,17 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
               <h1 className="text-3xl font-black text-white leading-tight">{product.title}</h1>
 
               {product.shortDesc && (
-                <p className="text-[#a0a0b8] leading-relaxed">{product.shortDesc}</p>
+                <p className="text-[#a0a0b8] leading-relaxed text-base">{product.shortDesc}</p>
+              )}
+
+              {product.purchaseType === "instant" && (
+                <div className="bg-green-600/10 border border-green-600/30 rounded-xl p-3 flex items-start gap-2">
+                  <Zap className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <span className="text-green-400 font-bold">تحميل فوري</span>
+                    <span className="text-[#a0a0b8]"> — احصل على المنتج مباشرة بعد إتمام الدفع</span>
+                  </div>
+                </div>
               )}
 
               <div className="flex items-baseline gap-3 flex-wrap">
@@ -154,13 +164,29 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 </div>
               )}
 
-              <Link
-                href={`/checkout?product=${product.id}`}
-                className="btn-primary w-full justify-center gap-2 text-base py-3.5"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                اشتري الآن
-              </Link>
+              {product.purchaseType === "instant" ? (
+                <Link
+                  href={`/checkout?product=${product.id}`}
+                  className="btn-primary w-full justify-center gap-2 text-base py-3.5"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="font-bold">احصل عليه الآن — {formatPrice(product.price)}</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/contact"
+                  className="btn-primary w-full justify-center gap-2 text-base py-3.5"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="font-bold">اطلب الخدمة — ابدأ الآن</span>
+                </Link>
+              )}
+              
+              <p className="text-xs text-center text-[#808090]">
+                {product.purchaseType === "instant" 
+                  ? "💳 دفع آمن • 📥 تحميل فوري • 🔒 معاملة مشفرة"
+                  : "💬 رد خلال 24 ساعة • 📋 عرض سعر مفصل • 🤝 استشارة مجانية"}
+              </p>
             </div>
           </div>
 

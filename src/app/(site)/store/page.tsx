@@ -188,7 +188,7 @@ function ProductCard({ product }: { product: Product }) {
             <Link href={`/checkout?product=${product.id}`}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold shadow-lg"
               style={{ background: "rgba(147,51,234,0.9)", color: "white", backdropFilter: "blur(8px)" }}>
-              <Zap className="w-3.5 h-3.5" /> اشتر الآن
+              <Zap className="w-3.5 h-3.5" /> احصل عليه
             </Link>
           )}
         </div>
@@ -255,7 +255,7 @@ function ProductCard({ product }: { product: Product }) {
             style={{ background: "linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border: "1px solid rgba(6,182,212,0.35)", color: "#67e8f9", boxShadow: "0 0 12px rgba(6,182,212,0.1)" }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(6,182,212,0.28)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(6,182,212,0.25)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))"; e.currentTarget.style.boxShadow = "0 0 12px rgba(6,182,212,0.1)"; }}>
-            <MessageSquare className="w-3 h-3" /> طلب الخدمة
+            <MessageSquare className="w-3 h-3" /> عرض التفاصيل
           </Link>
         ) : (
           <Link href={`/checkout?product=${product.id}`}
@@ -263,7 +263,7 @@ function ProductCard({ product }: { product: Product }) {
             style={{ background: "linear-gradient(135deg,#9333ea,#6d28d9)", boxShadow: "0 0 16px rgba(147,51,234,0.3)" }}
             onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 0 28px rgba(147,51,234,0.55)"; e.currentTarget.style.transform = "scale(1.04)"; }}
             onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 0 16px rgba(147,51,234,0.3)"; e.currentTarget.style.transform = "scale(1)"; }}>
-            <Zap className="w-3 h-3" /> اشتر الآن
+            <Zap className="w-3 h-3" /> احصل عليه الآن
           </Link>
         )}
       </div>

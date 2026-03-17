@@ -159,9 +159,12 @@ function CheckoutContent() {
   return (
     <div className="pt-20 pb-20">
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="flex items-center gap-3 mb-8">
-          <ShoppingCart className="w-6 h-6 text-purple-400" />
-          <h1 className="text-2xl font-black text-white">إتمام الشراء</h1>
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <ShoppingCart className="w-6 h-6 text-purple-400" />
+            <h1 className="text-2xl font-black text-white">إتمام الشراء</h1>
+          </div>
+          <p className="text-sm text-[#8888a8] mr-9">احصل على منتجك فورًا بعد إتمام الدفع — عملية آمنة ومشفرة 100%</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -170,10 +173,11 @@ function CheckoutContent() {
             <div className="md:col-span-2 space-y-6">
               {/* Customer Info */}
               <div className="card-base p-6">
-                <h2 className="text-white font-bold mb-5 flex items-center gap-2">
+                <h2 className="text-white font-bold mb-2 flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">1</span>
                   بياناتك
                 </h2>
+                <p className="text-xs text-[#8888a8] mb-5 mr-8">سنرسل لك المنتج على البريد الإلكتروني فور التأكيد</p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-[#a0a0b8] mb-1.5">الاسم الكامل *</label>
@@ -202,10 +206,11 @@ function CheckoutContent() {
 
               {/* Payment Method */}
               <div className="card-base p-6">
-                <h2 className="text-white font-bold mb-5 flex items-center gap-2">
+                <h2 className="text-white font-bold mb-2 flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">2</span>
                   طريقة الدفع
                 </h2>
+                <p className="text-xs text-[#8888a8] mb-5 mr-8">اختر الطريقة الأنسب لك — جميع المعاملات آمنة ومشفرة</p>
                 <div className="space-y-3">
                   {activePayments.length === 0 ? (
                     <div className="text-center py-6 text-[#a0a0b8] text-sm">لا توجد طرق دفع متاحة حاليًا — تواصل معنا لإتمام الشراء</div>
