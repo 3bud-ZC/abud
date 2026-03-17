@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -288,9 +288,14 @@ export default function StorePage() {
   const [sortOpen, setSortOpen] = useState(false);
   const [activeCat, setActiveCat] = useState("all");
 
+  const hasTrackedPageView = useRef(false);
+
   useEffect(() => {
-    // Track store page view
-    trackStorePageView();
+    // Track store page view only once
+    if (!hasTrackedPageView.current) {
+      trackStorePageView();
+      hasTrackedPageView.current = true;
+    }
     
     async function load() {
       fetch("/api/products?status=active")

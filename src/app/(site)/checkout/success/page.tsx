@@ -1,14 +1,26 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle, ShoppingBag, Mail, Home } from "lucide-react";
+import { trackCheckoutSuccess } from "@/lib/analytics";
 
 function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("order");
+  const hasTracked = useRef(false);
+
+  useEffect(() => {
+    // Track checkout success only once
+    if (orderNumber && !hasTracked.current) {
+      trackCheckoutSuccess({
+        order_number: orderNumber,
+      });
+      hasTracked.current = true;
+    }
+  }, [orderNumber]);
 
   return (
     <div className="pt-20 min-h-screen flex items-center justify-center px-4">

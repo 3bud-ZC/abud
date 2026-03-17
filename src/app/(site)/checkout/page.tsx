@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { trackCheckoutStart, trackCheckoutPaymentMethodSelected, trackCheckoutSubmit } from "@/lib/analytics";
 import { useForm } from "react-hook-form";
@@ -53,6 +53,7 @@ function CheckoutContent() {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponError, setCouponError] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
+  const hasTrackedCheckoutStart = useRef(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -62,9 +63,10 @@ function CheckoutContent() {
   const payMethod = watch("paymentMethod");
 
   useEffect(() => {
-    // Track checkout start
-    if (productId) {
+    // Track checkout start only once
+    if (productId && !hasTrackedCheckoutStart.current) {
       trackCheckoutStart({ product_id: productId });
+      hasTrackedCheckoutStart.current = true;
     }
 
     async function load() {

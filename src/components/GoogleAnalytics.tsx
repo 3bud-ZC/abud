@@ -1,20 +1,28 @@
 import Script from "next/script";
 
-const GA_ID = "G-GDL5PDTR63";
-
 export default function GoogleAnalytics() {
+  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
+  // Only load GA if ID is configured
+  if (!GA_ID) {
+    return null;
+  }
+
   return (
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
-      <Script id="ga-init" strategy="lazyOnload">
+      <Script id="ga-init" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_ID}', { page_path: window.location.pathname });
+          gtag('config', '${GA_ID}', {
+            page_path: window.location.pathname,
+            send_page_view: true
+          });
         `}
       </Script>
     </>
