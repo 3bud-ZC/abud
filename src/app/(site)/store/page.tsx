@@ -344,9 +344,23 @@ export default function StorePage() {
             </span>
             <h1 className="font-black text-white mt-5 mb-4"
               style={{ fontSize: "clamp(2.2rem,6vw,4rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-              منتجات وخدمات احترافية
+              منتجات رقمية جاهزة للتحميل الفوري
             </h1>
             <p style={{ color: "#606070", fontSize: "1rem", maxWidth: "36rem", margin: "0 auto", lineHeight: 1.7 }}>
+              أدوات، قوالب، ومصادر احترافية — احصل عليها الآن وابدأ فورًا. أو اطلب خدمة تطوير مخصصة لمشروعك.
+            </p>
+            <div className="mt-6 flex items-center justify-center gap-3 text-sm" style={{ color: "#9090b0" }}>
+              <div className="flex items-center gap-1.5">
+                <Download className="w-4 h-4 text-green-400" />
+                <span><span className="font-bold text-white">{digitalCount}</span> منتج رقمي</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <MessageSquare className="w-4 h-4 text-cyan-400" />
+                <span><span className="font-bold text-white">{serviceCount}</span> خدمة مخصصة</span>
+              </div>
+            </div>
+            <p className="mt-4 text-xs" style={{ color: "#7070a0" }}>
               أدلة رقمية وقوالب جاهزة للتحميل الفوري — وخدمات تطوير وأمن سيبراني. جميع الأسعار بالجنيه المصري.
             </p>
             {/* Stats row */}

@@ -109,7 +109,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-400" />
             </span>
             <span className="text-purple-300 text-sm font-medium tracking-wide">
-              مطوّر ويب متكامل • منتجات رقمية احترافية • حلول مدفوعة بالذكاء
+              مطوّر Full-Stack • أدوات AI احترافية • منتجات رقمية جاهزة
             </span>
           </m.div>
 
@@ -127,7 +127,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
               ABUD
             </span>
             <span className="text-white/90 block" style={{ fontSize: "clamp(1.5rem, 4.5vw, 3rem)", fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.35, marginTop: "0.35em" }}>
-              أُحوِّل أفكارك إلى منتجات رقمية احترافية
+              منتجات رقمية جاهزة + خدمات تطوير مخصصة
             </span>
           </m.h1>
 
@@ -138,7 +138,7 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             className="max-w-xl mx-auto mb-10 leading-relaxed"
             style={{ color: "#8888a8", fontSize: "1.05rem" }}
           >
-            أبني مواقع ويب، أدوات ذكاء اصطناعي، وأنظمة أتمتة متكاملة — بجودة عالمية وأداء استثنائي.
+            أدوات ومنتجات رقمية جاهزة للتحميل الفوري، أو خدمات تطوير مخصصة لمشروعك — كل ما تحتاجه لبناء حضورك الرقمي.
           </m.p>
 
           <m.div
@@ -147,16 +147,14 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
             transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap items-center justify-center gap-3"
           >
-            <Link href="/portfolio" className="btn-primary gap-2 text-sm py-2.5 px-6">
-              <span>أعمالي</span>
-              <ArrowLeft className="w-3.5 h-3.5" />
+            <Link href="/store" className="btn-primary gap-2 py-3 px-8">
+              <ShoppingBag className="w-4 h-4" />
+              <span className="font-bold">تصفح المنتجات الآن</span>
+              <ArrowLeft className="w-4 h-4" />
             </Link>
-            <Link href="/services" className="btn-outline gap-2 text-sm py-2.5 px-5">
-              <span>الخدمات</span>
-            </Link>
-            <Link href="/store" className="btn-outline gap-2 text-sm py-2.5 px-5">
-              <Package className="w-3.5 h-3.5" />
-              <span>المتجر</span>
+            <Link href="/contact" className="btn-outline gap-2 py-3 px-6">
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>طلب خدمة مخصصة</span>
             </Link>
           </m.div>
 
@@ -630,21 +628,18 @@ export default function HomePageClient({ initialProducts, initialPosts }: Props)
                   <Zap className="w-5 h-5 text-purple-400" />
                 </div>
                 <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
-                  ابدأ رحلتك الرقمية اليوم
+                  جاهز لبناء مشروعك الرقمي؟
                 </h2>
                 <p className="mb-8 leading-relaxed" style={{ color: "#8888a8", fontSize: "0.95rem" }}>
-                  منتجات رقمية جاهزة، أو خدمات مخصصة — كل ما تحتاجه لبناء حضورك الرقمي.
+                  ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                  <Link href="/store" className="btn-primary gap-2 text-sm py-2.5 px-7">
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>تصفح المنتجات</span>
+                  <Link href="/store" className="btn-primary gap-2 py-3 px-8">
+                    <ShoppingBag className="w-4 h-4" />
+                    <span className="font-bold">تصفح المنتجات</span>
+                    <ArrowLeft className="w-4 h-4" />
                   </Link>
-                  <Link href="/services" className="btn-outline text-sm py-2.5 px-6 gap-2">
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>عرض الخدمات</span>
-                  </Link>
-                  <Link href="/contact" className="btn-outline text-sm py-2.5 px-6 gap-2">
+                  <Link href="/contact" className="btn-outline py-3 px-6 gap-2">
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>تواصل معنا</span>
                   </Link>

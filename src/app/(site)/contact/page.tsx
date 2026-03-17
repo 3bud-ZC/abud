@@ -65,9 +65,9 @@ export default function ContactPage() {
               <MessageSquare className="w-3 h-3 text-purple-400" />
               <span className="text-purple-400 text-xs font-medium">تواصل</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">تحدث معي</h1>
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">لنبني مشروعك معًا</h1>
             <p className="text-[#a0a0b8] text-xl max-w-2xl mx-auto leading-relaxed">
-              هل لديك مشروع أو فكرة أو استفسار؟ أنا هنا للمساعدة. سأرد عليك في أقرب وقت.
+              هل لديك مشروع أو فكرة؟ أخبرني بالتفاصيل وسأرد عليك خلال 24 ساعة برؤية واضحة وعرض سعر.
             </p>
           </AnimatedSection>
         </div>
@@ -87,15 +87,32 @@ export default function ContactPage() {
                   <div className="w-16 h-16 rounded-2xl bg-green-500/15 border border-green-500/30 flex items-center justify-center mx-auto mb-4">
                     <Zap className="w-8 h-8 text-green-400" />
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-2">تم إرسال رسالتك!</h3>
-                  <p className="text-[#a0a0b8] mb-6">سأراجع رسالتك وأرد عليك في أقرب وقت ممكن.</p>
+                  <h3 className="text-2xl font-black text-white mb-2">تم إرسال رسالتك بنجاح!</h3>
+                  <p className="text-[#a0a0b8] mb-2">شكرًا لتواصلك! إليك ما سيحدث الآن:</p>
+                  <div className="text-right space-y-2 mb-6 text-sm text-[#9090b0]">
+                    <div className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      <span>سأراجع رسالتك خلال الساعات القادمة</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      <span>سأرد عليك خلال 24 ساعة برؤية واضحة</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      <span>إذا كان مشروعًا، سأرسل لك عرض سعر تفصيلي</span>
+                    </div>
+                  </div>
                   <button onClick={() => setDone(false)} className="btn-outline">
                     إرسال رسالة أخرى
                   </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5">
-                  <h2 className="text-xl font-bold text-white mb-2">أرسل رسالة</h2>
+                  <div className="mb-4">
+                    <h2 className="text-xl font-bold text-white mb-2">أرسل رسالة</h2>
+                    <p className="text-sm text-[#8888a8]">سأرد عليك خلال 24 ساعة برؤية واضحة لمشروعك</p>
+                  </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
@@ -159,7 +176,7 @@ export default function ContactPage() {
                     <a href="mailto:abed@abud.fun" className="text-[#a0a0b8] text-xs hover:text-purple-400 transition-colors" dir="ltr">abed@abud.fun</a>
                   </div>
                 </div>
-                <p className="text-[#808090] text-xs">أرد على الرسائل خلال 24 ساعة عادةً</p>
+                <p className="text-[#808090] text-xs">⚡ رد سريع خلال 24 ساعة • 100% خصوصية</p>
               </div>
             </AnimatedSection>
 
