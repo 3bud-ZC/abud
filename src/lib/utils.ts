@@ -63,3 +63,46 @@ export const paymentStatusLabels: Record<string, { label: string; color: string 
   failed: { label: "فشل", color: "red" },
   refunded: { label: "مُسترد", color: "gray" },
 };
+
+export function formatCurrency(amount: number, currency = 'EGP'): string {
+  return new Intl.NumberFormat('ar-EG', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+  }).format(amount);
+}
+
+export function generateCouponCode(): string {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+export function calculateDiscount(price: number, discount: number): number {
+  return price - (price * discount / 100);
+}
+
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function generateSEOTitle(title: string, siteName = "منصة عبود"): string {
+  return `${title} | ${siteName}`;
+}
+
+export function generateSEODescription(content: string, maxLength = 160): string {
+  const cleaned = content.replace(/[#*\[\]]/g, '').trim();
+  return truncate(cleaned, maxLength);
+}
+
+export function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 بايت';
+  const k = 1024;
+  const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+export function isValidPhone(phone: string): boolean {
+  const phoneRegex = /^(\+2)?01[0125][0-9]{8}$/;
+  return phoneRegex.test(phone.replace(/\s/g, ''));
+}

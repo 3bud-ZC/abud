@@ -112,7 +112,7 @@ function PostCard({ post }: { post: Post }) {
           {post.readTime && (
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              {post.readTime} min read
+              {post.readTime} دقيقة قراءة
             </span>
           )}
         </div>
@@ -152,7 +152,7 @@ function PostCard({ post }: { post: Post }) {
             onMouseEnter={e => (e.currentTarget.style.color = "#c084fc")}
             onMouseLeave={e => (e.currentTarget.style.color = "#9333ea")}
           >
-            Read more
+            اقرأ المزيد
             <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
           </Link>
         </div>
@@ -205,14 +205,14 @@ export default function BlogPage() {
           <AnimatedSection>
             <span className="section-badge mb-6">
               <BookOpen className="w-2.5 h-2.5" />
-              Blog
+              المدونة
             </span>
             <h1 className="font-black text-white mt-5 mb-5"
               style={{ fontSize: "clamp(2.2rem,6vw,4rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-              Insights & Guides
+              مقالات وأدلة عملية
             </h1>
             <p style={{ color: "#505070", fontSize: "0.95rem", maxWidth: "34rem", margin: "0 auto", lineHeight: 1.75 }}>
-              Practical articles on AI tools, digital products, freelancing, automation, and building income online.
+              مقالات عملية عن الذكاء الاصطناعي، المنتجات الرقمية، العمل الحر، الأتمتة، وبناء دخل من الإنترنت.
             </p>
             <div className="flex items-center justify-center gap-2 mt-5">
               <div className="w-7 h-7 rounded-full overflow-hidden relative flex-shrink-0"
@@ -220,7 +220,7 @@ export default function BlogPage() {
                 <Image src={AUTHOR_AVATAR} alt={AUTHOR_NAME} fill className="object-cover" sizes="28px" />
               </div>
               <span className="text-sm" style={{ color: "#707090" }}>
-                Written by <span className="text-white font-semibold">{AUTHOR_NAME}</span>
+                يكتبها <span className="text-white font-semibold">{AUTHOR_NAME}</span>
               </span>
             </div>
           </AnimatedSection>
@@ -253,11 +253,11 @@ export default function BlogPage() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs hidden sm:block" style={{ color: "#404060" }}>
-              <span className="text-white font-medium">{filtered.length}</span> article{filtered.length !== 1 ? "s" : ""}
+              <span className="text-white font-medium">{filtered.length}</span> مقال
             </span>
             <div className="relative w-full sm:w-56">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#505070]" />
-              <input type="text" placeholder="Search articles..."
+              <input type="text" placeholder="ابحث في المقالات..."
                 value={search} onChange={e => setSearch(e.target.value)}
                 className="w-full rounded-xl py-2 pr-9 pl-4 text-white text-sm placeholder-[#505070] outline-none transition-all"
                 style={{ background: "rgba(12,12,20,0.9)", border: "1px solid rgba(35,35,55,0.8)" }}
@@ -278,10 +278,10 @@ export default function BlogPage() {
           ) : filtered.length === 0 ? (
             <div className="text-center py-20">
               <BookOpen className="w-16 h-16 text-purple-600/30 mx-auto mb-4" />
-              <p className="text-[#a0a0b8] text-lg mb-2">No articles found</p>
+              <p className="text-[#a0a0b8] text-lg mb-2">لا توجد مقالات مطابقة</p>
               <button onClick={() => { setActiveCategory("all"); setSearch(""); }}
                 className="btn-outline mt-2 text-sm">
-                Clear filters
+                مسح الفلاتر
               </button>
             </div>
           ) : (
@@ -338,11 +338,11 @@ export default function BlogPage() {
                             {featuredPost.readTime && (
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
-                                {featuredPost.readTime} min read
+                                {featuredPost.readTime} دقيقة قراءة
                               </span>
                             )}
                             <span className="mr-auto text-purple-500 group-hover:text-purple-300 transition-colors flex items-center gap-1 font-medium">
-                              Read article <ChevronLeft className="w-3.5 h-3.5" />
+                              اقرأ المقال <ChevronLeft className="w-3.5 h-3.5" />
                             </span>
                           </div>
                         </div>
