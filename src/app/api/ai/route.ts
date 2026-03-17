@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAIModelService } from "@/lib/ai-model";
 import { verifySession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   // Rate limiting
   const rateLimit = checkRateLimit(req, "ai");
   if (!rateLimit.allowed) {
+    logger.rateLimitHit("ai", req.ip || "unknown");
     return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
   }
 
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ response }, { status: 200 });
   } catch (error) {
-    console.error("AI API Error:", error instanceof Error ? error.message : "Unknown error");
+    logger.apiError("POST", "/api/ai", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Failed to generate response" },
       { status: 500 }

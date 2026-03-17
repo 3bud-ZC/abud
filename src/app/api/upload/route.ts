@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySession } from "@/lib/session";
 import { validateUploadFile, getAllowedTypesForContext, MAX_IMAGE_SIZE, MAX_FILE_SIZE } from "@/lib/upload-validator";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
+import { logger } from "@/lib/logger";
 import path from "path";
 import fs from "fs/promises";
 
 export async function POST(req: NextRequest) {
   const rateLimit = checkRateLimit(req, "upload");
   if (!rateLimit.allowed) {
+    logger.rateLimitHit("upload", req.ip || "unknown");
     return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
   }
 
@@ -23,11 +25,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "لم يتم إرفاق ملف" }, { status: 400 });
     }
 
+    logger.uploadAttempt(file.name, file.size);
+
     const allowedTypes = getAllowedTypesForContext(context as "image" | "document" | "proof");
     const maxSize = context === "document" ? MAX_FILE_SIZE : MAX_IMAGE_SIZE;
     const validation = validateUploadFile(file, allowedTypes, maxSize);
 
     if (!validation.valid) {
+      logger.uploadFailure(file.name, validation.error || "validation_failed");
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
@@ -40,9 +45,12 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     await fs.writeFile(filePath, buffer);
 
-    return NextResponse.json({ url: `/uploads/${safeFileName}`, fileName: safeFileName });
+    const url = `/uploads/${safeFileName}`;
+    logger.uploadSuccess(safeFileName, url);
+
+    return NextResponse.json({ url, fileName: safeFileName });
   } catch (e) {
-    console.error("Upload error:", e instanceof Error ? e.message : "Unknown error");
+    logger.apiError("POST", "/api/upload", e);
     return NextResponse.json({ error: "فشل رفع الملف" }, { status: 500 });
   }
 }

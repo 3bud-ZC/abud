@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
+import { logger } from "@/lib/logger";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
   // Rate limiting
   const rateLimit = checkRateLimit(req, "contact");
   if (!rateLimit.allowed) {
+    logger.rateLimitHit("contact", req.ip || "unknown");
     return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
   }
 
@@ -37,7 +39,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ ok: true, id: msg.id }, { status: 201 });
   } catch (e) {
-    console.error("Contact error:", e instanceof Error ? e.message : "Unknown error");
+    logger.apiError("POST", "/api/contact", e);
     return NextResponse.json({ error: "حدث خطأ" }, { status: 500 });
   }
 }

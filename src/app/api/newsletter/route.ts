@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
+import { logger } from "@/lib/logger";
 import { z } from "zod";
 
 const newsletterSchema = z.object({
@@ -14,6 +15,7 @@ export async function POST(req: NextRequest) {
   // Rate limiting
   const rateLimit = checkRateLimit(req, "newsletter");
   if (!rateLimit.allowed) {
+    logger.rateLimitHit("newsletter", req.ip || "unknown");
     return NextResponse.json(rateLimitResponse(rateLimit.resetTime), { status: 429 });
   }
 
@@ -43,9 +45,10 @@ export async function POST(req: NextRequest) {
     await prisma.newsletterSubscriber.create({
       data: { email: emailLower, name: name?.trim() || null, source: source || "newsletter" },
     });
+    logger.apiSuccess("POST", "/api/newsletter", { email: emailLower });
     return NextResponse.json({ ok: true, message: "تم الاشتراك بنجاح! 🎉" });
   } catch (e) {
-    console.error("Newsletter error:", e instanceof Error ? e.message : "Unknown error");
+    logger.apiError("POST", "/api/newsletter", e);
     return NextResponse.json({ error: "حدث خطأ — حاول مجددًا" }, { status: 500 });
   }
 }
