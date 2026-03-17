@@ -8,6 +8,7 @@ import {
   BookOpen, Clock, ChevronLeft, Zap, Search, User, Calendar, ArrowRight,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import { EmptySearchState } from "@/components/ui/EmptyStates";
 import { formatDate } from "@/lib/utils";
 
 const AUTHOR_NAME = "Abud";
@@ -232,14 +233,7 @@ export default function BlogPageClient({
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           {filtered.length === 0 ? (
-            <div className="text-center py-20">
-              <BookOpen className="w-16 h-16 text-purple-600/30 mx-auto mb-4" />
-              <p className="text-[#a0a0b8] text-lg mb-2">لا توجد مقالات مطابقة</p>
-              <button onClick={() => { setActiveCategory("all"); setSearch(""); }}
-                className="btn-outline mt-2 text-sm">
-                مسح الفلاتر
-              </button>
-            </div>
+            <EmptySearchState onClear={() => { setActiveCategory("all"); setSearch(""); }} />
           ) : (
             <>
               {featuredPost && (
