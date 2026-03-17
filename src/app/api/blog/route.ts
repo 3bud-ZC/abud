@@ -14,7 +14,19 @@ export async function GET(req: NextRequest) {
 
   const posts = await prisma.blogPost.findMany({
     where,
-    include: { category: { select: { id: true, name: true, slug: true } } },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      coverImage: true,
+      readTime: true,
+      publishedAt: true,
+      featured: true,
+      status: true,
+      tags: true,
+      category: { select: { name: true, slug: true } },
+    },
     orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
   });
 
