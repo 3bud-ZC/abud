@@ -1,12 +1,12 @@
-# Nixpacks Configuration for ABUD Platform
-# Railway deployment configuration
-
+# Nixpacks Configuration - simplified for Railway
 [phases.setup]
-nixPkgs = ["nodejs_20", "npm-9_x"]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci"]
 
 [phases.build]
 cmds = [
-    "npm install",
     "npx prisma generate",
     "npm run build"
 ]
@@ -16,4 +16,3 @@ cmds = ["npm start"]
 
 [variables]
 NODE_ENV = "production"
-NEXT_TELEMETRY_DISABLED = "1"
