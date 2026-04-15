@@ -33,7 +33,7 @@ const nextConfig = {
   
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "abud.fun", "www.abud.fun"],
+      allowedOrigins: ["localhost:3000", "abud.fun", "www.abud.fun", "*.railway.app"],
     },
   },
   
