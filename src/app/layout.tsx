@@ -10,7 +10,7 @@ const tajawal = Tajawal({
   weight: ["300", "400", "500", "700", "800", "900"],
   variable: "--font-tajawal",
   display: "swap",
-  preload: true,
+  preload: false,
 });
 
 const ibmPlexArabic = IBM_Plex_Sans_Arabic({
