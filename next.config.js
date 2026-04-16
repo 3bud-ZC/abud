@@ -3,15 +3,17 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  // Railway build optimization - aggressive
+  // Railway - NO Static Generation at all
   generateBuildId: async () => 'build',
-  staticPageGenerationTimeout: 1000,
+  staticPageGenerationTimeout: 60,
   onDemandEntries: {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 2,
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  // Disable all static optimization
+  trailingSlash: false,
   
   async rewrites() {
     return [
