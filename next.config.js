@@ -3,6 +3,13 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
+  // Railway build optimization
+  generateBuildId: async () => 'build',
+  onDemandEntries: {
+    maxInactiveAge: 60 * 60 * 1000,
+    pagesBufferLength: 2,
+  },
+  
   async rewrites() {
     return [
       { source: "/favicon.ico",          destination: "/apple-icon" },
@@ -36,6 +43,8 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: ["localhost:3000", "abud.fun", "www.abud.fun", "*.railway.app"],
     },
+    workerThreads: false,
+    cpus: 1,
   },
   
   async headers() {
