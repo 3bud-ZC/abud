@@ -3,6 +3,7 @@ import BlogPageClient from "./BlogPageClient";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
 export default async function BlogPage() {
   const [posts, categories] = await Promise.all([

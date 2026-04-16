@@ -9,6 +9,10 @@ import ReadingProgress from "@/components/ui/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = await prisma.blogPost.findUnique({
     where: { slug: params.slug, status: "published" },

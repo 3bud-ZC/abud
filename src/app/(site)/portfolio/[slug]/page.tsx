@@ -10,6 +10,10 @@ import {
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 interface LongDesc {
   category?: string;
   overview?: string;
