@@ -1,5 +1,9 @@
 ﻿import { prisma } from "@/lib/prisma";
 import HomePageClient from "./HomePageClient";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
   const [products, posts] = await Promise.all([
     prisma.product.findMany({
