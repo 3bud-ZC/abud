@@ -41,3 +41,7 @@ next-env.d.ts
 /prisma/migrations
 /prisma/*.db
 /prisma/*.db-journal
+
+# Claude Code local files
+.claude/
+

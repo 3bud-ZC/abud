@@ -5,42 +5,59 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          NEXT_PUBLIC_SITE_URL: "https://abud.fun"
+          NEXT_TELEMETRY_DISABLED: "1"
+          SKIP_ENV_VALIDATION: "1"
+
   deploy:
+    needs: build-check
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script_stop: true
           script: |
             set -e
             APP_DIR="/home/abdullah/abud-platform"
-            echo ">>> [1/6] الانتقال لمجلد المشروع..."
+            echo ">>> [1/5] الانتقال لمجلد المشروع..."
             cd $APP_DIR
 
-            echo ">>> [2/6] نسخة احتياطية للـ database..."
-            cp prisma/dev.db prisma/dev.db.backup.$(date +%Y%m%d_%H%M%S) 2>/dev/null || true
-
-            echo ">>> [3/6] تحديث الكود من GitHub..."
+            echo ">>> [2/5] تحديث الكود من GitHub..."
             git pull origin main
 
-            echo ">>> [4/6] تثبيت الـ dependencies..."
-            npm ci
+            echo ">>> [3/5] تثبيت الـ dependencies..."
+            npm ci --omit=dev
 
-            echo ">>> [5/6] بناء المشروع..."
+            echo ">>> [4/5] بناء المشروع..."
             npm run build
 
-            echo ">>> [6/6] إعادة تشغيل PM2..."
+            echo ">>> [5/5] إعادة تشغيل PM2..."
             pm2 reload abud-platform || pm2 start ecosystem.config.js --env production
             pm2 save
 
