@@ -16,6 +16,7 @@ import AnimatedGrid from "@/components/effects/AnimatedGrid";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
 import TypewriterText from "@/components/effects/TypewriterText";
 import GlitchText from "@/components/effects/GlitchText";
+import HolographicWordmark from "@/components/effects/HolographicWordmark";
 import LiveTerminal from "@/components/effects/LiveTerminal";
 import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
@@ -130,26 +131,29 @@ export default function HomePageClient({ initialPosts }: Props) {
             </span>
           </m.div>
 
-          <m.h1
+          <m.div
             initial={{ opacity: 1, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            className="font-black mb-6"
-            style={{ fontSize: "clamp(2.8rem, 9vw, 6rem)", lineHeight: 1.02, letterSpacing: "-0.03em" }}
+            className="mb-6 flex flex-col items-center"
           >
-            <GlitchText
-              text="ABUD"
-              className="text-transparent bg-clip-text block"
-              style={{ backgroundImage: "linear-gradient(135deg, #f0abfc 0%, #c084fc 40%, #9333ea 75%, #7c3aed 100%)", WebkitBackgroundClip: "text" }}
-            />
-            <span className="text-white/90 block" style={{ fontSize: "clamp(1.5rem, 4.5vw, 3rem)", fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.35, marginTop: "0.35em" }}>
+            <HolographicWordmark text="ABUD" />
+            <h2
+              className="text-white/90 block text-center mt-6"
+              style={{
+                fontSize: "clamp(1.5rem, 4.5vw, 3rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.015em",
+                lineHeight: 1.35,
+              }}
+            >
               <TypewriterText
                 text="خدمات تطوير وذكاء اصطناعي وأتمتة"
                 speed={70}
                 startDelay={400}
               />
-            </span>
-          </m.h1>
+            </h2>
+          </m.div>
 
           <m.p
             initial={{ opacity: 1, y: 10 }}
