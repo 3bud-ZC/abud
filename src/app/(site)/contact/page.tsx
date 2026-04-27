@@ -9,6 +9,12 @@ import toast from "react-hot-toast";
 import { MessageSquare, Mail, Send, Zap, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import ParticleField from "@/components/effects/ParticleField";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import MatrixRain from "@/components/effects/MatrixRain";
 
 const schema = z.object({
   name: z.string().min(2, "الاسم مطلوب"),
@@ -60,10 +66,15 @@ export default function ContactPage() {
 
   return (
     <div className="pt-20">
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="relative max-w-4xl mx-auto text-center">
+        <MatrixRain opacity={0.07} fontSize={12} />
+        <FloatingOrbs count={6} />
+        <ParticleField density={32} />
+        <ScanLine duration={10} />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-600/10 border border-purple-600/20 mb-6">
               <MessageSquare className="w-3 h-3 text-purple-400" />
@@ -77,8 +88,10 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="py-16 px-4">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-10">
+      <section className="py-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <ScanLine duration={13} direction="vertical" />
+        <div className="relative z-10 max-w-5xl mx-auto grid md:grid-cols-5 gap-10">
           {/* Form */}
           <div className="md:col-span-3">
             <AnimatedSection>
@@ -86,11 +99,16 @@ export default function ContactPage() {
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="card-base p-10 text-center"
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-green-500/15 border border-green-500/30 flex items-center justify-center mx-auto mb-4">
-                    <Zap className="w-8 h-8 text-green-400" />
-                  </div>
+                  <HolographicCard duration={5}>
+                  <div className="p-10 text-center">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1], boxShadow: ["0 0 20px rgba(34,197,94,0.4)", "0 0 40px rgba(34,197,94,0.7)", "0 0 20px rgba(34,197,94,0.4)"] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-16 h-16 rounded-2xl bg-green-500/20 border border-green-400/50 flex items-center justify-center mx-auto mb-4"
+                  >
+                    <Zap className="w-8 h-8 text-green-300" />
+                  </motion.div>
                   <h3 className="text-2xl font-black text-white mb-2">تم إرسال رسالتك بنجاح!</h3>
                   <p className="text-[#a0a0b8] mb-2">شكرًا لتواصلك! إليك ما سيحدث الآن:</p>
                   <div className="text-right space-y-2 mb-6 text-sm text-[#9090b0]">
@@ -110,9 +128,12 @@ export default function ContactPage() {
                   <button onClick={() => setDone(false)} className="btn-outline">
                     إرسال رسالة أخرى
                   </button>
+                  </div>
+                  </HolographicCard>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5"
+                <HolographicCard duration={6}>
+                <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5"
                   onFocus={() => {
                     if (!formStarted) {
                       trackContactFormStart();
@@ -198,7 +219,7 @@ export default function ContactPage() {
                   </div>
 
                   <button type="submit" disabled={submitting}
-                    className="btn-primary w-full justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                    className="btn-primary btn-glow w-full justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                     {submitting ? (
                       <><div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />جاري الإرسال...</>
                     ) : (
@@ -206,6 +227,7 @@ export default function ContactPage() {
                     )}
                   </button>
                 </form>
+                </HolographicCard>
               )}
             </AnimatedSection>
           </div>
@@ -213,30 +235,38 @@ export default function ContactPage() {
           {/* Sidebar */}
           <div className="md:col-span-2 space-y-5">
             <AnimatedSection delay={0.1}>
-              <div className="card-base p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-purple-400" />
+              <HolographicCard duration={5} delay={0.3}>
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <motion.div
+                      animate={{ boxShadow: ["0 0 14px rgba(147,51,234,0.4)", "0 0 26px rgba(168,85,247,0.7)", "0 0 14px rgba(147,51,234,0.4)"] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center"
+                    >
+                      <Mail className="w-5 h-5 text-purple-200" />
+                    </motion.div>
+                    <div>
+                      <div className="text-white font-semibold text-sm">البريد الإلكتروني</div>
+                      <a href="mailto:abed@abud.fun" className="text-[#a0a0b8] text-xs hover:text-purple-400 transition-colors" dir="ltr">abed@abud.fun</a>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-white font-semibold text-sm">البريد الإلكتروني</div>
-                    <a href="mailto:abed@abud.fun" className="text-[#a0a0b8] text-xs hover:text-purple-400 transition-colors" dir="ltr">abed@abud.fun</a>
-                  </div>
+                  <p className="text-[#9090b0] text-xs">⚡ رد سريع خلال 24 ساعة • 100% خصوصية</p>
                 </div>
-                <p className="text-[#808090] text-xs">⚡ رد سريع خلال 24 ساعة • 100% خصوصية</p>
-              </div>
+              </HolographicCard>
             </AnimatedSection>
 
             <AnimatedSection delay={0.2}>
-              <div className="card-base p-6 bg-[radial-gradient(ellipse_at_top,rgba(147,51,234,0.08)_0%,transparent_70%)]">
-                <h3 className="text-white font-semibold text-sm mb-2">تواصل عبر واتساب</h3>
-                <p className="text-[#a0a0b8] text-xs mb-4 leading-relaxed">للمشاريع العاجلة والاستفسارات السريعة</p>
-                <a href="https://wa.me/201080672974" target="_blank" rel="noopener noreferrer"
-                  className="btn-primary text-sm py-2.5 w-full justify-center gap-2">
-                  <MessageCircle className="w-4 h-4" />
-                  ابدأ محادثة
-                </a>
-              </div>
+              <HolographicCard duration={6} delay={0.6}>
+                <div className="p-6">
+                  <h3 className="text-white font-semibold text-sm mb-2">تواصل عبر واتساب</h3>
+                  <p className="text-[#a0a0b8] text-xs mb-4 leading-relaxed">للمشاريع العاجلة والاستفسارات السريعة</p>
+                  <a href="https://wa.me/201080672974" target="_blank" rel="noopener noreferrer"
+                    className="btn-primary btn-glow text-sm py-2.5 w-full justify-center gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    ابدأ محادثة
+                  </a>
+                </div>
+              </HolographicCard>
             </AnimatedSection>
           </div>
         </div>

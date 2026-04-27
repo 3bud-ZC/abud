@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Globe, BrainCircuit, Layers, Bot, Shield, Terminal, ArrowLeft, CheckCircle, Zap, MessageSquare } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import ParticleField from "@/components/effects/ParticleField";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import MatrixRain from "@/components/effects/MatrixRain";
 
 const services = [
   {
@@ -99,10 +105,15 @@ export default function ServicesPage() {
   return (
     <div className="pt-20">
       {/* Header */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="relative max-w-4xl mx-auto text-center">
+        <MatrixRain opacity={0.07} fontSize={12} />
+        <FloatingOrbs count={6} />
+        <ParticleField density={32} />
+        <ScanLine duration={11} />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-600/10 border border-purple-600/20 mb-6">
               <Zap className="w-3 h-3 text-purple-400" />
@@ -117,16 +128,14 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto space-y-8">
+      <section className="py-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <div className="relative z-10 max-w-6xl mx-auto space-y-8">
           {services.map(({ id, icon: Icon, title, desc, longDesc, useCase, features, priceType, price, ctaLabel, color }, i) => (
             <AnimatedSection key={id} delay={i * 0.07}>
-              <motion.div
-                whileHover={{ y: -3 }}
-                id={id}
-                className="card-base overflow-hidden"
-              >
-                <div className="p-6 md:p-8">
+              <div id={id}>
+                <HolographicCard duration={6 + (i % 3)} delay={i * 0.3}>
+                  <div className="p-6 md:p-8">
                   <div className="flex flex-col md:flex-row gap-7">
                     <div className="flex-shrink-0">
                       <motion.div
@@ -168,37 +177,37 @@ export default function ServicesPage() {
                         ))}
                       </div>
 
-                      <Link href="/contact" className="btn-primary inline-flex gap-2 text-sm">
+                      <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2 text-sm">
                         <MessageSquare className="w-3.5 h-3.5" />
                         {ctaLabel}
                       </Link>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+                </HolographicCard>
+              </div>
             </AnimatedSection>
           ))}
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 px-4 bg-[#080810]">
-        <div className="max-w-3xl mx-auto">
+      <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
+        <FloatingOrbs count={4} />
+        <ScanLine duration={14} direction="vertical" />
+        <div className="relative z-10 max-w-3xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <h2 className="section-title mb-3">أسئلة شائعة</h2>
           </AnimatedSection>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {faq.map(({ q, a }, i) => (
               <AnimatedSection key={i} delay={i * 0.07}>
-                <div className="p-6 rounded-2xl transition-all duration-200"
-                  style={{
-                    background: "linear-gradient(160deg, rgba(13,13,20,1), rgba(10,10,16,1))",
-                    border: "1px solid rgba(26,26,44,0.8)",
-                    borderTop: "1px solid rgba(40,40,60,0.5)"
-                  }}>
-                  <h3 className="text-white font-bold mb-2 text-sm" style={{ letterSpacing: "-0.01em" }}>{q}</h3>
-                  <p className="text-[#606070] text-sm leading-relaxed">{a}</p>
-                </div>
+                <HolographicCard duration={6} delay={i * 0.3}>
+                  <div className="p-6">
+                    <h3 className="text-white font-bold mb-2 text-sm" style={{ letterSpacing: "-0.01em" }}>{q}</h3>
+                    <p className="text-[#9090b0] text-sm leading-relaxed">{a}</p>
+                  </div>
+                </HolographicCard>
               </AnimatedSection>
             ))}
           </div>
@@ -206,21 +215,27 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4">
-        <div className="max-w-2xl mx-auto text-center">
+      <section className="py-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <ScanLine duration={10} />
+        <div className="relative z-10 max-w-2xl mx-auto">
           <AnimatedSection>
-            <h2 className="text-3xl font-black text-white mb-4">جاهز للبدء؟</h2>
-            <p className="text-[#a0a0b8] mb-8">تواصل معي الآن ونبدأ العمل على مشروعك.</p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/contact" className="btn-primary gap-2">
-                <MessageSquare className="w-4 h-4" />
-                تواصل معي
-              </Link>
-              <Link href="/portfolio" className="btn-outline gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                شاهد أعمالي
-              </Link>
-            </div>
+            <HolographicCard duration={6}>
+              <div className="p-8 md:p-10 text-center">
+                <h2 className="text-3xl font-black text-white mb-4">جاهز للبدء؟</h2>
+                <p className="text-[#a0a0b8] mb-8">تواصل معي الآن ونبدأ العمل على مشروعك.</p>
+                <div className="flex flex-wrap gap-3 justify-center">
+                  <Link href="/contact" className="btn-primary btn-glow gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    تواصل معي
+                  </Link>
+                  <Link href="/portfolio" className="btn-outline gap-2">
+                    <ArrowLeft className="w-4 h-4" />
+                    شاهد أعمالي
+                  </Link>
+                </div>
+              </div>
+            </HolographicCard>
           </AnimatedSection>
         </div>
       </section>

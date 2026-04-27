@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { HelpCircle, ChevronDown, ShoppingBag, MessageSquare, Zap } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import ParticleField from "@/components/effects/ParticleField";
 
 const faqs = [
   {
@@ -133,10 +138,14 @@ export default function FAQPage() {
   return (
     <div className="pt-20">
       {/* Hero */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="relative max-w-3xl mx-auto text-center">
+        <FloatingOrbs count={5} />
+        <ParticleField density={28} />
+        <ScanLine duration={11} />
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
           <AnimatedSection>
             <span className="section-badge mb-6">
               <HelpCircle className="w-2.5 h-2.5" />
@@ -156,17 +165,20 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ Categories */}
-      <section className="py-12 px-4 pb-20">
-        <div className="max-w-3xl mx-auto space-y-12">
+      <section className="py-16 px-4 pb-24 relative overflow-hidden">
+        <FloatingOrbs count={4} />
+        <div className="relative z-10 max-w-3xl mx-auto space-y-12">
           {faqs.map(({ category, icon: Icon, color, items }, ci) => (
             <AnimatedSection key={ci} delay={ci * 0.05}>
               <div className="flex items-center gap-3 mb-5">
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+                <motion.div
+                  animate={{ boxShadow: [`0 0 12px ${color}40`, `0 0 24px ${color}80`, `0 0 12px ${color}40`] }}
+                  transition={{ duration: 2.6, repeat: Infinity, delay: ci * 0.3 }}
+                  className="w-9 h-9 rounded-lg flex items-center justify-center"
+                  style={{ background: `${color}25`, border: `1px solid ${color}55` }}
                 >
                   <Icon className="w-4 h-4" style={{ color }} />
-                </div>
+                </motion.div>
                 <h2 className="text-white font-bold text-lg" style={{ letterSpacing: "-0.02em" }}>
                   {category}
                 </h2>
@@ -183,33 +195,33 @@ export default function FAQPage() {
 
       {/* Still have questions CTA */}
       <section
-        className="py-16 px-4"
+        className="py-20 px-4 relative overflow-hidden"
         style={{ borderTop: "1px solid rgba(28,28,48,0.8)", background: "linear-gradient(to bottom, rgba(8,8,14,1), rgba(5,5,8,1))" }}
       >
-        <div className="max-w-2xl mx-auto text-center">
+        <FloatingOrbs count={4} />
+        <ScanLine duration={12} />
+        <div className="relative z-10 max-w-2xl mx-auto">
           <AnimatedSection>
-            <div
-              className="p-8 rounded-2xl relative overflow-hidden"
-              style={{
-                background: "linear-gradient(160deg, rgba(18,10,30,1) 0%, rgba(10,10,18,1) 100%)",
-                border: "1px solid rgba(147,51,234,0.2)",
-              }}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(147,51,234,0.1)_0%,transparent_65%)]" />
-              <div className="relative">
-                <MessageSquare className="w-8 h-8 mx-auto mb-4" style={{ color: "rgba(192,132,252,0.7)" }} />
+            <HolographicCard duration={6}>
+              <div className="p-8 md:p-10 text-center">
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <MessageSquare className="w-9 h-9 mx-auto mb-4" style={{ color: "#c084fc", filter: "drop-shadow(0 0 12px rgba(168,85,247,0.7))" }} />
+                </motion.div>
                 <h3 className="text-white font-bold text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
                   لم تجد إجابتك؟
                 </h3>
-                <p className="text-sm mb-6" style={{ color: "#606070" }}>
-                  فريقنا جاهز للمساعدة — تواصل معنا مباشرةً وسنرد في أقرب وقت.
+                <p className="text-sm mb-6" style={{ color: "#9090b0" }}>
+                  أنا جاهز للمساعدة — تواصل معي مباشرة وسأرد في أقرب وقت.
                 </p>
-                <Link href="/contact" className="btn-primary inline-flex gap-2">
+                <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2">
                   <MessageSquare className="w-3.5 h-3.5" />
-                  تواصل معنا
+                  تواصل معي
                 </Link>
               </div>
-            </div>
+            </HolographicCard>
           </AnimatedSection>
         </div>
       </section>

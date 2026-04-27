@@ -10,6 +10,12 @@ import {
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { EmptySearchState } from "@/components/ui/EmptyStates";
 import { formatDate } from "@/lib/utils";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import ParticleField from "@/components/effects/ParticleField";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import MatrixRain from "@/components/effects/MatrixRain";
 
 const AUTHOR_NAME = "Abud";
 const AUTHOR_AVATAR = "/abd-profile.jpg";
@@ -43,13 +49,14 @@ const gridVariants = {
   show: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
   return (
     <motion.article
       variants={cardVariants}
-      whileHover={{ y: -6 }}
-      className="glass-card glass-card-hover overflow-hidden group flex flex-col"
+      className="flex flex-col"
     >
+    <HolographicCard duration={6 + (idx % 3)} delay={(idx % 5) * 0.3}>
+    <div className="overflow-hidden group flex flex-col">
       <Link href={`/blog/${post.slug}`} className="block">
         <div
           className="aspect-video bg-[#080812] flex items-center justify-center relative overflow-hidden"
@@ -126,15 +133,17 @@ function PostCard({ post }: { post: Post }) {
           <Link
             href={`/blog/${post.slug}`}
             className="flex items-center gap-1.5 text-xs font-semibold transition-all duration-200 group/btn"
-            style={{ color: "#9333ea" }}
-            onMouseEnter={e => (e.currentTarget.style.color = "#c084fc")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#9333ea")}
+            style={{ color: "#c084fc" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#e0bbff")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#c084fc")}
           >
             اقرأ المزيد
             <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
           </Link>
         </div>
       </div>
+    </div>
+    </HolographicCard>
     </motion.article>
   );
 }
@@ -162,9 +171,14 @@ export default function BlogPageClient({
   return (
     <div className="pt-20">
       <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-5%,rgba(147,51,234,0.18)_0%,transparent_65%)]" />
         <div className="absolute inset-0 bg-grid opacity-25" />
-        <div className="relative max-w-3xl mx-auto text-center">
+        <MatrixRain opacity={0.08} fontSize={12} />
+        <FloatingOrbs count={6} />
+        <ParticleField density={32} />
+        <ScanLine duration={10} />
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
           <AnimatedSection>
             <span className="section-badge mb-6">
               <BookOpen className="w-2.5 h-2.5" />
@@ -230,8 +244,9 @@ export default function BlogPageClient({
         </div>
       </section>
 
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <div className="relative z-10 max-w-6xl mx-auto">
           {filtered.length === 0 ? (
             <EmptySearchState onClear={() => { setActiveCategory("all"); setSearch(""); }} />
           ) : (
@@ -308,7 +323,7 @@ export default function BlogPageClient({
                   animate="show"
                   variants={gridVariants}
                 >
-                  {gridPosts.map(post => <PostCard key={post.id} post={post} />)}
+                  {gridPosts.map((post, idx) => <PostCard key={post.id} post={post} idx={idx} />)}
                 </motion.div>
               )}
             </>

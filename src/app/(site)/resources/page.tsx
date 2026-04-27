@@ -8,6 +8,12 @@ import {
   Search, ExternalLink, X, BookOpen,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import ParticleField from "@/components/effects/ParticleField";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import MatrixRain from "@/components/effects/MatrixRain";
 
 /* ── Types ── */
 interface Resource {
@@ -125,10 +131,15 @@ export default function ResourcesPage() {
     <div className="pt-20">
 
       {/* ── HERO ── */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(147,51,234,0.14)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-grid opacity-25" />
-        <div className="relative max-w-4xl mx-auto text-center">
+        <MatrixRain opacity={0.08} fontSize={12} />
+        <FloatingOrbs count={6} />
+        <ParticleField density={36} />
+        <ScanLine duration={10} />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <span className="section-badge mb-6">
               📁 مكتبة المصادر
@@ -211,8 +222,9 @@ export default function ResourcesPage() {
       </div>
 
       {/* ── GRID ── */}
-      <section className="py-10 px-4 pb-24">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-10 px-4 pb-24 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatePresence mode="wait">
             {visible.length === 0 ? (
               <motion.div
@@ -233,18 +245,13 @@ export default function ResourcesPage() {
                 variants={gridAnim} initial="hidden" animate="show"
                 className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
               >
-                {visible.map(resource => {
+                {visible.map((resource, idx) => {
                   const cat = getCatColor(resource.category);
                   const CatIcon = cat.icon;
                   return (
-                    <motion.div key={resource.name} variants={cardAnim} whileHover={{ y: -5 }}
-                      className="rounded-2xl p-5 flex flex-col group transition-all duration-200"
-                      style={{
-                        background: "rgba(10,8,18,0.9)",
-                        border: "1px solid rgba(30,20,50,0.9)",
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.borderColor = `${cat.color}35`)}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(30,20,50,0.9)")}>
+                    <motion.div key={resource.name} variants={cardAnim}>
+                    <HolographicCard duration={6 + (idx % 4)} delay={(idx % 6) * 0.25}>
+                    <div className="p-5 flex flex-col group transition-all duration-200">
 
                       {/* Header row */}
                       <div className="flex items-start justify-between gap-3 mb-3">
@@ -287,16 +294,20 @@ export default function ResourcesPage() {
                       {/* CTA */}
                       <a href={resource.url} target="_blank" rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold transition-all duration-200"
-                        style={{ background: cat.bg, border: `1px solid ${cat.color}25`, color: cat.color }}
+                        style={{ background: cat.bg, border: `1px solid ${cat.color}40`, color: cat.color, boxShadow: `0 0 14px ${cat.color}20` }}
                         onMouseEnter={e => {
-                          (e.currentTarget as HTMLAnchorElement).style.background = cat.bg.replace("0.12", "0.22").replace("0.1", "0.2");
+                          (e.currentTarget as HTMLAnchorElement).style.background = cat.bg.replace("0.12", "0.28").replace("0.1", "0.25");
+                          (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 22px ${cat.color}50`;
                         }}
                         onMouseLeave={e => {
                           (e.currentTarget as HTMLAnchorElement).style.background = cat.bg;
+                          (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 14px ${cat.color}20`;
                         }}>
                         <ExternalLink className="w-3.5 h-3.5" />
                         زيارة الموقع
                       </a>
+                    </div>
+                    </HolographicCard>
                     </motion.div>
                   );
                 })}
@@ -307,37 +318,30 @@ export default function ResourcesPage() {
       </section>
 
       {/* ── BOTTOM CTA ── */}
-      <section className="px-4 pb-20">
-        <div className="max-w-2xl mx-auto rounded-2xl p-8 text-center relative overflow-hidden"
-          style={{
-            background: "linear-gradient(160deg, rgba(18,10,30,1) 0%, rgba(10,10,18,1) 100%)",
-            border: "1px solid rgba(147,51,234,0.2)",
-            borderTop: "1px solid rgba(192,132,252,0.15)",
-          }}>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(147,51,234,0.1)_0%,transparent_60%)]" />
-          <div className="relative">
-            <div className="text-3xl mb-3">�</div>
-            <h2 className="text-white font-black text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
-              محتاج خدمة تطوير مخصصة؟
-            </h2>
-            <p className="text-sm mb-6" style={{ color: "#606070", lineHeight: 1.7 }}>
-              من تطوير المواقع إلى أدوات الذكاء الاصطناعي والأمن السيبراني — تواصل لنبني حلًا يناسبك.
-            </p>
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              <Link href="/contact"
-                className="btn-primary inline-flex items-center gap-2">
-                تواصل معاي
-              </Link>
-              <Link href="/blog"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                style={{ border: "1px solid rgba(147,51,234,0.25)", color: "#c084fc" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(147,51,234,0.1)")}
-                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-                <BookOpen className="w-4 h-4" />
-                قراءة المدونة
-              </Link>
+      <section className="px-4 pb-20 relative overflow-hidden">
+        <FloatingOrbs count={4} />
+        <ScanLine duration={11} />
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <HolographicCard duration={6}>
+            <div className="p-8 md:p-10 text-center">
+              <h2 className="text-white font-black text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
+                حبيت الموارد؟ تحتاج خدمة مخصصة؟
+              </h2>
+              <p className="text-sm mb-6" style={{ color: "#9090b0", lineHeight: 1.7 }}>
+                من تطوير المواقع إلى أدوات الذكاء الاصطناعي والأمن السيبراني — تواصل لنبني حلًا يناسبك.
+              </p>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <Link href="/contact" className="btn-primary btn-glow inline-flex items-center gap-2">
+                  تواصل معاي
+                </Link>
+                <Link href="/blog"
+                  className="btn-outline inline-flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  قراءة المدونة
+                </Link>
+              </div>
             </div>
-          </div>
+          </HolographicCard>
         </div>
       </section>
     </div>

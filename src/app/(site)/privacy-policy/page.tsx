@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Shield, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
 
 export const metadata: Metadata = {
   title: "سياسة الخصوصية | ABUD",
@@ -11,16 +13,18 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen pt-28 pb-20 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen pt-28 pb-20 px-4 relative overflow-hidden">
+      <FloatingOrbs count={4} />
+      <ScanLine duration={14} direction="vertical" />
+      <div className="relative z-10 max-w-3xl mx-auto">
         <div className="mb-10">
           <Link href="/" className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             العودة للرئيسية
           </Link>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(147,51,234,0.15)", border: "1px solid rgba(147,51,234,0.25)" }}>
-              <Shield className="w-5 h-5 text-purple-400" />
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center animate-pulse-glow" style={{ background: "linear-gradient(135deg,rgba(147,51,234,0.3),rgba(34,211,238,0.15))", border: "1px solid rgba(192,132,252,0.5)", boxShadow: "0 0 20px rgba(147,51,234,0.5)" }}>
+              <Shield className="w-5 h-5 text-purple-200" />
             </div>
             <h1 className="text-3xl font-black text-white">سياسة الخصوصية</h1>
           </div>

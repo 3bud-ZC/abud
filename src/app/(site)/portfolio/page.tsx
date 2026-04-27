@@ -9,6 +9,12 @@ import {
   Cpu, Wrench, Figma, Database, Globe, Shield,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import ParticleField from "@/components/effects/ParticleField";
+import AuroraBeams from "@/components/effects/AuroraBeams";
+import HolographicCard from "@/components/effects/HolographicCard";
+import MatrixRain from "@/components/effects/MatrixRain";
 
 interface Repo {
   id: number;
@@ -143,10 +149,15 @@ export default function PortfolioPage() {
   return (
     <div className="pt-20">
       {/* ── HERO ── */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
+        <AuroraBeams />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="relative max-w-4xl mx-auto text-center">
+        <MatrixRain opacity={0.1} fontSize={12} />
+        <FloatingOrbs count={6} />
+        <ParticleField density={40} />
+        <ScanLine duration={9} />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <span className="section-badge mb-6">
               <Github className="w-2.5 h-2.5" />
@@ -232,8 +243,9 @@ export default function PortfolioPage() {
       )}
 
       {/* ── REPO GRID ── */}
-      <section className="pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="pb-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <div className="relative z-10 max-w-6xl mx-auto">
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[...Array(6)].map((_, i) => (
@@ -273,23 +285,22 @@ export default function PortfolioPage() {
                 animate="show"
                 className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
               >
-                {filtered.map((repo) => {
+                {filtered.map((repo, idx) => {
                   const lc = langColor(repo.language);
                   return (
-                    <motion.a
-                      key={repo.id}
+                    <motion.div key={repo.id} variants={cardAnim}>
+                    <HolographicCard duration={6 + (idx % 4)} delay={(idx % 6) * 0.3}>
+                    <a
                       href={repo.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      variants={cardAnim}
-                      whileHover={{ y: -6 }}
-                      className="glass-card p-5 group flex flex-col cursor-pointer relative overflow-hidden"
+                      className="p-5 group flex flex-col cursor-pointer relative overflow-hidden"
                     >
                       {/* Glow on hover */}
                       <div
                         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                         style={{
-                          background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${lc}15 0%, transparent 70%)`,
+                          background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${lc}25 0%, transparent 70%)`,
                         }}
                       />
 
@@ -375,7 +386,9 @@ export default function PortfolioPage() {
                           </button>
                         )}
                       </div>
-                    </motion.a>
+                    </a>
+                    </HolographicCard>
+                    </motion.div>
                   );
                 })}
               </motion.div>
@@ -385,8 +398,10 @@ export default function PortfolioPage() {
       </section>
 
       {/* ── TOOLS I USE ── */}
-      <section className="py-20 px-4" style={{ borderTop: "1px solid rgba(28,28,48,0.6)", background: "linear-gradient(to bottom, rgba(8,8,14,1), rgba(5,5,8,1))" }}>
-        <div className="max-w-5xl mx-auto">
+      <section className="py-20 px-4 relative overflow-hidden" style={{ borderTop: "1px solid rgba(28,28,48,0.6)", background: "linear-gradient(to bottom, rgba(8,8,14,1), rgba(5,5,8,1))" }}>
+        <FloatingOrbs count={4} />
+        <ScanLine duration={13} direction="vertical" />
+        <div className="relative z-10 max-w-5xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <span className="section-badge mb-5 mx-auto">
               <Wrench className="w-2.5 h-2.5" />
@@ -405,20 +420,22 @@ export default function PortfolioPage() {
             viewport={{ once: true, margin: "-60px" }}
             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
           >
-            {TOOLS.map(({ icon: Icon, label, color }) => (
+            {TOOLS.map(({ icon: Icon, label, color }, idx) => (
               <motion.div
                 key={label}
                 variants={cardAnim}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="glass-card p-4 flex items-center gap-3 cursor-default group"
               >
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:shadow-lg"
-                  style={{ background: `${color}15`, border: `1px solid ${color}25` }}>
-                  <Icon className="w-4 h-4 transition-colors duration-200" style={{ color }} />
-                </div>
-                <span className="text-xs font-semibold text-white/70 group-hover:text-white/90 transition-colors">
-                  {label}
-                </span>
+                <HolographicCard duration={6 + (idx % 3)} delay={(idx % 6) * 0.25}>
+                  <div className="p-4 flex items-center gap-3 cursor-default group">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
+                      style={{ background: `${color}25`, border: `1px solid ${color}55`, boxShadow: `0 0 14px ${color}40` }}>
+                      <Icon className="w-4 h-4" style={{ color }} />
+                    </div>
+                    <span className="text-xs font-semibold text-white/85 group-hover:text-white transition-colors">
+                      {label}
+                    </span>
+                  </div>
+                </HolographicCard>
               </motion.div>
             ))}
           </motion.div>
@@ -426,20 +443,21 @@ export default function PortfolioPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-16 px-4">
-        <div className="max-w-2xl mx-auto">
+      <section className="py-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <ScanLine duration={11} />
+        <div className="relative z-10 max-w-2xl mx-auto">
           <AnimatedSection>
-            <div className="glass-card p-8 text-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(147,51,234,0.12)_0%,transparent_65%)]" />
-              <div className="relative">
+            <HolographicCard duration={6}>
+              <div className="p-8 md:p-10 text-center">
                 <h2 className="text-white font-black text-2xl mb-2" style={{ letterSpacing: "-0.02em" }}>
                   Want something built?
                 </h2>
-                <p className="text-sm mb-5" style={{ color: "#606070" }}>
+                <p className="text-sm mb-5" style={{ color: "#9090b0" }}>
                   I build custom AI tools, automation systems, and web products. Let&#39;s talk.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  <Link href="/contact" className="btn-primary gap-2 text-sm py-2.5 px-6">
+                  <Link href="/contact" className="btn-primary btn-glow gap-2 text-sm py-2.5 px-6">
                     Start a Project
                   </Link>
                   <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
@@ -449,7 +467,7 @@ export default function PortfolioPage() {
                   </a>
                 </div>
               </div>
-            </div>
+            </HolographicCard>
           </AnimatedSection>
         </div>
       </section>

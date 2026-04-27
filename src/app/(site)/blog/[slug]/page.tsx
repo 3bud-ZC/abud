@@ -7,6 +7,9 @@ import { prisma } from "@/lib/prisma";
 import ReadingProgress from "@/components/ui/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import FloatingOrbs from "@/components/effects/FloatingOrbs";
+import ScanLine from "@/components/effects/ScanLine";
+import HolographicCard from "@/components/effects/HolographicCard";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -59,8 +62,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <JsonLd data={breadcrumbSchema} />
       <ReadingProgress />
 
-      <div className="pt-20 pb-20">
-        <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="pt-20 pb-20 relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <ScanLine duration={14} direction="vertical" />
+        <div className="relative z-10 max-w-2xl mx-auto px-4 py-10">
           <Breadcrumb items={[
             { label: "المدونة", href: "/blog" },
             { label: post.title },
@@ -73,7 +78,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {post.coverImage && (
             <div className="aspect-video rounded-2xl overflow-hidden mb-10 relative"
-              style={{ border: "1px solid rgba(35,35,55,0.8)", boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+              style={{ border: "1px solid rgba(168,85,247,0.4)", boxShadow: "0 8px 40px rgba(0,0,0,0.5), 0 0 50px rgba(147,51,234,0.25)" }}>
               <Image
                 src={post.coverImage}
                 alt={post.title}
@@ -133,22 +138,17 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </div>
           )}
 
-          <div className="mt-12 p-8 rounded-2xl text-center relative overflow-hidden"
-            style={{
-              background: "linear-gradient(160deg, rgba(18,10,30,1) 0%, rgba(10,10,18,1) 100%)",
-              border: "1px solid rgba(147,51,234,0.2)",
-              borderTop: "1px solid rgba(192,132,252,0.15)",
-              boxShadow: "0 0 40px rgba(147,51,234,0.07)",
-            }}>
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(147,51,234,0.1)_0%,transparent_65%)]" />
-            <div className="relative">
-              <BookOpen className="w-7 h-7 mx-auto mb-3" style={{ color: "rgba(168,85,247,0.7)" }} />
-              <p className="text-white font-semibold mb-1">أعجبك هذا المقال؟</p>
-              <p className="text-[#606070] text-sm mb-5">تصفح المزيد من مساحتي الكتابية</p>
-              <Link href="/blog" className="btn-primary inline-flex">
-                جميع المقالات
-              </Link>
-            </div>
+          <div className="mt-12">
+            <HolographicCard duration={6}>
+              <div className="p-8 text-center">
+                <BookOpen className="w-8 h-8 mx-auto mb-3" style={{ color: "#c084fc", filter: "drop-shadow(0 0 12px rgba(168,85,247,0.7))" }} />
+                <p className="text-white font-semibold mb-1">أعجبك هذا المقال؟</p>
+                <p className="text-[#9090b0] text-sm mb-5">تصفح المزيد من مساحتي الكتابية</p>
+                <Link href="/blog" className="btn-primary btn-glow inline-flex">
+                  جميع المقالات
+                </Link>
+              </div>
+            </HolographicCard>
           </div>
         </div>
       </div>
