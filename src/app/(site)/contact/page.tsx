@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { trackContactFormStart, trackContactQualificationField, trackContactFormSubmit } from "@/lib/analytics";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { MessageSquare, Mail, Send, Instagram, Zap, Music2, Ghost, MessageCircle } from "lucide-react";
+import { MessageSquare, Mail, Send, Zap, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
@@ -22,14 +22,6 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
-
-const socials = [
-  { icon: Music2,         label: "تيك توك",     handle: "@a_do",       href: "https://www.tiktok.com/@a_do?_r=1&_t=ZS-94J5UfXanZ4",                                          color: "#ff2d55" },
-  { icon: Instagram,      label: "إنستغرام",    handle: "@x90ar_",     href: "https://www.instagram.com/x90ar_?igsh=MXdrMjYwMTdodDJmNg%3D%3D&utm_source=qr",            color: "#e1306c" },
-  { icon: Ghost,          label: "سناب شات",    handle: "Snapchat",    href: "https://snapchat.com/t/RmpeWTPE",                                                             color: "#fffc00" },
-  { icon: Send,           label: "تيليجرام",    handle: "@x7abo123",   href: "https://t.me/x7abo123",                                                                       color: "#2aabee" },
-  { icon: MessageCircle,  label: "واتس آب",     handle: "+201080672974",href: "https://wa.me/201080672974",                                                                   color: "#25d366" },
-];
 
 export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
@@ -232,32 +224,6 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <p className="text-[#808090] text-xs">⚡ رد سريع خلال 24 ساعة • 100% خصوصية</p>
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.15}>
-              <div className="card-base p-6">
-                <h3 className="text-white font-semibold text-sm mb-4">تواصل عبر المنصات</h3>
-                <div className="space-y-3">
-                  {socials.map(({ icon: Icon, label, handle, href, color }) => (
-                    <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-3 transition-all group"
-                      style={{ color: "#a0a0b8" }}
-                      onMouseEnter={e => (e.currentTarget.style.color = color)}
-                      onMouseLeave={e => (e.currentTarget.style.color = "#a0a0b8")}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
-                        style={{ background: "#1a1a2e" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${color}18`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "#1a1a2e")}>
-                        <Icon className="w-4 h-4" style={{ color: "inherit" }} />
-                      </div>
-                      <div>
-                        <div className="text-xs font-medium">{label}</div>
-                        <div className="text-[#606080] text-xs" dir="ltr">{handle}</div>
-                      </div>
-                    </a>
-                  ))}
-                </div>
               </div>
             </AnimatedSection>
 

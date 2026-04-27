@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "أعمالي — مشاريع ويب وذكاء اصطناعي احترافية",
-  description: "استعرض مشاريعي في تطوير الويب، الذكاء الاصطناعي، الأمن السيبراني، وبناء المنصات الرقمية. مشاريع حقيقية بتقنيات حديثة.",
+  title: "أعمالي — مشاريع GitHub مفتوحة المصدر",
+  description: "استعرض مشاريعي على GitHub: أدوات الذكاء الاصطناعي، بوتات تيليجرام، أنظمة أتمتة، ومنصات ويب — مباشرة من حسابي @3bud-ZC.",
   keywords: [
-    "portfolio", "مشاريع برمجية", "Next.js projects", "AI projects",
-    "web development portfolio", "أعمال مطور", "مشاريع تيليغرام",
+    "portfolio", "GitHub", "open source", "مشاريع برمجية",
+    "Next.js projects", "AI projects", "Telegram bots", "أعمال مطور",
   ],
   openGraph: {
-    title: "أعمالي | ABUD",
-    description: "مشاريع في تطوير الويب، AI، والأمن السيبراني — كل مشروع قصة نجاح حقيقية",
+    title: "GitHub Portfolio | ABUD",
+    description: "مشاريعي على GitHub — كود مفتوح، أدوات حقيقية، حلول مطبّقة.",
     url: "/portfolio",
   },
   alternates: { canonical: "https://abud.fun/portfolio" },

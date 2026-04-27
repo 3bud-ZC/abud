@@ -4,22 +4,18 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard, Package, BookOpen, Layers, Briefcase,
-  MessageSquare, Settings, CreditCard, LogOut, Menu, X,
-  ChevronLeft, Terminal, ShoppingCart, Tag, Mail
+  LayoutDashboard, BookOpen, Layers, Briefcase,
+  MessageSquare, Settings, LogOut, Menu, X,
+  ChevronLeft, Terminal, Mail
 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const navItems = [
   { href: "/admin", label: "الرئيسية", icon: LayoutDashboard, exact: true },
-  { href: "/admin/orders", label: "الطلبات", icon: ShoppingCart },
-  { href: "/admin/products", label: "المنتجات", icon: Package },
   { href: "/admin/blog", label: "المدونة", icon: BookOpen },
   { href: "/admin/portfolio", label: "البورتفوليو", icon: Layers },
   { href: "/admin/services", label: "الخدمات", icon: Briefcase },
   { href: "/admin/messages", label: "الرسائل", icon: MessageSquare },
-  { href: "/admin/payments", label: "الدفع", icon: CreditCard },
-  { href: "/admin/coupons", label: "الكوبونات", icon: Tag },
   { href: "/admin/newsletter", label: "المشتركون", icon: Mail },
   { href: "/admin/settings", label: "الإعدادات", icon: Settings },
 ];

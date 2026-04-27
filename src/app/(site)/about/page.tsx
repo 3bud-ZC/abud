@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, BrainCircuit, Bot, Globe, Shield, Layers, Zap, Terminal, Database, GitBranch, ArrowLeft, ShoppingBag, CheckCircle2 } from "lucide-react";
+import { Code2, BrainCircuit, Bot, Globe, Shield, Layers, Zap, Terminal, Database, GitBranch, ArrowLeft, CheckCircle2 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
 const skills = [
@@ -219,10 +219,6 @@ export default function AboutPage() {
                   <a href="/portfolio" className="btn-outline gap-2 inline-flex">
                     <Code2 className="w-4 h-4" />
                     شاهد أعمالي
-                  </a>
-                  <a href="/store" className="btn-outline gap-2 inline-flex">
-                    <ShoppingBag className="w-4 h-4" />
-                    المتجر الرقمي
                   </a>
                 </div>
               </div>

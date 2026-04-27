@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Search, X, ShoppingBag, BookOpen, Wrench, Globe, Zap, ArrowLeft, Command } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+import { Search, X, BookOpen, Globe, Zap, ArrowLeft, Command } from "lucide-react";
 
 /* ── Types ── */
 interface SearchItem {
@@ -12,47 +11,30 @@ interface SearchItem {
   title: string;
   desc?: string;
   href: string;
-  category: "product" | "service" | "blog" | "resource" | "page";
-  price?: number;
+  category: "blog" | "resource" | "page";
 }
 
-/* ── Static catalog ── */
+/* ── Static catalog (pages only) ── */
 const CATALOG: SearchItem[] = [
-  { id: "p1",  title: "دليل الأمن السيبراني للمبتدئين",  desc: "أساسيات الأمن الرقمي في 80+ صفحة",           href: "/store/cybersecurity-starter-guide",        category: "product",  price: 149  },
-  { id: "p2",  title: "الدليل الشامل للأمن المتقدم",     desc: "اختراق أخلاقي وحماية متقدمة",                 href: "/store/advanced-cybersecurity-handbook",     category: "product",  price: 349  },
-  { id: "p3",  title: "دليل أدوات AI للمطورين",           desc: "أفضل أدوات الذكاء الاصطناعي للمطورين",        href: "/store/ai-tools-developers-guide",           category: "product",  price: 149  },
-  { id: "p4",  title: "خارطة طريق Full Stack Developer", desc: "من الصفر إلى الاحتراف",                        href: "/store/fullstack-developer-roadmap",         category: "product",  price: 129  },
-  { id: "p5",  title: "حقيبة أدوات المستقل المحترف",     desc: "عقود وفواتير وقوالب جاهزة",                   href: "/store/freelancer-toolkit",                 category: "product",  price: 119  },
-  { id: "p6",  title: "قالب موقع بورتفوليو احترافي",     desc: "قالب Next.js جاهز للنشر",                     href: "/store/portfolio-website-template",         category: "product",  price: 199  },
-  { id: "p7",  title: "دليل تحسين أداء الألعاب",          desc: "رفع FPS بدون تغيير الأجهزة",                  href: "/store/gaming-performance-guide",           category: "product",  price: 119  },
-  { id: "p8",  title: "دليل إنتاجية المطور المحترف",      desc: "منظومة عمل للمطورين المحترفين",               href: "/store/developer-productivity-guide",       category: "product",  price: 99   },
-  { id: "p9",  title: "دليل احتراف Git وGitHub",           desc: "Branching, CI/CD, GitHub Actions",            href: "/store/git-github-mastery-guide",           category: "product",  price: 99   },
-  { id: "s1",  title: "فحص أمني شامل للموقع",             desc: "تقييم الثغرات وتقرير تفصيلي",                 href: "/store/website-security-audit",             category: "service",  price: 1499 },
-  { id: "s2",  title: "تطوير موقع بورتفوليو شخصي",        desc: "موقع Next.js احترافي مكتمل",                  href: "/store/portfolio-website-development",      category: "service",  price: 3999 },
-  { id: "s3",  title: "إصلاح الأخطاء البرمجية",           desc: "تشخيص وإصلاح في 24-48 ساعة",                 href: "/store/bug-fixing-service",                 category: "service",  price: 799  },
-  { id: "s4",  title: "استشارة مسار مهني تقني",           desc: "جلسة مخصصة لرسم مسارك التقني",               href: "/store/tech-career-consultation",           category: "service",  price: 599  },
-  { id: "s5",  title: "تحسين سرعة وأداء الموقع",          desc: "PageSpeed 90+ و Core Web Vitals",              href: "/store/website-performance-optimization",   category: "service",  price: 1199 },
-  { id: "s6",  title: "تأمين الخادم Linux/VPS",            desc: "إعداد وتأمين خادمك بمعايير عالمية",           href: "/store/server-security-hardening",          category: "service",  price: 2499 },
-  { id: "pg1", title: "المتجر",                            desc: "تصفح المنتجات والخدمات",                      href: "/store",                                    category: "page"                },
-  { id: "pg2", title: "المدونة",                           desc: "مقالات تقنية متخصصة",                         href: "/blog",                                     category: "page"                },
-  { id: "pg3", title: "المصادر",                           desc: "أدوات ومصادر مجانية",                         href: "/resources",                                category: "page"                },
-  { id: "pg4", title: "تواصل معنا",                        desc: "تحدث معنا مباشرةً",                           href: "/contact",                                  category: "page"                },
-  { id: "pg5", title: "من أنا",                            desc: "تعرف على ABUD",                               href: "/about",                                    category: "page"                },
+  { id: "pg1", title: "الخدمات",     desc: "تطوير وذكاء اصطناعي وأتمتة",          href: "/services",  category: "page" },
+  { id: "pg2", title: "أعمالي",      desc: "مشاريع GitHub وسابقة الأعمال",        href: "/portfolio", category: "page" },
+  { id: "pg3", title: "المدونة",     desc: "مقالات تقنية متخصصة",                 href: "/blog",      category: "page" },
+  { id: "pg4", title: "المصادر",     desc: "أدوات ومصادر مجانية",                 href: "/resources", category: "page" },
+  { id: "pg5", title: "تواصل معاي",  desc: "تحدث معاي مباشرةً",                   href: "/contact",   category: "page" },
+  { id: "pg6", title: "من أنا",      desc: "تعرف على ABUD",                       href: "/about",     category: "page" },
 ];
 
 const CAT_META = {
-  product:  { label: "منتج",    Icon: ShoppingBag, color: "#c084fc", bg: "rgba(147,51,234,0.12)"  },
-  service:  { label: "خدمة",    Icon: Wrench,      color: "#67e8f9", bg: "rgba(6,182,212,0.1)"    },
-  blog:     { label: "مقال",    Icon: BookOpen,    color: "#86efac", bg: "rgba(34,197,94,0.1)"    },
-  resource: { label: "مورد",    Icon: Globe,       color: "#fbbf24", bg: "rgba(251,191,36,0.1)"   },
-  page:     { label: "صفحة",    Icon: Zap,         color: "#94a3b8", bg: "rgba(148,163,184,0.08)" },
+  blog:     { label: "مقال",  Icon: BookOpen, color: "#86efac", bg: "rgba(34,197,94,0.1)"    },
+  resource: { label: "مورد",  Icon: Globe,    color: "#fbbf24", bg: "rgba(251,191,36,0.1)"   },
+  page:     { label: "صفحة",  Icon: Zap,      color: "#94a3b8", bg: "rgba(148,163,184,0.08)" },
 };
 
 const QUICK_LINKS: SearchItem[] = [
-  { id: "q1", title: "استعراض المتجر",    href: "/store",     category: "page" },
-  { id: "q2", title: "قراءة المدونة",     href: "/blog",      category: "page" },
-  { id: "q3", title: "مكتبة المصادر",    href: "/resources", category: "page" },
-  { id: "q4", title: "تواصل معنا",        href: "/contact",   category: "page" },
+  { id: "q1", title: "استعراض الخدمات",  href: "/services",  category: "page" },
+  { id: "q2", title: "أعمالي على GitHub", href: "/portfolio", category: "page" },
+  { id: "q3", title: "قراءة المدونة",     href: "/blog",      category: "page" },
+  { id: "q4", title: "تواصل معاي",        href: "/contact",   category: "page" },
 ];
 
 /* ── Hook: Ctrl+K toggle ── */
@@ -113,7 +95,6 @@ export default function GlobalSearch({ open, onClose }: GlobalSearchProps) {
           category: "blog" as const,
         }));
         const combined = [...staticMatches, ...blogItems];
-        /* Deduplicate by id */
         const seen = new Set<string>();
         setResults(combined.filter(r => { if (seen.has(r.id)) return false; seen.add(r.id); return true; }).slice(0, 12));
       } else {
@@ -155,7 +136,7 @@ export default function GlobalSearch({ open, onClose }: GlobalSearchProps) {
 
   const displayItems = query ? results : QUICK_LINKS;
   const grouped = query
-    ? (["product","service","blog","resource","page"] as const).map(cat => ({
+    ? (["blog","resource","page"] as const).map(cat => ({
         cat,
         items: results.filter(r => r.category === cat),
       })).filter(g => g.items.length > 0)
@@ -202,7 +183,7 @@ export default function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                   type="text"
                   value={query}
                   onChange={e => { setQuery(e.target.value); setFocused(0); }}
-                  placeholder="ابحث عن منتجات، خدمات، مقالات، أدوات..."
+                  placeholder="ابحث في الصفحات والمقالات..."
                   className="flex-1 bg-transparent text-white text-sm placeholder-[#404060] outline-none"
                   dir="auto"
                 />
@@ -288,11 +269,6 @@ export default function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                                 </div>
                               )}
                             </div>
-                            {item.price !== undefined && (
-                              <span className="text-xs font-black flex-shrink-0" style={{ color }}>
-                                {formatPrice(item.price)}
-                              </span>
-                            )}
                           </Link>
                         );
                       })}

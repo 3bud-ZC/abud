@@ -4,7 +4,6 @@ import Image from "next/image";
 import { ArrowRight, Clock, Calendar, Tag, BookOpen } from "lucide-react";
 import { formatDate, estimateReadTime } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
-import BlogSalesFunnel from "@/components/ui/BlogSalesFunnel";
 import ReadingProgress from "@/components/ui/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -133,8 +132,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             </div>
           )}
-
-          <BlogSalesFunnel category={post.category} tags={tags} />
 
           <div className="mt-12 p-8 rounded-2xl text-center relative overflow-hidden"
             style={{

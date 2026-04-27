@@ -9,7 +9,6 @@ const footerLinks = {
     { href: "/about", label: "من أنا" },
     { href: "/services", label: "الخدمات" },
     { href: "/portfolio", label: "أعمالي" },
-    { href: "/store", label: "المتجر" },
     { href: "/blog", label: "المدونة" },
     { href: "/contact", label: "تواصل" },
   ],
@@ -23,7 +22,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Github, href: "#", label: "GitHub" },
+  { icon: Github, href: "https://github.com/3bud-ZC", label: "GitHub" },
   { icon: Twitter, href: "#", label: "تويتر / X" },
   { icon: Instagram, href: "#", label: "إنستغرام" },
   { icon: Youtube, href: "#", label: "يوتيوب" },
@@ -106,15 +105,9 @@ export default function Footer() {
               <p className="text-[#a0a0b8] text-sm">للمشاريع والاستفسارات:</p>
               <Link
                 href="/contact"
-                className="btn-outline text-sm py-2.5 w-full justify-center"
-              >
-                ابدأ المحادثة
-              </Link>
-              <Link
-                href="/store"
                 className="btn-primary text-sm py-2.5 w-full justify-center"
               >
-                المتجر الرقمي
+                ابدأ المحادثة
               </Link>
             </div>
           </div>

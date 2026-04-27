@@ -1,52 +1,66 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import {
-  Layers, ExternalLink, Github, Zap, ArrowLeft,
-  BrainCircuit, Globe, Shield, Bot, Terminal, BarChart3,
-  Code2, Cpu, Wrench, Figma, Database,
+  Layers, ExternalLink, Github, Star, GitFork, CircleDot,
+  Code2, BrainCircuit, Bot, Terminal, BarChart3,
+  Cpu, Wrench, Figma, Database, Globe, Shield,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
-interface Project {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  longDesc?: string;
-  thumbnail?: string;
-  tags: string | string[];
-  links: string | string[];
-  featured: boolean;
-  status: string;
+interface Repo {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  homepage: string | null;
+  language: string | null;
+  topics: string[];
+  stars: number;
+  forks: number;
+  issues: number;
+  pushed_at: string;
+  updated_at: string;
+  created_at: string;
 }
 
-const CATEGORIES = ["All", "AI", "Business", "Automation", "Security", "Tool"] as const;
-type Category = typeof CATEGORIES[number];
+const GITHUB_USER = "3bud-ZC";
+const GITHUB_URL = `https://github.com/${GITHUB_USER}`;
 
-const CAT_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  AI:         { bg: "rgba(139,92,246,0.12)", text: "#a78bfa", border: "rgba(139,92,246,0.3)" },
-  Business:   { bg: "rgba(16,185,129,0.12)", text: "#34d399", border: "rgba(16,185,129,0.3)" },
-  Automation: { bg: "rgba(245,158,11,0.12)", text: "#fbbf24", border: "rgba(245,158,11,0.3)" },
-  Security:   { bg: "rgba(239,68,68,0.12)",  text: "#f87171", border: "rgba(239,68,68,0.3)" },
-  Tool:       { bg: "rgba(56,189,248,0.12)", text: "#38bdf8", border: "rgba(56,189,248,0.3)" },
+// Brand-ish colors per language (subset)
+const LANG_COLORS: Record<string, string> = {
+  TypeScript: "#3178c6",
+  JavaScript: "#f1e05a",
+  Python: "#3572A5",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  Shell: "#89e051",
+  Go: "#00ADD8",
+  Rust: "#dea584",
+  Java: "#b07219",
+  PHP: "#4F5D95",
+  C: "#555555",
+  "C++": "#f34b7d",
+  "C#": "#178600",
+  Vue: "#41b883",
+  Svelte: "#ff3e00",
+  Dart: "#00B4AB",
+  Kotlin: "#A97BFF",
+  Ruby: "#701516",
 };
 
-const ICON_BY_CAT: Record<string, React.ReactNode> = {
-  AI:         <BrainCircuit className="w-8 h-8" style={{ color: "#a78bfa" }} />,
-  Business:   <BarChart3    className="w-8 h-8" style={{ color: "#34d399" }} />,
-  Automation: <Bot          className="w-8 h-8" style={{ color: "#fbbf24" }} />,
-  Security:   <Shield       className="w-8 h-8" style={{ color: "#f87171" }} />,
-  Tool:       <Wrench       className="w-8 h-8" style={{ color: "#38bdf8" }} />,
-};
+function langColor(lang: string | null): string {
+  if (!lang) return "#606070";
+  return LANG_COLORS[lang] || "#a78bfa";
+}
 
 const TOOLS = [
-  { icon: Code2,       label: "Next.js",        color: "#a78bfa" },
+  { icon: Code2,       label: "Next.js",         color: "#a78bfa" },
   { icon: BrainCircuit,label: "ChatGPT / GPT-4", color: "#a78bfa" },
-  { icon: Bot,         label: "Telegram API",   color: "#fbbf24" },
+  { icon: Bot,         label: "Telegram API",    color: "#fbbf24" },
   { icon: Terminal,    label: "Python",          color: "#34d399" },
   { icon: Database,    label: "PostgreSQL",      color: "#38bdf8" },
   { icon: Cpu,         label: "n8n / Make",      color: "#fbbf24" },
@@ -60,61 +74,71 @@ const TOOLS = [
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.07 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 const cardAnim = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
 };
 
-function getCategory(project: Project): string {
-  if (!project.longDesc) return "Tool";
-  try { return JSON.parse(project.longDesc).category || "Tool"; }
-  catch { return "Tool"; }
-}
-
-function getTags(project: Project): string[] {
-  if (Array.isArray(project.tags)) return project.tags;
-  try { return JSON.parse(project.tags as string); }
-  catch { return []; }
-}
-
-function getLinks(project: Project): string[] {
-  if (Array.isArray(project.links)) return project.links;
-  try { return JSON.parse(project.links as string); }
-  catch { return []; }
-}
-
-function CategoryBadge({ category }: { category: string }) {
-  const c = CAT_COLORS[category] || CAT_COLORS.Tool;
-  return (
-    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
-      style={{ background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>
-      {category}
-    </span>
-  );
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const sec = Math.floor(diff / 1000);
+  if (sec < 60) return `${sec}s ago`;
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h ago`;
+  const day = Math.floor(hr / 24);
+  if (day < 30) return `${day}d ago`;
+  const mon = Math.floor(day / 30);
+  if (mon < 12) return `${mon}mo ago`;
+  const yr = Math.floor(mon / 12);
+  return `${yr}y ago`;
 }
 
 export default function PortfolioPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const [error, setError] = useState<string | null>(null);
+  const [activeLang, setActiveLang] = useState<string>("All");
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/portfolio");
+        const res = await fetch("/api/github");
         const data = await res.json();
-        setProjects(data.projects || []);
-      } catch { setProjects([]); }
-      finally { setLoading(false); }
+        if (!res.ok) {
+          setError(data.error || "Failed to load");
+          setRepos([]);
+        } else {
+          setRepos(data.repos || []);
+        }
+      } catch (e) {
+        setError((e as Error).message);
+        setRepos([]);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);
 
-  const filtered = activeCategory === "All"
-    ? projects
-    : projects.filter(p => getCategory(p) === activeCategory);
+  const languages = useMemo(() => {
+    const set = new Set<string>();
+    repos.forEach((r) => { if (r.language) set.add(r.language); });
+    return ["All", ...Array.from(set).sort()];
+  }, [repos]);
+
+  const filtered = useMemo(() => {
+    if (activeLang === "All") return repos;
+    return repos.filter((r) => r.language === activeLang);
+  }, [activeLang, repos]);
+
+  const totalStars = useMemo(
+    () => repos.reduce((sum, r) => sum + r.stars, 0),
+    [repos]
+  );
 
   return (
     <div className="pt-20">
@@ -125,192 +149,233 @@ export default function PortfolioPage() {
         <div className="relative max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <span className="section-badge mb-6">
-              <Layers className="w-2.5 h-2.5" />
-              Portfolio
+              <Github className="w-2.5 h-2.5" />
+              GitHub Portfolio
             </span>
             <h1 className="font-black text-white mt-5 mb-4"
               style={{ fontSize: "clamp(2.2rem,6vw,4rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-              Projects & Work
+              Open Source & Projects
             </h1>
             <p style={{ color: "#606070", fontSize: "1rem", maxWidth: "36rem", margin: "0 auto", lineHeight: 1.75 }}>
-              A curated collection of AI tools, automation systems, digital products, and web platforms — built to solve real problems.
+              مشاريعي على GitHub — أدوات، بوتات، أتمتة، وحلول حقيقية. مباشرة من{" "}
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+                className="text-purple-400 hover:text-purple-300 underline underline-offset-4">
+                @{GITHUB_USER}
+              </a>
+              .
             </p>
+
+            {!loading && repos.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+                <div className="glass-card px-4 py-2 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-purple-400" />
+                  <span className="text-white font-bold">{repos.length}</span>
+                  <span className="text-xs" style={{ color: "#606070" }}>Repos</span>
+                </div>
+                <div className="glass-card px-4 py-2 flex items-center gap-2">
+                  <Star className="w-4 h-4 text-yellow-400" />
+                  <span className="text-white font-bold">{totalStars}</span>
+                  <span className="text-xs" style={{ color: "#606070" }}>Stars</span>
+                </div>
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+                  className="btn-primary gap-2 text-sm py-2 px-4">
+                  <Github className="w-4 h-4" />
+                  Visit GitHub
+                </a>
+              </div>
+            )}
           </AnimatedSection>
         </div>
       </section>
 
-      {/* ── CATEGORY FILTER ── */}
-      <section className="px-4 pb-10">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {CATEGORIES.map(cat => {
-                const isActive = activeCategory === cat;
-                const c = cat !== "All" ? CAT_COLORS[cat] : null;
-                return (
-                  <motion.button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    whileTap={{ scale: 0.96 }}
-                    className="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
-                    style={isActive ? {
-                      background: c ? c.bg : "rgba(147,51,234,0.15)",
-                      color: c ? c.text : "#c084fc",
-                      border: `1px solid ${c ? c.border : "rgba(147,51,234,0.4)"}`,
-                      boxShadow: `0 0 20px ${c ? c.bg : "rgba(147,51,234,0.12)"}`,
-                    } : {
-                      background: "transparent",
-                      color: "#606070",
-                      border: "1px solid rgba(28,28,48,0.8)",
-                    }}
-                  >
-                    {cat}
-                    {cat !== "All" && (
-                      <span className="ml-2 text-xs opacity-60">
-                        {projects.filter(p => getCategory(p) === cat).length}
-                      </span>
-                    )}
-                    {cat === "All" && (
-                      <span className="ml-2 text-xs opacity-60">{projects.length}</span>
-                    )}
-                  </motion.button>
-                );
-              })}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
+      {/* ── LANGUAGE FILTER ── */}
+      {!loading && languages.length > 1 && (
+        <section className="px-4 pb-10">
+          <div className="max-w-6xl mx-auto">
+            <AnimatedSection>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {languages.map((lang) => {
+                  const isActive = activeLang === lang;
+                  const color = lang === "All" ? "#a78bfa" : langColor(lang);
+                  const count = lang === "All"
+                    ? repos.length
+                    : repos.filter((r) => r.language === lang).length;
+                  return (
+                    <motion.button
+                      key={lang}
+                      onClick={() => setActiveLang(lang)}
+                      whileTap={{ scale: 0.96 }}
+                      className="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2"
+                      style={isActive ? {
+                        background: `${color}22`,
+                        color,
+                        border: `1px solid ${color}55`,
+                        boxShadow: `0 0 20px ${color}22`,
+                      } : {
+                        background: "transparent",
+                        color: "#606070",
+                        border: "1px solid rgba(28,28,48,0.8)",
+                      }}
+                    >
+                      {lang !== "All" && (
+                        <span className="w-2 h-2 rounded-full" style={{ background: color }} />
+                      )}
+                      {lang}
+                      <span className="text-xs opacity-60">{count}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
 
-      {/* ── PROJECT GRID ── */}
+      {/* ── REPO GRID ── */}
       <section className="pb-20 px-4">
         <div className="max-w-6xl mx-auto">
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="glass-card overflow-hidden animate-pulse">
-                  <div className="aspect-video" style={{ background: "rgba(20,20,32,0.6)" }} />
-                  <div className="p-5 space-y-3">
-                    <div className="h-3 rounded w-1/4" style={{ background: "rgba(30,30,50,0.8)" }} />
-                    <div className="h-4 rounded w-3/4" style={{ background: "rgba(30,30,50,0.8)" }} />
-                    <div className="h-3 rounded w-full" style={{ background: "rgba(30,30,50,0.8)" }} />
-                    <div className="h-3 rounded w-2/3" style={{ background: "rgba(30,30,50,0.8)" }} />
+                <div key={i} className="glass-card overflow-hidden animate-pulse p-5 space-y-3">
+                  <div className="h-5 rounded w-3/4" style={{ background: "rgba(30,30,50,0.8)" }} />
+                  <div className="h-3 rounded w-full" style={{ background: "rgba(30,30,50,0.8)" }} />
+                  <div className="h-3 rounded w-2/3" style={{ background: "rgba(30,30,50,0.8)" }} />
+                  <div className="flex gap-2 pt-3">
+                    <div className="h-6 rounded-full w-16" style={{ background: "rgba(30,30,50,0.8)" }} />
+                    <div className="h-6 rounded-full w-16" style={{ background: "rgba(30,30,50,0.8)" }} />
                   </div>
                 </div>
               ))}
             </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <Github className="w-12 h-12 text-red-500/40 mx-auto mb-4" />
+              <p style={{ color: "#f87171" }} className="mb-2">تعذّر جلب المشاريع من GitHub.</p>
+              <p style={{ color: "#505070" }} className="text-sm mb-6">{error}</p>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+                className="btn-primary gap-2 text-sm py-2 px-4 inline-flex">
+                <Github className="w-4 h-4" />
+                افتح GitHub مباشرة
+              </a>
+            </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-20">
               <Layers className="w-12 h-12 text-purple-600/25 mx-auto mb-4" />
-              <p style={{ color: "#505070" }}>No projects in this category yet.</p>
+              <p style={{ color: "#505070" }}>No repositories in this language yet.</p>
             </div>
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeCategory}
+                key={activeLang}
                 variants={container}
                 initial="hidden"
                 animate="show"
                 className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
               >
-                {filtered.map(project => {
-                  const tags = getTags(project);
-                  const links = getLinks(project);
-                  const category = getCategory(project);
-                  const catColor = CAT_COLORS[category] || CAT_COLORS.Tool;
-                  const fallbackIcon = ICON_BY_CAT[category] || ICON_BY_CAT.Tool;
-
+                {filtered.map((repo) => {
+                  const lc = langColor(repo.language);
                   return (
-                    <motion.div
-                      key={project.id}
+                    <motion.a
+                      key={repo.id}
+                      href={repo.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       variants={cardAnim}
                       whileHover={{ y: -6 }}
-                      className="glass-card overflow-hidden group flex flex-col"
+                      className="glass-card p-5 group flex flex-col cursor-pointer relative overflow-hidden"
                     >
-                      {/* Image */}
-                      <div className="aspect-video bg-[#080810] relative overflow-hidden flex items-center justify-center"
-                        style={{ borderBottom: "1px solid rgba(28,28,48,0.8)" }}>
-                        {project.thumbnail ? (
-                          <Image src={project.thumbnail} alt={project.title} fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" />
-                        ) : (
-                          <>
-                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.08)_0%,transparent_65%)]" />
-                            {fallbackIcon}
-                          </>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        {project.featured && (
-                          <span className="absolute top-3 right-3 badge-purple flex items-center gap-1">
-                            <Zap className="w-2.5 h-2.5" />Featured
+                      {/* Glow on hover */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                        style={{
+                          background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${lc}15 0%, transparent 70%)`,
+                        }}
+                      />
+
+                      <div className="relative flex items-center gap-2 mb-3">
+                        <div
+                          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                          style={{ background: `${lc}18`, border: `1px solid ${lc}33` }}
+                        >
+                          <Github className="w-4 h-4" style={{ color: lc }} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-white font-bold text-sm group-hover:text-purple-200 transition-colors leading-snug truncate"
+                            style={{ letterSpacing: "-0.01em" }}>
+                            {repo.name}
+                          </h3>
+                          <p className="text-[11px] truncate" style={{ color: "#505070" }}>
+                            {repo.full_name}
+                          </p>
+                        </div>
+                      </div>
+
+                      {repo.description && (
+                        <p className="relative text-sm leading-relaxed mb-4 line-clamp-2 flex-1" style={{ color: "#808090" }}>
+                          {repo.description}
+                        </p>
+                      )}
+
+                      {repo.topics.length > 0 && (
+                        <div className="relative flex flex-wrap gap-1.5 mb-4">
+                          {repo.topics.slice(0, 4).map((t) => (
+                            <span key={t} className="tag-pill">{t}</span>
+                          ))}
+                          {repo.topics.length > 4 && (
+                            <span className="tag-pill">+{repo.topics.length - 4}</span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Meta row */}
+                      <div className="relative flex items-center gap-4 mt-auto pt-3 text-xs"
+                        style={{ borderTop: "1px solid rgba(28,28,48,0.6)", color: "#606070" }}>
+                        {repo.language && (
+                          <span className="flex items-center gap-1.5">
+                            <CircleDot className="w-3 h-3" style={{ color: lc }} />
+                            {repo.language}
                           </span>
                         )}
-
-                        {/* Hover overlay CTA */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <Link href={`/portfolio/${project.slug}`}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold shadow-lg"
-                            style={{ background: "rgba(147,51,234,0.9)", color: "white", backdropFilter: "blur(8px)" }}>
-                            View Project <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
-                          </Link>
-                        </div>
+                        <span className="flex items-center gap-1">
+                          <Star className="w-3 h-3" />
+                          {repo.stars}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <GitFork className="w-3 h-3" />
+                          {repo.forks}
+                        </span>
+                        <span className="ml-auto text-[10px] opacity-70">
+                          {timeAgo(repo.pushed_at)}
+                        </span>
                       </div>
 
-                      {/* Body */}
-                      <div className="p-5 flex flex-col flex-1">
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <CategoryBadge category={category} />
-                        </div>
-
-                        <h3 className="text-white font-bold text-sm mb-2 group-hover:text-purple-200 transition-colors leading-snug"
-                          style={{ letterSpacing: "-0.01em" }}>
-                          {project.title}
-                        </h3>
-
-                        {project.description && (
-                          <p className="text-sm leading-relaxed mb-4 line-clamp-2 flex-1" style={{ color: "#606070" }}>
-                            {project.description}
-                          </p>
-                        )}
-
-                        {tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 mb-4">
-                            {tags.slice(0, 3).map(tag => (
-                              <span key={tag} className="tag-pill">{tag}</span>
-                            ))}
-                            {tags.length > 3 && (
-                              <span className="tag-pill">+{tags.length - 3}</span>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Action row */}
-                        <div className="flex items-center gap-2 mt-auto pt-3" style={{ borderTop: "1px solid rgba(28,28,48,0.6)" }}>
-                          <Link href={`/portfolio/${project.slug}`}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
-                            style={{ background: catColor.bg, color: catColor.text, border: `1px solid ${catColor.border}` }}
-                            onMouseEnter={e => (e.currentTarget.style.opacity = "0.8")}
-                            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                      {/* Action buttons */}
+                      <div className="relative flex items-center gap-2 mt-3">
+                        <span
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+                          style={{ background: `${lc}1a`, color: lc, border: `1px solid ${lc}40` }}
+                        >
+                          <Github className="w-3.5 h-3.5" />
+                          View Code
+                        </span>
+                        {repo.homepage && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open(repo.homepage!, "_blank", "noopener,noreferrer");
+                            }}
+                            className="w-9 h-9 flex items-center justify-center rounded-xl transition-all duration-200"
+                            style={{ background: "rgba(28,28,48,0.8)", border: "1px solid rgba(40,40,65,0.8)", color: "#a0a0b8" }}
+                            title="Live Demo"
                           >
-                            View Project <ArrowLeft className="w-3 h-3 rotate-180" />
-                          </Link>
-                          {links.map((url, i) => {
-                            const isGithub = url.toLowerCase().includes("github.com");
-                            return (
-                              <a key={i} href={url} target="_blank" rel="noopener noreferrer"
-                                className="w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-200"
-                                style={{ background: "rgba(28,28,48,0.8)", border: "1px solid rgba(40,40,65,0.8)", color: "#606070" }}
-                                onMouseEnter={e => (e.currentTarget.style.color = "#c084fc")}
-                                onMouseLeave={e => (e.currentTarget.style.color = "#606070")}
-                                title={isGithub ? "GitHub" : "Live Demo"}
-                              >
-                                {isGithub ? <Github className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
-                              </a>
-                            );
-                          })}
-                        </div>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
-                    </motion.div>
+                    </motion.a>
                   );
                 })}
               </motion.div>
@@ -377,9 +442,11 @@ export default function PortfolioPage() {
                   <Link href="/contact" className="btn-primary gap-2 text-sm py-2.5 px-6">
                     Start a Project
                   </Link>
-                  <Link href="/services" className="btn-outline text-sm py-2.5 px-5">
-                    View Services
-                  </Link>
+                  <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+                    className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center">
+                    <Github className="w-4 h-4" />
+                    Follow on GitHub
+                  </a>
                 </div>
               </div>
             </div>

@@ -12,7 +12,6 @@ const navLinks = [
   { href: "/", label: "الرئيسية" },
   { href: "/about", label: "من أنا" },
   { href: "/services", label: "الخدمات" },
-  { href: "/store", label: "المتجر" },
   { href: "/portfolio", label: "أعمالي" },
   { href: "/blog", label: "المدونة" },
   { href: "/resources", label: "المصادر" },
@@ -189,8 +188,8 @@ export default function Navbar() {
                 );
               })}
               <div className="pt-3 pb-1">
-                <Link href="/store" className="btn-primary w-full justify-center text-sm">
-                  تصفح المتجر
+                <Link href="/contact" className="btn-primary w-full justify-center text-sm">
+                  تواصل معاي
                 </Link>
               </div>
             </div>

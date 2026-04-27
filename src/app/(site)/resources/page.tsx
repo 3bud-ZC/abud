@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   Brain, Code2, Briefcase, Zap, Shield, Globe,
-  Search, ExternalLink, X, BookOpen, ShoppingBag,
+  Search, ExternalLink, X, BookOpen,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
@@ -316,18 +316,17 @@ export default function ResourcesPage() {
           }}>
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(147,51,234,0.1)_0%,transparent_60%)]" />
           <div className="relative">
-            <div className="text-3xl mb-3">🛍️</div>
+            <div className="text-3xl mb-3">�</div>
             <h2 className="text-white font-black text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
-              هل تريد منتجات ومصادر مدفوعة الجودة؟
+              محتاج خدمة تطوير مخصصة؟
             </h2>
             <p className="text-sm mb-6" style={{ color: "#606070", lineHeight: 1.7 }}>
-              تصفح متجرنا للحصول على أدلة احترافية وقوالب جاهزة وخدمات تطوير.
+              من تطوير المواقع إلى أدوات الذكاء الاصطناعي والأمن السيبراني — تواصل لنبني حلًا يناسبك.
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <Link href="/store"
+              <Link href="/contact"
                 className="btn-primary inline-flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4" />
-                استعراض المتجر
+                تواصل معاي
               </Link>
               <Link href="/blog"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"

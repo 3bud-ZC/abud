@@ -3,5 +3,5 @@
 import HomePageClient from "./HomePageClient";
 
 export default function HomePage() {
-  return <HomePageClient initialProducts={[]} initialPosts={[]} />;
+  return <HomePageClient initialPosts={[]} />;
 }

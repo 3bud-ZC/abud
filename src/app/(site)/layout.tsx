@@ -1,8 +1,8 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/ui/PageTransition";
-import AIAssistant from "@/components/ui/AIAssistant";
 import JsonLd from "@/components/JsonLd";
+import ScrollProgress from "@/components/effects/ScrollProgress";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -38,12 +38,12 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <JsonLd data={organizationSchema} />
+      <ScrollProgress />
       <Navbar />
       <main className="min-h-screen">
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
-      <AIAssistant />
     </>
   );
 }

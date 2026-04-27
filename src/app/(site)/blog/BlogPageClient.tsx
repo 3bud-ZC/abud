@@ -12,7 +12,7 @@ import { EmptySearchState } from "@/components/ui/EmptyStates";
 import { formatDate } from "@/lib/utils";
 
 const AUTHOR_NAME = "Abud";
-const AUTHOR_AVATAR = "https://api.dicebear.com/8.x/bottts-neutral/svg?seed=abud&backgroundColor=6d28d9";
+const AUTHOR_AVATAR = "/abd-profile.jpg";
 
 interface Post {
   id: string;
