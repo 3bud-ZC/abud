@@ -12,11 +12,13 @@ interface Props {
 
 /**
  * HolographicWordmark — Cinematic combo wordmark
- *  • Letter-by-letter cascade reveal with glow burst
+ *  • Letter-by-letter cascade reveal (LTR latin) or whole-word reveal (Arabic)
  *  • Liquid-chrome shimmer (animated gradient)
  *  • 3D parallax tilt that follows the mouse
  *  • One-shot scan beam after entrance
  *  • Continuous animated data-stream underline
+ *  • Accent characters ({, }, [, ], etc) get cyan tint
+ *  • Robust LTR rendering on RTL pages (uses unicode-bidi: isolate-override)
  */
 export default function HolographicWordmark({
   text,
@@ -34,14 +36,12 @@ export default function HolographicWordmark({
   const sx = useSpring(mx, { stiffness: 90, damping: 18, mass: 0.6 });
   const sy = useSpring(my, { stiffness: 90, damping: 18, mass: 0.6 });
 
-  // Map mouse position to tilt degrees
+  // Map mouse position to tilt + hue (top-level: hooks rules)
   const rotateX = useTransform(sy, [-0.5, 0.5], [8, -8]);
   const rotateY = useTransform(sx, [-0.5, 0.5], [-12, 12]);
-
-  // Hue shift based on mouse X (foil holographic feel)
   const hueShift = useTransform(sx, [-0.5, 0.5], [-25, 25]);
+  const hueFilter = useTransform(hueShift, (v) => `hue-rotate(${v}deg)`);
 
-  // Trigger entrance scan beam after letters revealed
   useEffect(() => {
     const t = setTimeout(() => setRevealed(true), 700);
     return () => clearTimeout(t);
@@ -61,68 +61,97 @@ export default function HolographicWordmark({
     my.set(0);
   }
 
-  const letters = text.split("");
+  // Detect Arabic / RTL script — if present, render as a single unit
+  // so connected (cursive) letters render correctly.
+  const isArabic = /[\u0600-\u06FF]/.test(text);
+  const letters = isArabic ? [text] : text.split("");
 
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
+      dir={isArabic ? "rtl" : "ltr"}
       className={`relative inline-block ${className}`}
-      style={{ perspective: "1000px" }}
+      style={{
+        perspective: "1000px",
+        // Force LTR rendering even on RTL parents (override-isolate is the strongest)
+        direction: isArabic ? "rtl" : "ltr",
+        unicodeBidi: "isolate-override",
+      }}
     >
       <motion.div
         style={{
           rotateX,
           rotateY,
           transformStyle: "preserve-3d",
-          filter: useTransform(hueShift, (v) => `hue-rotate(${v}deg)`),
+          filter: hueFilter,
         }}
         className="relative will-change-transform"
       >
         {/* The wordmark itself */}
         <h1
+          dir={isArabic ? "rtl" : "ltr"}
           className="font-black m-0 leading-none relative"
-          style={{ fontSize, letterSpacing: "-0.04em", lineHeight: 1 }}
+          style={{
+            fontSize,
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+            direction: isArabic ? "rtl" : "ltr",
+            unicodeBidi: "isolate-override",
+          }}
           aria-label={text}
         >
-          {letters.map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 40, scale: 0.6, rotateX: -60, filter: "blur(12px)" }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" }}
-              transition={{
-                duration: 0.7,
-                delay: 0.08 + i * 0.11,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="inline-block relative liquid-chrome-letter"
-              style={{
-                transformStyle: "preserve-3d",
-                transformOrigin: "50% 100%",
-              }}
-              aria-hidden
-            >
-              {/* Glow burst at the moment of reveal */}
+          {letters.map((char, i) => {
+            // Treat non-alphanumeric (e.g. { } [ ] . _ -) as accent characters
+            const isAccent = !isArabic && /[^a-zA-Z0-9]/.test(char) && char.trim() !== "";
+            return (
               <motion.span
-                className="absolute inset-0 rounded-full pointer-events-none"
-                initial={{ opacity: 0, scale: 0.4 }}
-                animate={{ opacity: [0, 1, 0], scale: [0.4, 2.2, 2.6] }}
+                key={i}
+                initial={{ opacity: 0, y: 40, scale: 0.6, rotateX: -60, filter: "blur(12px)" }}
+                animate={{ opacity: isAccent ? 0.65 : 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" }}
                 transition={{
-                  duration: 1.0,
+                  duration: 0.7,
                   delay: 0.08 + i * 0.11,
-                  ease: "easeOut",
+                  ease: [0.16, 1, 0.3, 1],
                 }}
+                className={`inline-block relative ${isAccent ? "" : "liquid-chrome-letter"}`}
                 style={{
-                  background:
-                    "radial-gradient(circle, rgba(192,132,252,0.7) 0%, rgba(168,85,247,0.3) 35%, transparent 70%)",
-                  filter: "blur(14px)",
-                  zIndex: -1,
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "50% 100%",
+                  ...(isAccent
+                    ? {
+                        color: "#67e8f9",
+                        fontWeight: 300,
+                        textShadow: "0 0 14px rgba(103,232,249,0.55)",
+                        margin: "0 0.12em",
+                      }
+                    : {}),
                 }}
-              />
-              {char === " " ? "\u00A0" : char}
-            </motion.span>
-          ))}
+                aria-hidden
+              >
+                {!isAccent && (
+                  <motion.span
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    initial={{ opacity: 0, scale: 0.4 }}
+                    animate={{ opacity: [0, 1, 0], scale: [0.4, 2.2, 2.6] }}
+                    transition={{
+                      duration: 1.0,
+                      delay: 0.08 + i * 0.11,
+                      ease: "easeOut",
+                    }}
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(192,132,252,0.7) 0%, rgba(168,85,247,0.3) 35%, transparent 70%)",
+                      filter: "blur(14px)",
+                      zIndex: -1,
+                    }}
+                  />
+                )}
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            );
+          })}
 
           {/* One-shot scan beam after entrance */}
           {revealed && (
@@ -197,7 +226,6 @@ export default function HolographicWordmark({
           color: transparent;
           animation: liquid-chrome-flow 5.5s linear infinite;
           will-change: background-position;
-          /* Crisp inner edge */
           text-shadow: 0 0 0 transparent;
         }
         @keyframes liquid-chrome-flow {

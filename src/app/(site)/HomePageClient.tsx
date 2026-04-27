@@ -18,6 +18,9 @@ import TypewriterText from "@/components/effects/TypewriterText";
 import GlitchText from "@/components/effects/GlitchText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
 import HeroFloatingCards from "@/components/effects/HeroFloatingCards";
+import SectionDivider from "@/components/effects/SectionDivider";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import TechStackSection from "@/components/sections/TechStackSection";
 import LiveTerminal from "@/components/effects/LiveTerminal";
 import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
@@ -141,7 +144,7 @@ export default function HomePageClient({ initialPosts }: Props) {
             transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 flex flex-col items-center"
           >
-            <HolographicWordmark text="ABUD" />
+            <HolographicWordmark text="{ Abud }" />
             <h2
               className="text-white/90 block text-center mt-6"
               style={{
@@ -428,6 +431,18 @@ export default function HomePageClient({ initialPosts }: Props) {
           </div>
         </div>
       </section>
+
+      <SectionDivider variant="line" />
+
+      {/* ── TECH STACK ── */}
+      <TechStackSection />
+
+      <SectionDivider variant="gradient" height={40} />
+
+      {/* ── TESTIMONIALS ── */}
+      <TestimonialsSection />
+
+      <SectionDivider variant="line" />
 
       {/* ── BLOG ── */}
       <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
