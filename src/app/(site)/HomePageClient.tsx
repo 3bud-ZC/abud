@@ -17,6 +17,7 @@ import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
 import TypewriterText from "@/components/effects/TypewriterText";
 import GlitchText from "@/components/effects/GlitchText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
+import HeroFloatingCards from "@/components/effects/HeroFloatingCards";
 import LiveTerminal from "@/components/effects/LiveTerminal";
 import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
@@ -93,6 +94,9 @@ export default function HomePageClient({ initialPosts }: Props) {
         <ParticleField density={50} />
         <ScanLine duration={9} />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_20%_80%,rgba(109,40,217,0.08)_0%,transparent_60%)]" />
+
+        {/* Floating service cards orbiting the hero */}
+        <HeroFloatingCards />
 
         <m.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.2, 0.4, 0.2] }}
