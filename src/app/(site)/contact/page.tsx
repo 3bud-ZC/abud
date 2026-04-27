@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { trackContactFormStart, trackContactQualificationField, trackContactFormSubmit } from "@/lib/analytics";
@@ -33,10 +34,19 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [formStarted, setFormStarted] = useState(false);
+  const searchParams = useSearchParams();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  // Prefill from query params (e.g. coming from /quote)
+  useEffect(() => {
+    const subject = searchParams?.get("subject");
+    const message = searchParams?.get("message");
+    if (subject) setValue("subject", subject);
+    if (message) setValue("message", message);
+  }, [searchParams, setValue]);
 
   async function onSubmit(data: FormData) {
     // Track contact form submit

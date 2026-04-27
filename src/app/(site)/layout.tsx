@@ -3,6 +3,8 @@ import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/ui/PageTransition";
 import JsonLd from "@/components/JsonLd";
 import ScrollProgress from "@/components/effects/ScrollProgress";
+import FloatingContact from "@/components/ui/FloatingContact";
+import CommandPalette from "@/components/ui/CommandPalette";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -44,6 +46,8 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
+      <FloatingContact />
+      <CommandPalette />
     </>
   );
 }

@@ -10,6 +10,8 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
+import SocialShare from "@/components/blog/SocialShare";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -28,6 +30,36 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     : (() => { try { return JSON.parse(post.tags as string); } catch { return []; } })();
 
   const readTime = post.readTime || estimateReadTime(post.content);
+
+  // Fetch related posts (same category, exclude current, limit 3)
+  const related = await prisma.blogPost.findMany({
+    where: {
+      status: "published",
+      slug: { not: post.slug },
+      ...(post.categoryId ? { categoryId: post.categoryId } : {}),
+    },
+    include: { category: true },
+    orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
+    take: 3,
+  });
+
+  // Fallback: if not enough in same category, fill with latest other posts
+  let relatedFinal = related;
+  if (relatedFinal.length < 3) {
+    const fallback = await prisma.blogPost.findMany({
+      where: {
+        status: "published",
+        slug: { not: post.slug },
+        id: { notIn: relatedFinal.map((r) => r.id) },
+      },
+      include: { category: true },
+      orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
+      take: 3 - relatedFinal.length,
+    });
+    relatedFinal = [...relatedFinal, ...fallback];
+  }
+
+  const postUrl = `https://abud.fun/blog/${post.slug}`;
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -127,7 +159,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
           {tags.length > 0 && (
             <div className="mt-12 pt-6" style={{ borderTop: "1px solid rgba(28,28,48,0.8)" }}>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap mb-6">
                 <Tag className="w-3.5 h-3.5 text-purple-500/60" />
                 {tags.map((tag: string) => (
                   <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`} className="tag-pill">
@@ -137,6 +169,24 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             </div>
           )}
+
+          {/* Social share */}
+          <div className={tags.length > 0 ? "mt-2" : "mt-12 pt-6"} style={tags.length > 0 ? {} : { borderTop: "1px solid rgba(28,28,48,0.8)" }}>
+            <SocialShare url={postUrl} title={post.title} />
+          </div>
+
+          {/* Related posts */}
+          <RelatedPosts
+            posts={relatedFinal.map((r) => ({
+              id: r.id,
+              slug: r.slug,
+              title: r.title,
+              excerpt: r.excerpt,
+              coverImage: r.coverImage,
+              readTime: r.readTime,
+              category: r.category ? { name: r.category.name } : null,
+            }))}
+          />
 
           <div className="mt-12">
             <HolographicCard duration={6}>

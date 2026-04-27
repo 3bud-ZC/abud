@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Globe, BrainCircuit, Layers, Bot, Shield, Terminal, ArrowLeft, CheckCircle, Zap, MessageSquare } from "lucide-react";
+import { Globe, BrainCircuit, Layers, Bot, Shield, Terminal, ArrowLeft, CheckCircle, Zap, MessageSquare, Calculator } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
@@ -223,15 +223,15 @@ export default function ServicesPage() {
             <HolographicCard duration={6}>
               <div className="p-8 md:p-10 text-center">
                 <h2 className="text-3xl font-black text-white mb-4">جاهز للبدء؟</h2>
-                <p className="text-[#a0a0b8] mb-8">تواصل معي الآن ونبدأ العمل على مشروعك.</p>
+                <p className="text-[#a0a0b8] mb-8">احسب سعر مشروعك بنفسك في دقيقة، أو تواصل مباشرة لعرض مخصص.</p>
                 <div className="flex flex-wrap gap-3 justify-center">
-                  <Link href="/contact" className="btn-primary btn-glow gap-2">
+                  <Link href="/quote" className="btn-primary btn-glow gap-2">
+                    <Calculator className="w-4 h-4" />
+                    احسب سعر مشروعك
+                  </Link>
+                  <Link href="/contact" className="btn-outline gap-2">
                     <MessageSquare className="w-4 h-4" />
                     تواصل معي
-                  </Link>
-                  <Link href="/portfolio" className="btn-outline gap-2">
-                    <ArrowLeft className="w-4 h-4" />
-                    شاهد أعمالي
                   </Link>
                 </div>
               </div>
