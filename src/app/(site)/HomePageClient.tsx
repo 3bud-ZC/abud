@@ -422,8 +422,10 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── BLOG ── */}
-      <section className="py-20 px-4 bg-[#080810]">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
+        <FloatingOrbs count={5} />
+        <ScanLine duration={13} direction="vertical" />
+        <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <span className="section-badge mb-5 mx-auto">
               <BookOpen className="w-2.5 h-2.5" />
@@ -437,28 +439,32 @@ export default function HomePageClient({ initialPosts }: Props) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="space-y-2.5"
+            className="space-y-3"
           >
-            {posts.map((post) => (
-              <m.div key={post.id} variants={item} whileHover={{ x: -3 }}>
-                <Link href={`/blog/${post.slug}`} className="group flex items-center justify-between gap-4 p-4 rounded-2xl transition-colors"
-                  style={{ background: "rgba(10,10,16,0.7)", border: "1px solid rgba(255,255,255,0.045)", borderTop: "1px solid rgba(255,255,255,0.07)" }}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(147,51,234,0.1)", border: "1px solid rgba(147,51,234,0.18)" }}>
-                      <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-white font-semibold text-sm group-hover:text-purple-200 transition-colors leading-snug mb-1">{post.title}</h3>
-                      <div className="flex items-center gap-2">
-                        {post.category && <span className="tag-pill" style={{ padding: "0.1rem 0.6rem", fontSize: "0.65rem" }}>{post.category.name}</span>}
-                        <span style={{ color: "#8888aa", fontSize: "0.7rem" }}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</span>
+            {posts.map((post, idx) => (
+              <m.div key={post.id} variants={item}>
+                <HolographicCard duration={6 + (idx % 3)} delay={(idx % 5) * 0.3}>
+                  <Link href={`/blog/${post.slug}`} className="group flex items-center justify-between gap-4 p-4">
+                    <div className="flex items-center gap-3.5">
+                      <m.div
+                        animate={{ boxShadow: ["0 0 10px rgba(147,51,234,0.3)", "0 0 22px rgba(168,85,247,0.6)", "0 0 10px rgba(147,51,234,0.3)"] }}
+                        transition={{ duration: 2.6, repeat: Infinity, delay: idx * 0.2 }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: "rgba(147,51,234,0.18)", border: "1px solid rgba(168,85,247,0.4)" }}
+                      >
+                        <BookOpen className="w-4 h-4 text-purple-200" />
+                      </m.div>
+                      <div>
+                        <h3 className="text-white font-semibold text-sm group-hover:text-purple-200 transition-colors leading-snug mb-1">{post.title}</h3>
+                        <div className="flex items-center gap-2">
+                          {post.category && <span className="tag-pill" style={{ padding: "0.1rem 0.6rem", fontSize: "0.65rem" }}>{post.category.name}</span>}
+                          <span style={{ color: "#9090b0", fontSize: "0.7rem" }}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ChevronLeft className="w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 group-hover:translate-x-[-2px]" style={{ color: "rgba(147,51,234,0.35)" }} />
-                </Link>
+                    <ChevronLeft className="w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 group-hover:translate-x-[-3px]" style={{ color: "#c084fc" }} />
+                  </Link>
+                </HolographicCard>
               </m.div>
             ))}
           </m.div>
@@ -473,8 +479,10 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── RESOURCES HUB STRIP ── */}
-      <section className="py-16 px-4" style={{ background: "rgba(4,4,8,0.85)", borderTop: "1px solid rgba(28,28,48,0.5)", borderBottom: "1px solid rgba(28,28,48,0.5)" }}>
-        <div className="max-w-5xl mx-auto">
+      <section className="py-20 px-4 relative overflow-hidden" style={{ background: "rgba(4,4,8,0.85)", borderTop: "1px solid rgba(28,28,48,0.5)", borderBottom: "1px solid rgba(28,28,48,0.5)" }}>
+        <FloatingOrbs count={5} />
+        <ScanLine duration={11} />
+        <div className="relative z-10 max-w-5xl mx-auto">
           <AnimatedSection className="text-center mb-10">
             <span className="section-badge mb-5 mx-auto">
               <Folder className="w-2.5 h-2.5" />
@@ -489,29 +497,33 @@ export default function HomePageClient({ initialPosts }: Props) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
           >
             {[
-              { label: "أدوات AI",        Icon: BrainCircuit, color: "#a78bfa", bg: "rgba(139,92,246,0.1)",  count: 10 },
-              { label: "أدوات المطورين", Icon: Code2,         color: "#60a5fa", bg: "rgba(96,165,250,0.1)",  count: 8  },
-              { label: "الفريلانس",       Icon: Layers,        color: "#34d399", bg: "rgba(52,211,153,0.1)", count: 6  },
-              { label: "الإنتاجية",       Icon: Zap,           color: "#fbbf24", bg: "rgba(251,191,36,0.1)", count: 6  },
-              { label: "الأمن السيبراني", Icon: Shield,        color: "#f87171", bg: "rgba(248,113,113,0.1)",count: 6  },
-              { label: "بناء المواقع",    Icon: Globe,         color: "#67e8f9", bg: "rgba(6,182,212,0.1)",  count: 7  },
-            ].map(({ label, Icon, color, bg, count }) => (
-              <m.div key={label} variants={item} whileHover={{ y: -4 }}>
-                <Link href="/resources"
-                  className="flex flex-col items-center gap-2 p-4 rounded-2xl text-center transition-all duration-200 block"
-                  style={{ background: "rgba(10,8,18,0.8)", border: "1px solid rgba(28,20,48,0.8)" }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = `${color}40`)}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(28,20,48,0.8)")}>
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: bg, border: `1px solid ${color}25` }}>
-                    <Icon className="w-5 h-5" style={{ color }} />
-                  </div>
-                  <span className="text-xs font-semibold leading-tight" style={{ color: "#b0b0c8" }}>{label}</span>
-                  <span className="text-[10px]" style={{ color: "#7878a0" }}>{count} مصادر</span>
-                </Link>
+              { label: "أدوات AI",        Icon: BrainCircuit, color: "#a78bfa", bg: "rgba(139,92,246,0.18)", count: 10 },
+              { label: "أدوات المطورين", Icon: Code2,         color: "#60a5fa", bg: "rgba(96,165,250,0.18)", count: 8  },
+              { label: "الفريلانس",       Icon: Layers,        color: "#34d399", bg: "rgba(52,211,153,0.18)", count: 6  },
+              { label: "الإنتاجية",       Icon: Zap,           color: "#fbbf24", bg: "rgba(251,191,36,0.18)", count: 6  },
+              { label: "الأمن السيبراني", Icon: Shield,        color: "#f87171", bg: "rgba(248,113,113,0.18)",count: 6  },
+              { label: "بناء المواقع",    Icon: Globe,         color: "#67e8f9", bg: "rgba(6,182,212,0.18)",  count: 7  },
+            ].map(({ label, Icon, color, bg, count }, idx) => (
+              <m.div key={label} variants={item}>
+                <HolographicCard duration={6 + (idx % 3)} delay={(idx % 6) * 0.25}>
+                  <Link href="/resources"
+                    className="flex flex-col items-center gap-2 p-4 text-center block"
+                  >
+                    <m.div
+                      animate={{ boxShadow: [`0 0 10px ${color}40`, `0 0 22px ${color}80`, `0 0 10px ${color}40`] }}
+                      transition={{ duration: 2.4, repeat: Infinity, delay: idx * 0.18 }}
+                      className="w-11 h-11 rounded-xl flex items-center justify-center"
+                      style={{ background: bg, border: `1px solid ${color}55` }}
+                    >
+                      <Icon className="w-5 h-5" style={{ color }} />
+                    </m.div>
+                    <span className="text-xs font-semibold leading-tight mt-1" style={{ color: "#d0d0e8" }}>{label}</span>
+                    <span className="text-[10px]" style={{ color: "#9090b8" }}>{count} مصادر</span>
+                  </Link>
+                </HolographicCard>
               </m.div>
             ))}
           </m.div>
@@ -526,8 +538,10 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── FAQ PREVIEW ── */}
-      <section className="py-20 px-4 bg-[#080810]">
-        <div className="max-w-3xl mx-auto">
+      <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
+        <FloatingOrbs count={4} />
+        <ScanLine duration={14} direction="vertical" />
+        <div className="relative z-10 max-w-3xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <span className="section-badge mb-5 mx-auto">
               <HelpCircle className="w-2.5 h-2.5" />
@@ -537,37 +551,26 @@ export default function HomePageClient({ initialPosts }: Props) {
           </AnimatedSection>
 
           <AnimatedSection>
-            <div className="space-y-2 mb-8">
+            <div className="space-y-3 mb-8">
               {faqPreview.map((f, i) => (
-                <div
-                  key={i}
-                  className="overflow-hidden rounded-xl transition-all duration-200"
-                  style={{
-                    background: openFaq === i
-                      ? "linear-gradient(160deg,rgba(18,10,30,0.9),rgba(10,10,18,0.8))"
-                      : "rgba(10,10,18,0.6)",
-                    border: openFaq === i
-                      ? "1px solid rgba(147,51,234,0.3)"
-                      : "1px solid rgba(28,28,48,0.8)",
-                  }}
-                >
+                <HolographicCard key={i} duration={6 + (i % 3)} delay={i * 0.3}>
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between gap-4 p-5 text-right"
                   >
-                    <span className="font-semibold text-sm" style={{ color: openFaq === i ? "#e2d4f8" : "#c0c0d8" }}>
+                    <span className="font-semibold text-sm" style={{ color: openFaq === i ? "#e2d4f8" : "#d0d0e8" }}>
                       {f.q}
                     </span>
                     <m.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.22 }}>
-                      <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: openFaq === i ? "#c084fc" : "#505070" }} />
+                      <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: openFaq === i ? "#c084fc" : "#7070a0" }} />
                     </m.div>
                   </button>
                   {openFaq === i && (
-                    <div className="px-5 pb-5 text-sm leading-relaxed" style={{ color: "#707090", borderTop: "1px solid rgba(28,28,48,0.6)" }}>
+                    <div className="px-5 pb-5 text-sm leading-relaxed" style={{ color: "#a0a0c0", borderTop: "1px solid rgba(168,85,247,0.2)" }}>
                       <div className="pt-4">{f.a}</div>
                     </div>
                   )}
-                </div>
+                </HolographicCard>
               ))}
             </div>
             <div className="text-center">
@@ -581,62 +584,76 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto">
+      <section className="py-24 px-4 relative overflow-hidden">
+        <AuroraBeams />
+        <FloatingOrbs count={6} />
+        <ParticleField density={28} />
+        <ScanLine duration={10} />
+        <div className="relative z-10 max-w-3xl mx-auto">
           <AnimatedSection>
-            <div className="glass-card relative overflow-hidden text-center p-10 md:p-14">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_-20%,rgba(147,51,234,0.18)_0%,transparent_60%)] pointer-events-none" />
-              <div className="absolute inset-0 bg-dots opacity-[0.06] pointer-events-none" />
-              <div className="relative">
-                <div className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-6"
-                  style={{ background: "linear-gradient(135deg,rgba(147,51,234,0.2),rgba(109,40,217,0.12))", border: "1px solid rgba(147,51,234,0.25)" }}>
-                  <Zap className="w-5 h-5 text-purple-400" />
-                </div>
-                <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
-                  جاهز لبناء مشروعك الرقمي؟
-                </h2>
-                <p className="mb-8 leading-relaxed" style={{ color: "#8888a8", fontSize: "0.95rem" }}>
-                  ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                  <Link href="/contact" className="btn-primary gap-2 py-3 px-8" onClick={() => trackHomeFinalCTA('/contact')}>
-                    <MessageSquare className="w-4 h-4" />
-                    <span className="font-bold">تواصل معاي</span>
-                    <ArrowLeft className="w-4 h-4" />
-                  </Link>
-                  <Link href="/services" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeFinalCTA('/services')}>
-                    <Code2 className="w-3.5 h-3.5" />
-                    <span>استعرض الخدمات</span>
-                  </Link>
-                </div>
-                <div className="flex items-center justify-center gap-2.5">
-                  <div className="flex -space-x-1.5 rtl:space-x-reverse">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black"
-                        style={{ background: "rgba(147,51,234,0.2)", border: "2px solid rgba(6,6,10,1)", color: "#b084fc" }}>
-                        {["A","B","C","D"][i]}
-                      </div>
-                    ))}
+            <HolographicCard duration={6}>
+              <div className="text-center p-10 md:p-14 relative overflow-hidden">
+                <div className="absolute inset-0 bg-dots opacity-[0.06] pointer-events-none" />
+                <div className="relative">
+                  <m.div
+                    animate={{ scale: [1, 1.08, 1], boxShadow: ["0 0 20px rgba(147,51,234,0.5)", "0 0 40px rgba(168,85,247,0.85)", "0 0 20px rgba(147,51,234,0.5)"] }}
+                    transition={{ duration: 2.6, repeat: Infinity }}
+                    className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6"
+                    style={{ background: "linear-gradient(135deg,rgba(147,51,234,0.35),rgba(109,40,217,0.2))", border: "1px solid rgba(168,85,247,0.5)" }}
+                  >
+                    <Zap className="w-6 h-6 text-purple-200" />
+                  </m.div>
+                  <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
+                    جاهز لبناء مشروعك الرقمي؟
+                  </h2>
+                  <p className="mb-8 leading-relaxed" style={{ color: "#a0a0c0", fontSize: "0.95rem" }}>
+                    ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                    <Link href="/contact" className="btn-primary btn-glow gap-2 py-3 px-8" onClick={() => trackHomeFinalCTA('/contact')}>
+                      <MessageSquare className="w-4 h-4" />
+                      <span className="font-bold">تواصل معاي</span>
+                      <ArrowLeft className="w-4 h-4" />
+                    </Link>
+                    <Link href="/services" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeFinalCTA('/services')}>
+                      <Code2 className="w-3.5 h-3.5" />
+                      <span>استعرض الخدمات</span>
+                    </Link>
                   </div>
-                  <span style={{ color: "#8080a0", fontSize: "0.75rem" }}>+30 عميل سعيد</span>
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
+                  <div className="flex items-center justify-center gap-2.5">
+                    <div className="flex -space-x-1.5 rtl:space-x-reverse">
+                      {[...Array(4)].map((_, i) => (
+                        <div key={i} className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black"
+                          style={{ background: "rgba(147,51,234,0.25)", border: "2px solid rgba(6,6,10,1)", color: "#c084fc", boxShadow: "0 0 8px rgba(147,51,234,0.4)" }}>
+                          {["A","B","C","D"][i]}
+                        </div>
+                      ))}
+                    </div>
+                    <span style={{ color: "#a0a0c0", fontSize: "0.75rem" }}>+30 عميل سعيد</span>
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </HolographicCard>
           </AnimatedSection>
         </div>
       </section>
 
       {/* ── NEWSLETTER ── */}
-      <section className="py-20 px-4" style={{ borderTop: "1px solid rgba(28,28,48,0.6)", background: "rgba(4,4,8,0.8)" }}>
-        <div className="max-w-xl mx-auto text-center">
+      <section className="py-20 px-4 relative overflow-hidden" style={{ borderTop: "1px solid rgba(28,28,48,0.6)", background: "rgba(4,4,8,0.8)" }}>
+        <FloatingOrbs count={4} />
+        <ScanLine duration={12} direction="vertical" />
+        <div className="relative z-10 max-w-xl mx-auto text-center">
           <AnimatedSection>
-            <div className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-6"
-              style={{ background: "linear-gradient(135deg,rgba(147,51,234,0.18),rgba(109,40,217,0.1))", border: "1px solid rgba(147,51,234,0.25)" }}>
-              <Mail className="w-5 h-5 text-purple-400" />
-            </div>
+            <m.div
+              animate={{ boxShadow: ["0 0 16px rgba(147,51,234,0.4)", "0 0 32px rgba(168,85,247,0.7)", "0 0 16px rgba(147,51,234,0.4)"] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="w-13 h-13 mx-auto rounded-2xl flex items-center justify-center mb-6"
+              style={{ width: "3.25rem", height: "3.25rem", background: "linear-gradient(135deg,rgba(147,51,234,0.3),rgba(109,40,217,0.18))", border: "1px solid rgba(168,85,247,0.5)" }}>
+              <Mail className="w-5 h-5 text-purple-200" />
+            </m.div>
             <h2 className="font-black text-white mb-2" style={{ fontSize: "clamp(1.4rem,3.5vw,2rem)", letterSpacing: "-0.02em" }}>
               اشترك في النشرة البريدية
             </h2>
@@ -681,7 +698,7 @@ export default function HomePageClient({ initialPosts }: Props) {
                   onFocus={e => (e.target.style.borderColor = "rgba(147,51,234,0.5)")}
                   onBlur={e => (e.target.style.borderColor = "rgba(35,35,55,0.8)")}
                 />
-                <button type="submit" className="btn-primary px-5 py-3 gap-1.5 flex-shrink-0">
+                <button type="submit" className="btn-primary btn-glow px-5 py-3 gap-1.5 flex-shrink-0">
                   <Send className="w-3.5 h-3.5" />
                   اشترك
                 </button>
