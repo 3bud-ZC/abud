@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import {
-  BrainCircuit, Bot, Shield, Code2, type LucideIcon,
+  BrainCircuit, Bot, Shield, Code2, Cpu, Sparkles, Database, Zap, type LucideIcon,
 } from "lucide-react";
 
 interface FloatingCardSpec {
@@ -12,10 +12,18 @@ interface FloatingCardSpec {
   y: number;
   /** Parallax depth multiplier (0..1). Higher = moves more with mouse. */
   depth: number;
-  /** Rotation in degrees. */
+  /** Initial rotation in degrees. */
   rotate: number;
   /** Animation phase offset for the float. */
   phase: number;
+  /** Animation speed (seconds for one full drift cycle). */
+  speed: number;
+  /** Drift amplitude X (px). */
+  driftX: number;
+  /** Drift amplitude Y (px). */
+  driftY: number;
+  /** Rotation amplitude (deg). */
+  rotAmp: number;
   icon: LucideIcon;
   label: string;
   hint: string;
@@ -23,19 +31,23 @@ interface FloatingCardSpec {
   glow: string;
 }
 
-// 4 cards in the four outer quadrants — kept clear of the central wordmark.
+// 8 cards scattered around the wordmark with randomized organic drift.
 const CARDS: FloatingCardSpec[] = [
-  { x: -38, y: -28, depth: 0.7, rotate: -7,  phase: 0,    icon: BrainCircuit, label: "AI Tools",      hint: "GPT • Claude",   accent: "#c084fc", glow: "rgba(192,132,252,0.5)"  },
-  { x:  40, y: -26, depth: 0.9, rotate:  9,  phase: 1.4,  icon: Code2,        label: "Full-Stack",    hint: "Next.js • TS",   accent: "#67e8f9", glow: "rgba(103,232,249,0.45)" },
-  { x: -42, y:  24, depth: 0.55,rotate:  6,  phase: 2.6,  icon: Bot,          label: "Telegram Bots", hint: "Automation",     accent: "#a78bfa", glow: "rgba(167,139,250,0.45)" },
-  { x:  42, y:  26, depth: 1.0, rotate: -8,  phase: 3.4,  icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",    accent: "#34d399", glow: "rgba(52,211,153,0.45)"  },
+  { x: -42, y: -32, depth: 0.7,  rotate: -8,  phase: 0.0, speed: 11, driftX: 22, driftY: 18, rotAmp: 5, icon: BrainCircuit, label: "AI Tools",      hint: "GPT \u2022 Claude",      accent: "#c084fc", glow: "rgba(192,132,252,0.5)"  },
+  { x:  44, y: -30, depth: 0.9,  rotate:  10, phase: 1.4, speed: 13, driftX: 28, driftY: 14, rotAmp: 6, icon: Code2,        label: "Full-Stack",    hint: "Next.js \u2022 TS",       accent: "#67e8f9", glow: "rgba(103,232,249,0.45)" },
+  { x: -46, y:  22, depth: 0.55, rotate:  6,  phase: 2.6, speed: 9,  driftX: 18, driftY: 22, rotAmp: 4, icon: Bot,          label: "Telegram Bots", hint: "Automation",            accent: "#a78bfa", glow: "rgba(167,139,250,0.45)" },
+  { x:  46, y:  26, depth: 1.0,  rotate: -9,  phase: 3.4, speed: 14, driftX: 24, driftY: 16, rotAmp: 7, icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",           accent: "#34d399", glow: "rgba(52,211,153,0.45)"  },
+  { x: -28, y:   2, depth: 0.45, rotate:  4,  phase: 0.8, speed: 10, driftX: 30, driftY: 12, rotAmp: 5, icon: Cpu,          label: "Automation",    hint: "Python \u2022 APIs",     accent: "#f0abfc", glow: "rgba(240,171,252,0.45)" },
+  { x:  30, y:  -2, depth: 0.5,  rotate: -5,  phase: 2.0, speed: 12, driftX: 26, driftY: 18, rotAmp: 4, icon: Sparkles,     label: "AI Agents",     hint: "Multi-step",            accent: "#fbbf24", glow: "rgba(251,191,36,0.45)"  },
+  { x:  -8, y: -42, depth: 0.65, rotate: -3,  phase: 4.2, speed: 15, driftX: 16, driftY: 20, rotAmp: 6, icon: Database,     label: "Backend",       hint: "Postgres \u2022 Prisma", accent: "#60a5fa", glow: "rgba(96,165,250,0.45)"  },
+  { x:  10, y:  44, depth: 0.6,  rotate:  7,  phase: 1.7, speed: 13, driftX: 20, driftY: 14, rotAmp: 5, icon: Zap,          label: "Performance",   hint: "Edge \u2022 Cache",      accent: "#34d399", glow: "rgba(52,211,153,0.5)"   },
 ];
 
 /**
- * HeroFloatingCards — Floating service cards that orbit the hero center.
- *  • 4 corner cards, kept far from central wordmark
+ * HeroFloatingCards — Living service cards orbiting the hero center.
+ *  • 8 cards scattered around the central wordmark
  *  • Mouse parallax (deeper cards shift more)
- *  • Continuous Y-bobbing for life
+ *  • Per-card randomized organic drift (X + Y + rotation + scale)
  *  • Holographic glow per accent color
  *  • Hidden on mobile to keep hero focused
  */
@@ -109,14 +121,20 @@ function FloatingCard({
         translateY: `calc(-50% + ${card.y}vh * 0.35)`,
       }}
     >
-      {/* Continuous Y-bob */}
+      {/* Organic drift: independent X, Y, rotation, scale per card */}
       <motion.div
-        animate={{ y: [0, -10, 0, 6, 0] }}
+        animate={{
+          x: [0, card.driftX, -card.driftX * 0.6, card.driftX * 0.4, 0],
+          y: [0, -card.driftY, card.driftY * 0.5, -card.driftY * 0.3, 0],
+          rotate: [0, card.rotAmp, -card.rotAmp * 0.8, card.rotAmp * 0.5, 0],
+          scale: [1, 1.03, 0.98, 1.01, 1],
+        }}
         transition={{
-          duration: 6 + (index % 3),
+          duration: card.speed,
           repeat: Infinity,
           ease: "easeInOut",
           delay: card.phase,
+          times: [0, 0.25, 0.5, 0.75, 1],
         }}
       >
         <div

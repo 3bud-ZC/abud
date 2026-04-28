@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion as m } from "framer-motion";
 import { trackHomeHeroCTA, trackHomeFinalCTA } from "@/lib/analytics";
 import {
   ArrowLeft, Zap, Code2, Bot, BrainCircuit, Layers, Cpu,
-  Star, BookOpen, MessageSquare, ChevronLeft,
+  Star, MessageSquare,
   Terminal, Globe, Shield, Mail, Send, ChevronDown, HelpCircle, Folder,
   Lightbulb, PencilRuler, Rocket, CheckCircle2
 } from "lucide-react";
@@ -15,11 +15,8 @@ import MatrixRain from "@/components/effects/MatrixRain";
 import AnimatedGrid from "@/components/effects/AnimatedGrid";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
 import TypewriterText from "@/components/effects/TypewriterText";
-import GlitchText from "@/components/effects/GlitchText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
 import HeroFloatingCards from "@/components/effects/HeroFloatingCards";
-import SectionDivider from "@/components/effects/SectionDivider";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import TechStackSection from "@/components/sections/TechStackSection";
 import LiveTerminal from "@/components/effects/LiveTerminal";
 import CountUp from "@/components/effects/CountUp";
@@ -64,6 +61,7 @@ const faqPreview = [
 interface ApiPost { id: string; title: string; slug: string; category?: { name: string } | null; publishedAt?: string | Date | null; createdAt: string | Date; }
 
 interface Props {
+  // Kept for backwards-compat with the parent server page; no longer rendered on home.
   initialPosts: ApiPost[];
 }
 
@@ -77,8 +75,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
 
-export default function HomePageClient({ initialPosts }: Props) {
-  const [posts] = useState<ApiPost[]>(initialPosts);
+export default function HomePageClient(_props: Props) {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterDone, setNewsletterDone] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -229,7 +226,7 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── STATS ── */}
-      <section className="py-16 relative overflow-hidden" style={{ borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)", background: "rgba(4,4,8,0.7)" }}>
+      <section className="py-16 relative overflow-hidden">
         <FloatingOrbs count={4} />
         <ScanLine duration={11} />
         <div className="relative z-10 max-w-4xl mx-auto px-4">
@@ -310,7 +307,7 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── SERVICES ── */}
-      <section className="py-20 px-4 bg-[#080810]">
+      <section className="py-20 px-4 relative overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <AnimatedSection className="text-center mb-14">
             <span className="section-badge mb-5 mx-auto">
@@ -355,7 +352,7 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── PROCESS STEPS ── */}
-      <section className="py-24 px-4 relative overflow-hidden" style={{ background: "linear-gradient(180deg,#080810 0%,#0a0814 50%,#080810 100%)" }}>
+      <section className="py-24 px-4 relative overflow-hidden">
         <FloatingOrbs count={5} />
         <ScanLine duration={14} direction="vertical" />
         <div className="relative z-10 max-w-6xl mx-auto">
@@ -432,77 +429,11 @@ export default function HomePageClient({ initialPosts }: Props) {
         </div>
       </section>
 
-      <SectionDivider variant="line" />
-
       {/* ── TECH STACK ── */}
       <TechStackSection />
 
-      <SectionDivider variant="gradient" height={40} />
-
-      {/* ── TESTIMONIALS ── */}
-      <TestimonialsSection />
-
-      <SectionDivider variant="line" />
-
-      {/* ── BLOG ── */}
-      <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
-        <FloatingOrbs count={5} />
-        <ScanLine duration={13} direction="vertical" />
-        <div className="relative z-10 max-w-6xl mx-auto">
-          <AnimatedSection className="text-center mb-12">
-            <span className="section-badge mb-5 mx-auto">
-              <BookOpen className="w-2.5 h-2.5" />
-              المدونة
-            </span>
-            <h2 className="section-title mt-4">آخر المقالات</h2>
-          </AnimatedSection>
-
-          <m.div
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="space-y-3"
-          >
-            {posts.map((post, idx) => (
-              <m.div key={post.id} variants={item}>
-                <HolographicCard duration={6 + (idx % 3)} delay={(idx % 5) * 0.3}>
-                  <Link href={`/blog/${post.slug}`} className="group flex items-center justify-between gap-4 p-4">
-                    <div className="flex items-center gap-3.5">
-                      <m.div
-                        animate={{ boxShadow: ["0 0 10px rgba(147,51,234,0.3)", "0 0 22px rgba(168,85,247,0.6)", "0 0 10px rgba(147,51,234,0.3)"] }}
-                        transition={{ duration: 2.6, repeat: Infinity, delay: idx * 0.2 }}
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: "rgba(147,51,234,0.18)", border: "1px solid rgba(168,85,247,0.4)" }}
-                      >
-                        <BookOpen className="w-4 h-4 text-purple-200" />
-                      </m.div>
-                      <div>
-                        <h3 className="text-white font-semibold text-sm group-hover:text-purple-200 transition-colors leading-snug mb-1">{post.title}</h3>
-                        <div className="flex items-center gap-2">
-                          {post.category && <span className="tag-pill" style={{ padding: "0.1rem 0.6rem", fontSize: "0.65rem" }}>{post.category.name}</span>}
-                          <span style={{ color: "#9090b0", fontSize: "0.7rem" }}>{new Date(post.publishedAt || post.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronLeft className="w-3.5 h-3.5 flex-shrink-0 transition-all duration-200 group-hover:translate-x-[-3px]" style={{ color: "#c084fc" }} />
-                  </Link>
-                </HolographicCard>
-              </m.div>
-            ))}
-          </m.div>
-
-          <AnimatedSection className="text-center mt-10">
-            <Link href="/blog" className="btn-outline inline-flex gap-2">
-              <span>اقرأ كل المقالات</span>
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
-
       {/* ── RESOURCES HUB STRIP ── */}
-      <section className="py-20 px-4 relative overflow-hidden" style={{ background: "rgba(4,4,8,0.85)", borderTop: "1px solid rgba(28,28,48,0.5)", borderBottom: "1px solid rgba(28,28,48,0.5)" }}>
+      <section className="py-20 px-4 relative overflow-hidden">
         <FloatingOrbs count={5} />
         <ScanLine duration={11} />
         <div className="relative z-10 max-w-5xl mx-auto">
@@ -561,7 +492,7 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── FAQ PREVIEW ── */}
-      <section className="py-20 px-4 bg-[#080810] relative overflow-hidden">
+      <section className="py-20 px-4 relative overflow-hidden">
         <FloatingOrbs count={4} />
         <ScanLine duration={14} direction="vertical" />
         <div className="relative z-10 max-w-3xl mx-auto">
@@ -665,7 +596,7 @@ export default function HomePageClient({ initialPosts }: Props) {
       </section>
 
       {/* ── NEWSLETTER ── */}
-      <section className="py-20 px-4 relative overflow-hidden" style={{ borderTop: "1px solid rgba(28,28,48,0.6)", background: "rgba(4,4,8,0.8)" }}>
+      <section className="py-20 px-4 relative overflow-hidden">
         <FloatingOrbs count={4} />
         <ScanLine duration={12} direction="vertical" />
         <div className="relative z-10 max-w-xl mx-auto text-center">

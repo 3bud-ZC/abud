@@ -256,7 +256,7 @@ export default function ProfileHero() {
                   }}
                 />
                 <div
-                  className="relative w-36 h-36 rounded-full flex items-center justify-center overflow-hidden"
+                  className="relative w-40 h-40 rounded-full flex items-center justify-center overflow-hidden"
                   style={{
                     background:
                       "linear-gradient(135deg, rgba(192,132,252,0.25) 0%, rgba(103,232,249,0.15) 100%)",
@@ -270,12 +270,15 @@ export default function ProfileHero() {
                         src="/avatar.jpeg"
                         alt="Abud"
                         fill
-                        sizes="144px"
+                        sizes="160px"
                         priority
                         unoptimized
                         onError={() => setImgError(true)}
                         className="object-cover"
-                        style={{ objectPosition: "center 22%" }}
+                        style={{
+                          objectPosition: "58% 65%",
+                          transform: "scale(1.05) translateX(-3px)",
+                        }}
                       />
                       {/* Subtle holographic overlay tint */}
                       <div
