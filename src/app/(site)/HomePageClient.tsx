@@ -11,8 +11,7 @@ import {
   Lightbulb, PencilRuler, Rocket, CheckCircle2
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
-import MatrixRain from "@/components/effects/MatrixRain";
-import AnimatedGrid from "@/components/effects/AnimatedGrid";
+import GlobalBackground from "@/components/effects/GlobalBackground";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
 import TypewriterText from "@/components/effects/TypewriterText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
@@ -21,11 +20,7 @@ import TechStackSection from "@/components/sections/TechStackSection";
 import LiveTerminal from "@/components/effects/LiveTerminal";
 import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
-import AuroraBeams from "@/components/effects/AuroraBeams";
 import HolographicCard from "@/components/effects/HolographicCard";
-import FloatingOrbs from "@/components/effects/FloatingOrbs";
-import ScanLine from "@/components/effects/ScanLine";
-import ParticleField from "@/components/effects/ParticleField";
 import AnimatedBar from "@/components/effects/AnimatedBar";
 
 const services = [
@@ -81,19 +76,14 @@ export default function HomePageClient(_props: Props) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden relative isolate">
+      {/* Page-wide animated background (Matrix rain + grid + glows) */}
+      <GlobalBackground />
+
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
-        {/* Cyber background stack */}
-        <AuroraBeams />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_-5%,rgba(147,51,234,0.22)_0%,transparent_65%)]" />
-        <AnimatedGrid />
-        <MatrixRain opacity={0.14} fontSize={13} />
-        <FloatingCodeSnippets count={10} />
-        <FloatingOrbs count={6} />
-        <ParticleField density={50} />
-        <ScanLine duration={9} />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_20%_80%,rgba(109,40,217,0.08)_0%,transparent_60%)]" />
+        {/* Hero-only accent: subtle floating code snippets */}
+        <FloatingCodeSnippets count={8} />
 
         {/* Floating service cards orbiting the hero */}
         <HeroFloatingCards />
@@ -227,8 +217,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── STATS ── */}
       <section className="py-16 relative overflow-hidden">
-        <FloatingOrbs count={4} />
-        <ScanLine duration={11} />
         <div className="relative z-10 max-w-4xl mx-auto px-4">
           <m.div
             variants={container}
@@ -353,8 +341,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── PROCESS STEPS ── */}
       <section className="py-24 px-4 relative overflow-hidden">
-        <FloatingOrbs count={5} />
-        <ScanLine duration={14} direction="vertical" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <AnimatedSection className="text-center mb-14">
             <span className="section-badge mb-5 mx-auto">
@@ -434,8 +420,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── RESOURCES HUB STRIP ── */}
       <section className="py-20 px-4 relative overflow-hidden">
-        <FloatingOrbs count={5} />
-        <ScanLine duration={11} />
         <div className="relative z-10 max-w-5xl mx-auto">
           <AnimatedSection className="text-center mb-10">
             <span className="section-badge mb-5 mx-auto">
@@ -493,8 +477,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── FAQ PREVIEW ── */}
       <section className="py-20 px-4 relative overflow-hidden">
-        <FloatingOrbs count={4} />
-        <ScanLine duration={14} direction="vertical" />
         <div className="relative z-10 max-w-3xl mx-auto">
           <AnimatedSection className="text-center mb-12">
             <span className="section-badge mb-5 mx-auto">
@@ -539,10 +521,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 relative overflow-hidden">
-        <AuroraBeams />
-        <FloatingOrbs count={6} />
-        <ParticleField density={28} />
-        <ScanLine duration={10} />
         <div className="relative z-10 max-w-3xl mx-auto">
           <AnimatedSection>
             <HolographicCard duration={6}>
@@ -597,8 +575,6 @@ export default function HomePageClient(_props: Props) {
 
       {/* ── NEWSLETTER ── */}
       <section className="py-20 px-4 relative overflow-hidden">
-        <FloatingOrbs count={4} />
-        <ScanLine duration={12} direction="vertical" />
         <div className="relative z-10 max-w-xl mx-auto text-center">
           <AnimatedSection>
             <m.div
