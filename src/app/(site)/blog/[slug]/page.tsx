@@ -211,7 +211,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             العودة للمدونة
           </Link>
 
-          {post.coverImage && (
+          {post.coverImage ? (
             <div className="aspect-video rounded-2xl overflow-hidden mb-10 relative"
               style={{ border: "1px solid rgba(168,85,247,0.4)", boxShadow: "0 8px 40px rgba(0,0,0,0.5), 0 0 50px rgba(147,51,234,0.25)" }}>
               <Image
@@ -223,7 +223,51 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 priority
               />
             </div>
-          )}
+          ) : (() => {
+            const SLUG_ACCENT: Record<string, { from: string; to: string }> = {
+              "ai":            { from: "#a855f7", to: "#67e8f9" },
+              "web-dev":       { from: "#6366f1", to: "#a855f7" },
+              "automation":    { from: "#34d399", to: "#a855f7" },
+              "freelance":     { from: "#f59e0b", to: "#a855f7" },
+              "cybersecurity": { from: "#ef4444", to: "#a855f7" },
+              "tools":         { from: "#67e8f9", to: "#a855f7" },
+            };
+            const acc = (post.category && SLUG_ACCENT[post.category.slug]) || { from: "#a855f7", to: "#67e8f9" };
+            return (
+              <div
+                className="aspect-video rounded-2xl overflow-hidden mb-10 relative flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${acc.from}24 0%, ${acc.to}1a 100%)`,
+                  border: `1px solid ${acc.from}55`,
+                  boxShadow: `0 8px 40px rgba(0,0,0,0.5), 0 0 50px ${acc.from}26`,
+                }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `radial-gradient(ellipse at 25% 30%, ${acc.from}50 0%, transparent 60%), radial-gradient(ellipse at 75% 70%, ${acc.to}40 0%, transparent 60%)`,
+                  }}
+                />
+                <span
+                  className="relative font-black opacity-25"
+                  style={{
+                    fontSize: "8rem",
+                    background: `linear-gradient(135deg, ${acc.from}, ${acc.to})`,
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    letterSpacing: "-0.05em",
+                  }}
+                >
+                  { }
+                </span>
+                <BookOpen
+                  className="absolute w-16 h-16"
+                  style={{ color: acc.from, filter: `drop-shadow(0 0 24px ${acc.from}aa)`, opacity: 0.65 }}
+                />
+              </div>
+            );
+          })()}
 
           <div className="mb-8">
             {post.category && (

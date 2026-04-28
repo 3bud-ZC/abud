@@ -8,7 +8,8 @@ import {
   ArrowLeft, Zap, Code2, Bot, BrainCircuit, Layers, Cpu,
   Star, MessageSquare,
   Terminal, Globe, Shield, Mail, Send, ChevronDown, HelpCircle, Folder,
-  Lightbulb, PencilRuler, Rocket, CheckCircle2
+  Lightbulb, PencilRuler, Rocket, CheckCircle2,
+  BookOpen, Clock, Calendar,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
@@ -54,9 +55,44 @@ const faqPreview = [
 
 interface ApiPost { id: string; title: string; slug: string; category?: { name: string } | null; publishedAt?: string | Date | null; createdAt: string | Date; }
 
+export interface HomeBlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  readTime: number | null;
+  publishedAt: string;
+  category: { name: string; slug: string } | null;
+}
+
 interface Props {
   // Kept for backwards-compat with the parent server page; no longer rendered on home.
   initialPosts: ApiPost[];
+  latestPosts?: HomeBlogPost[];
+}
+
+// Per-category accent for fallback gradient covers
+const CATEGORY_ACCENT: Record<string, { from: string; to: string }> = {
+  "ai":            { from: "#a855f7", to: "#67e8f9" },
+  "web-dev":       { from: "#6366f1", to: "#a855f7" },
+  "automation":    { from: "#34d399", to: "#a855f7" },
+  "freelance":     { from: "#f59e0b", to: "#a855f7" },
+  "cybersecurity": { from: "#ef4444", to: "#a855f7" },
+  "tools":         { from: "#67e8f9", to: "#a855f7" },
+};
+
+function categoryAccent(slug?: string | null) {
+  if (slug && CATEGORY_ACCENT[slug]) return CATEGORY_ACCENT[slug];
+  return { from: "#a855f7", to: "#67e8f9" };
+}
+
+function formatPostDate(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "short", day: "numeric" }).format(new Date(iso));
+  } catch {
+    return "";
+  }
 }
 
 const container = {
@@ -69,7 +105,8 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
 
-export default function HomePageClient(_props: Props) {
+export default function HomePageClient(props: Props) {
+  const { latestPosts = [] } = props;
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterDone, setNewsletterDone] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -470,6 +507,133 @@ export default function HomePageClient(_props: Props) {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* ── LATEST BLOG POSTS ── */}
+      {latestPosts.length > 0 && (
+        <section className="py-20 px-4 relative overflow-hidden">
+          <div className="relative z-10 max-w-6xl mx-auto">
+            <AnimatedSection className="text-center mb-12">
+              <span className="section-badge mb-5 mx-auto">
+                <BookOpen className="w-2.5 h-2.5" />
+                المدونة
+              </span>
+              <h2 className="section-title mt-4 mb-3">آخر المقالات</h2>
+              <p className="section-subtitle text-center max-w-xl mx-auto">
+                كتابات عن الذكاء الاصطناعي، تطوير الويب، الأتمتة، والفريلانس ─ من تجربتي الشخصية
+              </p>
+            </AnimatedSection>
+
+            <m.div
+              variants={container}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-50px" }}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10"
+            >
+              {latestPosts.map((post, idx) => {
+                const accent = categoryAccent(post.category?.slug);
+                return (
+                  <m.div key={post.id} variants={item}>
+                    <HolographicCard duration={6 + (idx % 3)} delay={(idx % 4) * 0.3}>
+                      <Link href={`/blog/${post.slug}`} className="block group h-full">
+                        {/* Cover ─ gradient if no image */}
+                        <div
+                          className="aspect-[16/9] relative overflow-hidden flex items-center justify-center"
+                          style={{
+                            background: `linear-gradient(135deg, ${accent.from}1a 0%, ${accent.to}14 100%)`,
+                            borderBottom: `1px solid ${accent.from}33`,
+                          }}
+                        >
+                          <div
+                            className="absolute inset-0 opacity-40"
+                            style={{
+                              background: `radial-gradient(ellipse at 30% 30%, ${accent.from}55 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${accent.to}40 0%, transparent 55%)`,
+                            }}
+                          />
+                          {/* Decorative monogram */}
+                          <span
+                            className="relative font-black text-7xl opacity-25 group-hover:opacity-40 transition-opacity duration-500"
+                            style={{
+                              background: `linear-gradient(135deg, ${accent.from}, ${accent.to})`,
+                              WebkitBackgroundClip: "text",
+                              backgroundClip: "text",
+                              color: "transparent",
+                              letterSpacing: "-0.05em",
+                            }}
+                          >
+                            { }
+                          </span>
+                          <BookOpen
+                            className="absolute w-8 h-8 opacity-50 group-hover:opacity-80 transition-opacity"
+                            style={{ color: accent.from }}
+                          />
+                          {post.category && (
+                            <span
+                              className="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full"
+                              style={{
+                                background: "rgba(0,0,0,0.65)",
+                                backdropFilter: "blur(6px)",
+                                border: `1px solid ${accent.from}55`,
+                                color: accent.from,
+                              }}
+                            >
+                              {post.category.name}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="p-5 flex flex-col">
+                          <div className="flex items-center gap-3 text-[11px] mb-2.5" style={{ color: "#606080" }}>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {formatPostDate(post.publishedAt)}
+                            </span>
+                            {post.readTime && (
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {post.readTime} د
+                              </span>
+                            )}
+                          </div>
+                          <h3
+                            className="text-white font-bold text-sm mb-2 leading-snug line-clamp-2 group-hover:text-purple-200 transition-colors"
+                            style={{ letterSpacing: "-0.01em" }}
+                          >
+                            {post.title}
+                          </h3>
+                          {post.excerpt && (
+                            <p className="text-[11px] leading-relaxed line-clamp-2" style={{ color: "#7070a0" }}>
+                              {post.excerpt}
+                            </p>
+                          )}
+                          <div
+                            className="flex items-center justify-end gap-1.5 text-xs font-semibold mt-4 pt-3"
+                            style={{
+                              color: accent.from,
+                              borderTop: "1px solid rgba(28,28,48,0.6)",
+                            }}
+                          >
+                            <span>اقرأ</span>
+                            <ArrowLeft className="w-3 h-3 transition-transform duration-200 group-hover:-translate-x-0.5" />
+                          </div>
+                        </div>
+                      </Link>
+                    </HolographicCard>
+                  </m.div>
+                );
+              })}
+            </m.div>
+
+            <AnimatedSection className="text-center">
+              <Link href="/blog" className="btn-outline inline-flex gap-2 text-sm">
+                <BookOpen className="w-3.5 h-3.5" />
+                كل المقالات
+                <ArrowLeft className="w-3.5 h-3.5" />
+              </Link>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
 
       {/* ── FAQ PREVIEW ── */}
       <section className="py-20 px-4 relative overflow-hidden">

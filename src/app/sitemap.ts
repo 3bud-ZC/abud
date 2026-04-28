@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { SEED_POSTS } from "@/data/blog-seed";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
 
@@ -16,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let blogRoutes: MetadataRoute.Sitemap = [];
   let portfolioRoutes: MetadataRoute.Sitemap = [];
+  const dbBlogSlugs = new Set<string>();
 
   try {
     const posts = await prisma.blogPost.findMany({
@@ -23,12 +25,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true },
       orderBy: { updatedAt: "desc" },
     });
-    blogRoutes = posts.map(p => ({
-      url: `${BASE}/blog/${p.slug}`,
-      lastModified: p.updatedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
+    blogRoutes = posts.map(p => {
+      dbBlogSlugs.add(p.slug);
+      return {
+        url: `${BASE}/blog/${p.slug}`,
+        lastModified: p.updatedAt,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      };
+    });
 
     const projects = await prisma.portfolioProject.findMany({
       select: { slug: true, updatedAt: true },
@@ -44,5 +49,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // silently continue if DB unavailable at build time
   }
 
-  return [...staticRoutes, ...blogRoutes, ...portfolioRoutes];
+  // Append seed posts (curated fallback content) deduped against DB
+  const seedRoutes: MetadataRoute.Sitemap = SEED_POSTS
+    .filter((s) => !dbBlogSlugs.has(s.slug))
+    .map((s) => ({
+      url: `${BASE}/blog/${s.slug}`,
+      lastModified: new Date(s.publishedAt),
+      changeFrequency: "weekly" as const,
+      priority: 0.75,
+    }));
+
+  return [...staticRoutes, ...blogRoutes, ...seedRoutes, ...portfolioRoutes];
 }

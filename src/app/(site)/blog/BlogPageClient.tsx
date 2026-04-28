@@ -17,6 +17,20 @@ import HolographicCard from "@/components/effects/HolographicCard";
 const AUTHOR_NAME = "Abud";
 const AUTHOR_AVATAR = "/avatar.jpeg";
 
+// Gradient cover palette per category (matches Home page hero)
+const CATEGORY_ACCENT: Record<string, { from: string; to: string }> = {
+  "ai":            { from: "#a855f7", to: "#67e8f9" },
+  "web-dev":       { from: "#6366f1", to: "#a855f7" },
+  "automation":    { from: "#34d399", to: "#a855f7" },
+  "freelance":     { from: "#f59e0b", to: "#a855f7" },
+  "cybersecurity": { from: "#ef4444", to: "#a855f7" },
+  "tools":         { from: "#67e8f9", to: "#a855f7" },
+};
+
+function categoryAccent(slug?: string | null) {
+  return (slug && CATEGORY_ACCENT[slug]) || { from: "#a855f7", to: "#67e8f9" };
+}
+
 interface Post {
   id: string;
   title: string;
@@ -47,6 +61,7 @@ const gridVariants = {
 };
 
 function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
+  const accent = categoryAccent(post.category?.slug);
   return (
     <motion.article
       variants={cardVariants}
@@ -56,8 +71,15 @@ function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
     <div className="overflow-hidden group flex flex-col">
       <Link href={`/blog/${post.slug}`} className="block">
         <div
-          className="aspect-video bg-[#080812] flex items-center justify-center relative overflow-hidden"
-          style={{ borderBottom: "1px solid rgba(28,28,48,0.8)" }}
+          className="aspect-video flex items-center justify-center relative overflow-hidden"
+          style={{
+            background: post.coverImage
+              ? "#080812"
+              : `linear-gradient(135deg, ${accent.from}1a 0%, ${accent.to}14 100%)`,
+            borderBottom: post.coverImage
+              ? "1px solid rgba(28,28,48,0.8)"
+              : `1px solid ${accent.from}33`,
+          }}
         >
           {post.coverImage ? (
             <Image
@@ -69,7 +91,28 @@ function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
             />
           ) : (
             <>
-              <BookOpen className="w-12 h-12 text-purple-600/35" />
+              <div
+                className="absolute inset-0 opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+                style={{
+                  background: `radial-gradient(ellipse at 30% 30%, ${accent.from}55 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${accent.to}40 0%, transparent 55%)`,
+                }}
+              />
+              <span
+                className="relative font-black text-7xl opacity-20 group-hover:opacity-35 transition-opacity duration-500"
+                style={{
+                  background: `linear-gradient(135deg, ${accent.from}, ${accent.to})`,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  letterSpacing: "-0.05em",
+                }}
+              >
+                { }
+              </span>
+              <BookOpen
+                className="absolute w-9 h-9 opacity-50 group-hover:opacity-80 transition-opacity"
+                style={{ color: accent.from, filter: `drop-shadow(0 0 12px ${accent.from}55)` }}
+              />
             </>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -80,7 +123,12 @@ function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
           )}
           {post.category && (
             <span className="absolute bottom-3 right-3 text-xs font-semibold px-2.5 py-1 rounded-full"
-              style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)", border: "1px solid rgba(147,51,234,0.3)", color: "#c084fc" }}>
+              style={{
+                background: "rgba(0,0,0,0.7)",
+                backdropFilter: "blur(8px)",
+                border: `1px solid ${accent.from}55`,
+                color: accent.from,
+              }}>
               {post.category.name}
             </span>
           )}
@@ -242,7 +290,9 @@ export default function BlogPageClient({
             <EmptySearchState onClear={() => { setActiveCategory("all"); setSearch(""); }} />
           ) : (
             <>
-              {featuredPost && (
+              {featuredPost && (() => {
+                const fAccent = categoryAccent(featuredPost.category?.slug);
+                return (
                 <AnimatedSection className="mb-10">
                   <Link href={`/blog/${featuredPost.slug}`}>
                     <motion.div
@@ -250,17 +300,46 @@ export default function BlogPageClient({
                       className="group overflow-hidden rounded-2xl relative"
                       style={{
                         background: "linear-gradient(160deg, rgba(18,10,30,1) 0%, rgba(10,10,18,1) 100%)",
-                        border: "1px solid rgba(147,51,234,0.2)",
-                        borderTop: "1px solid rgba(192,132,252,0.15)",
-                        boxShadow: "0 8px 40px rgba(0,0,0,0.4), 0 0 40px rgba(147,51,234,0.06)"
+                        border: `1px solid ${fAccent.from}33`,
+                        borderTop: `1px solid ${fAccent.from}26`,
+                        boxShadow: `0 8px 40px rgba(0,0,0,0.4), 0 0 40px ${fAccent.from}10`,
                       }}
                     >
                       <div className="flex flex-col md:flex-row">
-                        <div className="md:w-5/12 aspect-video bg-[#080812] flex items-center justify-center relative overflow-hidden">
+                        <div
+                          className="md:w-5/12 aspect-video flex items-center justify-center relative overflow-hidden"
+                          style={{
+                            background: featuredPost.coverImage
+                              ? "#080812"
+                              : `linear-gradient(135deg, ${fAccent.from}24 0%, ${fAccent.to}1a 100%)`,
+                          }}
+                        >
                           {featuredPost.coverImage
                             ? <Image src={featuredPost.coverImage} alt={featuredPost.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width:768px) 100vw, 50vw" />
                             : <>
-                              <BookOpen className="w-12 h-12 text-purple-700/40" />
+                              <div
+                                className="absolute inset-0"
+                                style={{
+                                  background: `radial-gradient(ellipse at 30% 30%, ${fAccent.from}55 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${fAccent.to}40 0%, transparent 55%)`,
+                                }}
+                              />
+                              <span
+                                className="relative font-black opacity-25 group-hover:opacity-40 transition-opacity duration-500"
+                                style={{
+                                  fontSize: "5.5rem",
+                                  background: `linear-gradient(135deg, ${fAccent.from}, ${fAccent.to})`,
+                                  WebkitBackgroundClip: "text",
+                                  backgroundClip: "text",
+                                  color: "transparent",
+                                  letterSpacing: "-0.05em",
+                                }}
+                              >
+                                { }
+                              </span>
+                              <BookOpen
+                                className="absolute w-12 h-12"
+                                style={{ color: fAccent.from, filter: `drop-shadow(0 0 18px ${fAccent.from}80)`, opacity: 0.6 }}
+                              />
                             </>}
                           <div className="absolute inset-0 bg-gradient-to-l from-[#0a0a12]/60 via-transparent to-transparent hidden md:block" />
                           <span className="absolute top-3 right-3 badge-purple flex items-center gap-1">
@@ -304,7 +383,8 @@ export default function BlogPageClient({
                     </motion.div>
                   </Link>
                 </AnimatedSection>
-              )}
+                );
+              })()}
 
               {gridPosts.length > 0 && (
                 <motion.div
