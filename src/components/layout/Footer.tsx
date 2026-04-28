@@ -33,7 +33,10 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-[#050508] border-t border-[#1a1a2e] overflow-hidden">
+    <footer
+      className="relative bg-[#050508] border-t border-[#1a1a2e] overflow-hidden"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_30%_at_50%_0%,rgba(147,51,234,0.06)_0%,transparent_60%)]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-8">

@@ -25,7 +25,14 @@ export default function FloatingContact() {
   if (!mounted || pathname?.startsWith("/contact") || pathname?.startsWith("/admin") || pathname?.startsWith("/dashboard")) return null;
 
   return (
-    <div className="fixed bottom-5 left-5 z-[60] flex flex-col items-start gap-3" dir="ltr">
+    <div
+      className="fixed left-5 z-[60] flex flex-col items-start gap-3"
+      dir="ltr"
+      style={{
+        // Lift above the iPhone home indicator / Android nav bar.
+        bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)",
+      }}
+    >
       {/* Expanded menu */}
       <AnimatePresence>
         {open && (

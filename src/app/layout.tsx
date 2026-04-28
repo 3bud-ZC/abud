@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Tajawal, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -22,6 +22,20 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   preload: false,
   adjustFontFallback: false,
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  minimumScale: 1,
+  userScalable: true,
+  viewportFit: "cover", // iPhone notch / Dynamic Island support
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)",  color: "#050508" },
+    { media: "(prefers-color-scheme: light)", color: "#050508" },
+  ],
+  colorScheme: "dark",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -87,8 +101,14 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning className={`${tajawal.variable} ${ibmPlexArabic.variable}`}>
       <head>
-        <meta name="theme-color" content="#050508" />
         <meta name="google-site-verification" content="" />
+        {/* iOS PWA-like behaviour */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ABUD" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        {/* Prevent iOS auto-detection of phone numbers / addresses (we link manually) */}
+        <meta name="format-detection" content="telephone=no, address=no, email=no" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />

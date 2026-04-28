@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SNIPPETS = [
   "const abud = () => build()",
@@ -40,9 +40,29 @@ export default function FloatingCodeSnippets({
   className,
   count = 9,
 }: FloatingCodeSnippetsProps) {
+  const [config, setConfig] = useState<{ count: number; show: boolean }>({
+    count,
+    show: true,
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduceMotion =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
+    setConfig({
+      // Skip the effect entirely under reduced-motion preference.
+      show: !reduceMotion,
+      // Half the snippets on mobile for a calmer, lighter hero.
+      count: isMobile ? Math.max(3, Math.floor(count / 2)) : count,
+    });
+  }, [count]);
+
   const items = useMemo<Snip[]>(() => {
+    if (!config.show) return [];
     const arr: Snip[] = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < config.count; i++) {
       arr.push({
         text: SNIPPETS[i % SNIPPETS.length],
         top: `${Math.random() * 90}%`,
@@ -55,7 +75,7 @@ export default function FloatingCodeSnippets({
       });
     }
     return arr;
-  }, [count]);
+  }, [config.count, config.show]);
 
   return (
     <div

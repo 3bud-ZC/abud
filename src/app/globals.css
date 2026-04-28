@@ -32,11 +32,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* Mobile: kill the blue tap highlight on iOS / Android Chrome.
+     Components add their own pressed states via :active. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   direction: rtl;
   scroll-behavior: smooth;
+  /* Stop iOS Safari from auto-zooming text on landscape rotate. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -44,10 +50,23 @@ body {
   color: var(--color-white);
   font-family: var(--font-ibm-arabic), var(--font-tajawal), 'Arial', sans-serif;
   line-height: 1.7;
+  /* Use small-viewport-height where supported (iOS Safari URL bar fix). */
   min-height: 100vh;
+  min-height: 100svh;
   overflow-x: hidden;
+  /* Prevent rubber-band scroll on iOS from showing the body bg outside. */
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Respect iPhone safe-area on left/right (landscape with notch). */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* All interactive controls: instant tap, no 300ms delay, no callout. */
+a, button, [role="button"], input[type="submit"], input[type="button"], label {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 ::selection {
@@ -95,6 +114,17 @@ body {
   
   input, textarea, select {
     font-family: inherit;
+    /* iOS Safari auto-zooms when an input is focused if its
+       computed font-size is < 16px. Force >= 16px on mobile to
+       prevent that jarring zoom. */
+    font-size: 16px;
+  }
+
+  @media (min-width: 768px) {
+    input, textarea, select {
+      /* On desktop, components can override to a smaller size. */
+      font-size: inherit;
+    }
   }
 }
 

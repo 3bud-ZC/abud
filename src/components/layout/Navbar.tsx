@@ -114,15 +114,15 @@ export default function Navbar() {
                 whileTap={{ scale: 0.92 }}
                 onClick={() => setSearchOpen(true)}
                 aria-label="بحث"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#606080] hover:text-white transition-all duration-200"
+                className="flex items-center gap-1.5 min-h-[44px] min-w-[44px] justify-center px-3 py-2 rounded-xl text-[#606080] hover:text-white transition-all duration-200"
                 style={{ background: "rgba(15,12,24,0.7)", border: "1px solid rgba(45,35,70,0.7)" }}
               >
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-4 h-4" />
                 <span className="hidden sm:block text-xs" style={{ color: "#404055" }}>Ctrl K</span>
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                className="md:hidden p-2 rounded-lg text-[#808090] hover:text-white transition-colors"
+                className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-[#808090] hover:text-white transition-colors"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="القائمة"
               >
@@ -151,11 +151,14 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="max-h-[calc(100vh-60px)] overflow-y-auto"
             style={{
               background: "rgba(6,6,10,0.96)",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
-              borderBottom: "1px solid rgba(255,255,255,0.06)"
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              // Add safe-area padding so the last item isn't hidden by the iPhone home indicator
+              paddingBottom: "env(safe-area-inset-bottom)",
             }}
           >
             <div className="px-5 py-4 space-y-1">
