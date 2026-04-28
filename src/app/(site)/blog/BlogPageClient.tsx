@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -12,10 +12,7 @@ import { EmptySearchState } from "@/components/ui/EmptyStates";
 import { formatDate } from "@/lib/utils";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
-import ParticleField from "@/components/effects/ParticleField";
-import AuroraBeams from "@/components/effects/AuroraBeams";
 import HolographicCard from "@/components/effects/HolographicCard";
-import MatrixRain from "@/components/effects/MatrixRain";
 
 const AUTHOR_NAME = "Abud";
 const AUTHOR_AVATAR = "/abd-profile.jpg";
@@ -72,7 +69,6 @@ function PostCard({ post, idx = 0 }: { post: Post; idx?: number }) {
             />
           ) : (
             <>
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.14)_0%,transparent_65%)]" />
               <BookOpen className="w-12 h-12 text-purple-600/35" />
             </>
           )}
@@ -171,12 +167,7 @@ export default function BlogPageClient({
   return (
     <div className="pt-20">
       <section className="relative py-24 px-4 overflow-hidden">
-        <AuroraBeams />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-5%,rgba(147,51,234,0.18)_0%,transparent_65%)]" />
-        <div className="absolute inset-0 bg-grid opacity-25" />
-        <MatrixRain opacity={0.08} fontSize={12} />
         <FloatingOrbs count={6} />
-        <ParticleField density={32} />
         <ScanLine duration={10} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <AnimatedSection>
@@ -269,7 +260,6 @@ export default function BlogPageClient({
                           {featuredPost.coverImage
                             ? <Image src={featuredPost.coverImage} alt={featuredPost.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width:768px) 100vw, 50vw" />
                             : <>
-                              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.15)_0%,transparent_65%)]" />
                               <BookOpen className="w-12 h-12 text-purple-700/40" />
                             </>}
                           <div className="absolute inset-0 bg-gradient-to-l from-[#0a0a12]/60 via-transparent to-transparent hidden md:block" />

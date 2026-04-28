@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,10 +11,7 @@ import {
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
-import ParticleField from "@/components/effects/ParticleField";
-import AuroraBeams from "@/components/effects/AuroraBeams";
 import HolographicCard from "@/components/effects/HolographicCard";
-import MatrixRain from "@/components/effects/MatrixRain";
 
 interface Repo {
   id: number;
@@ -150,12 +147,7 @@ export default function PortfolioPage() {
     <div className="pt-20">
       {/* ── HERO ── */}
       <section className="relative py-24 px-4 overflow-hidden">
-        <AuroraBeams />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        <MatrixRain opacity={0.1} fontSize={12} />
         <FloatingOrbs count={6} />
-        <ParticleField density={40} />
         <ScanLine duration={9} />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <AnimatedSection>

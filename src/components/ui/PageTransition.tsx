@@ -1,22 +1,24 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
+/**
+ * Lightweight fade-in on route change.
+ * No `mode="wait"` — the new page mounts immediately so navigation
+ * feels instant. The exit animation is dropped entirely (it was the
+ * source of the perceived "lag" between pages).
+ */
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -4 }}
-        transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-        style={{ willChange: "transform" }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.15, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
   );
 }

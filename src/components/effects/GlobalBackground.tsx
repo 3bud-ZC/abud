@@ -1,31 +1,46 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
+// Heavy canvas/animations are loaded only on the client and only when needed.
 const MatrixRain = dynamic(() => import("./MatrixRain"), { ssr: false });
 const AnimatedGrid = dynamic(() => import("./AnimatedGrid"), { ssr: false });
 
 /**
  * GlobalBackground — A page-wide fixed background layer.
- *  • Matrix Rain (subtle, low opacity)
+ *  • Matrix Rain (subtle, low opacity, paused when tab is hidden)
  *  • Animated grid overlay
  *  • Radial vignette glow
  *
- * Renders behind all page content (-z-10) and is `pointer-events-none`
- * so it never intercepts clicks. Uses `position: fixed` so it stays in
- * place during scroll — gives a parallax / "world is alive" feel.
+ * Renders behind all page content (-z-10), `pointer-events-none`,
+ * and `position: fixed` so the background stays in place during
+ * scroll — giving a parallax feel.
  *
- * Drop this once near the top of a page wrapper; sections above it
- * should have transparent (or near-transparent) backgrounds so it
- * shows through.
+ * Renders ONCE in (site)/layout.tsx so it persists across navigation
+ * (no canvas re-init on every route change).
+ *
+ * Honours `prefers-reduced-motion`: animation layers are skipped,
+ * static gradient still renders.
  */
 export default function GlobalBackground() {
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <div
       aria-hidden
       className="fixed inset-0 -z-10 pointer-events-none overflow-hidden"
     >
-      {/* Base layer — radial purple vignette */}
+      {/* Static base — radial purple vignette (always rendered) */}
       <div
         className="absolute inset-0"
         style={{
@@ -34,13 +49,15 @@ export default function GlobalBackground() {
         }}
       />
 
-      {/* Matrix rain — subtle so it doesn't drown text */}
-      <MatrixRain opacity={0.09} fontSize={13} fade={0.08} speed={0.85} />
+      {/* Animated layers — skipped under reduced-motion */}
+      {!reduceMotion && (
+        <>
+          <MatrixRain opacity={0.09} fontSize={13} fade={0.08} speed={0.85} />
+          <AnimatedGrid />
+        </>
+      )}
 
-      {/* Animated grid lines */}
-      <AnimatedGrid />
-
-      {/* Top-edge gradient fade so the navbar area stays clean */}
+      {/* Top-edge gradient fade keeps the navbar area clean */}
       <div
         className="absolute top-0 left-0 right-0 h-32"
         style={{

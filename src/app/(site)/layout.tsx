@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/ui/PageTransition";
 import JsonLd from "@/components/JsonLd";
 import ScrollProgress from "@/components/effects/ScrollProgress";
+import GlobalBackground from "@/components/effects/GlobalBackground";
 import FloatingContact from "@/components/ui/FloatingContact";
 import CommandPalette from "@/components/ui/CommandPalette";
 
@@ -40,9 +41,10 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <JsonLd data={organizationSchema} />
+      <GlobalBackground />
       <ScrollProgress />
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen relative isolate">
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />

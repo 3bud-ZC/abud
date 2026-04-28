@@ -125,6 +125,7 @@ export default function HeroFloatingCards() {
   const ref = useRef<HTMLDivElement>(null);
   // Layout is generated client-side (avoids hydration mismatch).
   const [cards, setCards] = useState<FloatingCardInstance[] | null>(null);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   // Smoothed mouse-parallax tracker
   const mx = useMotionValue(0);
@@ -133,6 +134,13 @@ export default function HeroFloatingCards() {
   const sy = useSpring(my, { stiffness: 70, damping: 22, mass: 0.8 });
 
   useEffect(() => {
+    // Respect reduced motion preference — skip cards entirely.
+    if (typeof window !== "undefined" && window.matchMedia) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setReduceMotion(true);
+        return;
+      }
+    }
     setCards(generateLayout());
     function onMove(e: MouseEvent) {
       const rect = ref.current?.getBoundingClientRect();
@@ -145,6 +153,8 @@ export default function HeroFloatingCards() {
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, [mx, my]);
+
+  if (reduceMotion) return null;
 
   return (
     <div
@@ -204,6 +214,8 @@ function FloatingCard({
   useAnimationFrame((time) => {
     if (!entered) return;
     if (draggingRef.current) return;
+    // Pause on hidden tabs (no point spending CPU when not visible)
+    if (typeof document !== "undefined" && document.hidden) return;
 
     const tSec = time / 1000;
     const omega = (Math.PI * 2) / card.speed;

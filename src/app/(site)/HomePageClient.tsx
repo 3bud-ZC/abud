@@ -11,7 +11,6 @@ import {
   Lightbulb, PencilRuler, Rocket, CheckCircle2
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
-import GlobalBackground from "@/components/effects/GlobalBackground";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
 import TypewriterText from "@/components/effects/TypewriterText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
@@ -76,10 +75,7 @@ export default function HomePageClient(_props: Props) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="overflow-hidden relative isolate">
-      {/* Page-wide animated background (Matrix rain + grid + glows) */}
-      <GlobalBackground />
-
+    <div className="overflow-hidden">
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
         {/* Hero-only accent: subtle floating code snippets */}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,9 +7,7 @@ import { HelpCircle, ChevronDown, ShoppingBag, MessageSquare, Zap } from "lucide
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
-import AuroraBeams from "@/components/effects/AuroraBeams";
 import HolographicCard from "@/components/effects/HolographicCard";
-import ParticleField from "@/components/effects/ParticleField";
 
 const faqs = [
   {
@@ -139,11 +137,7 @@ export default function FAQPage() {
     <div className="pt-20">
       {/* Hero */}
       <section className="relative py-24 px-4 overflow-hidden">
-        <AuroraBeams />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(147,51,234,0.15)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-grid opacity-30" />
         <FloatingOrbs count={5} />
-        <ParticleField density={28} />
         <ScanLine duration={11} />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <AnimatedSection>

@@ -27,10 +27,22 @@ export default function MatrixRain({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Honour prefers-reduced-motion: render nothing.
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
+
+    // On small screens we drop the FPS further to keep mobile smooth.
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const targetFps = isMobile ? 16 : 24;
+    const frameDuration = 1000 / targetFps;
 
     let width = 0;
     let height = 0;
@@ -38,11 +50,10 @@ export default function MatrixRain({
     let drops: number[] = [];
     let raf = 0;
     let lastTime = 0;
-    const targetFps = 24;
-    const frameDuration = 1000 / targetFps;
+    let paused = false;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
       width = canvas.clientWidth;
       height = canvas.clientHeight;
       canvas.width = Math.floor(width * dpr);
@@ -55,10 +66,10 @@ export default function MatrixRain({
 
     const draw = (time: number) => {
       raf = requestAnimationFrame(draw);
+      if (paused) return;
       if (time - lastTime < frameDuration) return;
       lastTime = time;
 
-      // fading layer
       ctx.fillStyle = `rgba(4, 4, 8, ${fade})`;
       ctx.fillRect(0, 0, width, height);
 
@@ -67,10 +78,8 @@ export default function MatrixRain({
         const x = i * fontSize;
         const y = drops[i];
 
-        // bright leading character
         ctx.fillStyle = `rgba(216, 180, 254, ${opacity * 1.3})`;
         ctx.fillText(ch, x, y);
-        // trail
         ctx.fillStyle = `rgba(147, 51, 234, ${opacity})`;
         ctx.fillText(ch, x, y - fontSize);
 
@@ -82,12 +91,19 @@ export default function MatrixRain({
       }
     };
 
+    // Pause when the tab is hidden — saves CPU on background tabs.
+    const onVisibility = () => {
+      paused = document.hidden;
+    };
+
     resize();
     raf = requestAnimationFrame(draw);
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [opacity, fontSize, fade, speed]);
 
