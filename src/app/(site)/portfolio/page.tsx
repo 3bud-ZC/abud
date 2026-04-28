@@ -3,10 +3,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Layers, ExternalLink, Github, Star, GitFork, CircleDot,
   Code2, BrainCircuit, Bot, Terminal, BarChart3,
   Cpu, Wrench, Figma, Database, Globe, Shield,
+  User, ArrowLeft,
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
@@ -431,6 +433,85 @@ export default function PortfolioPage() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── ABOUT THE DEV (link back to /about) ── */}
+      <section className="py-20 px-4 relative overflow-hidden">
+        <FloatingOrbs count={4} />
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <AnimatedSection>
+            <HolographicCard duration={6}>
+              <Link href="/about" className="block group">
+                <div className="p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-right">
+                  {/* Avatar */}
+                  <div className="relative flex-shrink-0">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                      className="absolute -inset-1 rounded-full"
+                      style={{
+                        background:
+                          "conic-gradient(from 0deg, transparent 0%, #c084fc 25%, transparent 50%, #67e8f9 75%, transparent 100%)",
+                        padding: "2px",
+                        WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                        WebkitMaskComposite: "xor",
+                        maskComposite: "exclude",
+                      }}
+                    />
+                    <div
+                      className="relative w-20 h-20 rounded-full overflow-hidden"
+                      style={{
+                        border: "2px solid rgba(192,132,252,0.5)",
+                        boxShadow: "0 0 20px rgba(168,85,247,0.35)",
+                      }}
+                    >
+                      <Image
+                        src="/avatar.jpeg"
+                        alt="Abud"
+                        fill
+                        sizes="80px"
+                        unoptimized
+                        className="object-cover"
+                        style={{ objectPosition: "58% 65%", transform: "scale(1.05)" }}
+                      />
+                    </div>
+                    <span
+                      className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-[#0a0814]"
+                      style={{ background: "#34d399", boxShadow: "0 0 10px #34d399" }}
+                    />
+                  </div>
+
+                  {/* Bio */}
+                  <div className="flex-1 min-w-0">
+                    <span className="section-badge mb-3 inline-flex">
+                      <User className="w-2.5 h-2.5" />
+                      تعرّف على المطوّر
+                    </span>
+                    <h2
+                      className="text-white font-black text-xl md:text-2xl mb-2 group-hover:text-purple-200 transition-colors"
+                      style={{ letterSpacing: "-0.02em" }}
+                    >
+                      Abud — Full-Stack & AI Engineer
+                    </h2>
+                    <p className="text-sm mb-3" style={{ color: "#9090b0", lineHeight: 1.7 }}>
+                      ورا كل المشاريع دي شخص واحد بيحب يبني حلول حقيقية.
+                      اعرف القصة الكاملة، الأدوات، والمسيرة من 2019 لحد دلوقتي.
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-purple-300 group-hover:text-purple-100 transition-colors">
+                      <span>قصة Abud الكاملة</span>
+                      <motion.span
+                        animate={{ x: [0, -3, 0] }}
+                        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </motion.span>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </HolographicCard>
+          </AnimatedSection>
         </div>
       </section>
 

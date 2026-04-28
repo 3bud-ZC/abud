@@ -15,7 +15,7 @@ import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
 
 const AUTHOR_NAME = "Abud";
-const AUTHOR_AVATAR = "/abd-profile.jpg";
+const AUTHOR_AVATAR = "/avatar.jpeg";
 
 interface Post {
   id: string;

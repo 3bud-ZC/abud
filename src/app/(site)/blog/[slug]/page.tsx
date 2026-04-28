@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowRight, Clock, Calendar, Tag, BookOpen } from "lucide-react";
 import { formatDate, estimateReadTime } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
+import { SEED_POSTS } from "@/data/blog-seed";
 import ReadingProgress from "@/components/ui/ReadingProgress";
 import JsonLd from "@/components/JsonLd";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -17,46 +18,148 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const fetchCache = 'force-no-store';
 
+interface RenderablePost {
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  coverImage: string | null;
+  readTime: number | null;
+  publishedAt: Date | string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  tags: string[];
+  category: { name: string; slug: string } | null;
+  categoryId: string | null;
+}
+
+interface RelatedItem {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  readTime: number | null;
+  category: { name: string } | null;
+}
+
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await prisma.blogPost.findUnique({
-    where: { slug: params.slug, status: "published" },
-    include: { category: true },
-  });
+  let post: RenderablePost | null = null;
+
+  try {
+    const dbPost = await prisma.blogPost.findUnique({
+      where: { slug: params.slug, status: "published" },
+      include: { category: true },
+    });
+    if (dbPost) {
+      const dbTags: string[] = Array.isArray(dbPost.tags)
+        ? (dbPost.tags as unknown as string[])
+        : (() => { try { return JSON.parse(dbPost.tags as string); } catch { return []; } })();
+      post = {
+        title: dbPost.title,
+        slug: dbPost.slug,
+        excerpt: dbPost.excerpt,
+        content: dbPost.content,
+        coverImage: dbPost.coverImage,
+        readTime: dbPost.readTime,
+        publishedAt: dbPost.publishedAt,
+        createdAt: dbPost.createdAt,
+        updatedAt: dbPost.updatedAt,
+        tags: dbTags,
+        category: dbPost.category ? { name: dbPost.category.name, slug: dbPost.category.slug } : null,
+        categoryId: dbPost.categoryId,
+      };
+    }
+  } catch (e) {
+    console.error("[blog/[slug]] DB miss, trying seed:", (e as Error).message);
+  }
+
+  // Fall back to seed posts (curated content)
+  if (!post) {
+    const seed = SEED_POSTS.find((p) => p.slug === params.slug);
+    if (seed) {
+      post = {
+        title: seed.title,
+        slug: seed.slug,
+        excerpt: seed.excerpt,
+        content: seed.content,
+        coverImage: seed.coverImage,
+        readTime: seed.readTime,
+        publishedAt: seed.publishedAt,
+        createdAt: seed.publishedAt,
+        updatedAt: seed.publishedAt,
+        tags: seed.tags,
+        category: seed.category,
+        categoryId: seed.category.slug,
+      };
+    }
+  }
 
   if (!post) notFound();
 
-  const tags: string[] = Array.isArray(post.tags)
-    ? post.tags
-    : (() => { try { return JSON.parse(post.tags as string); } catch { return []; } })();
-
+  const tags = post.tags;
   const readTime = post.readTime || estimateReadTime(post.content);
 
-  // Fetch related posts (same category, exclude current, limit 3)
-  const related = await prisma.blogPost.findMany({
-    where: {
-      status: "published",
-      slug: { not: post.slug },
-      ...(post.categoryId ? { categoryId: post.categoryId } : {}),
-    },
-    include: { category: true },
-    orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
-    take: 3,
-  });
-
-  // Fallback: if not enough in same category, fill with latest other posts
-  let relatedFinal = related;
-  if (relatedFinal.length < 3) {
-    const fallback = await prisma.blogPost.findMany({
+  // Related posts: try DB first, then enrich/replace from seed
+  let relatedFinal: RelatedItem[] = [];
+  try {
+    const dbRelated = await prisma.blogPost.findMany({
       where: {
         status: "published",
         slug: { not: post.slug },
-        id: { notIn: relatedFinal.map((r) => r.id) },
+        ...(post.categoryId ? { categoryId: post.categoryId } : {}),
       },
       include: { category: true },
       orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
-      take: 3 - relatedFinal.length,
+      take: 3,
     });
-    relatedFinal = [...relatedFinal, ...fallback];
+    relatedFinal = dbRelated.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      excerpt: r.excerpt,
+      coverImage: r.coverImage,
+      readTime: r.readTime,
+      category: r.category ? { name: r.category.name } : null,
+    }));
+  } catch {
+    relatedFinal = [];
+  }
+
+  if (relatedFinal.length < 3) {
+    const haveSlugs = new Set([post.slug, ...relatedFinal.map((r) => r.slug)]);
+    const seedRelated = SEED_POSTS
+      .filter((s) => !haveSlugs.has(s.slug))
+      .filter((s) => !post!.category || s.category.slug === post!.category.slug)
+      .slice(0, 3 - relatedFinal.length)
+      .map<RelatedItem>((s) => ({
+        id: s.id,
+        slug: s.slug,
+        title: s.title,
+        excerpt: s.excerpt,
+        coverImage: s.coverImage,
+        readTime: s.readTime,
+        category: { name: s.category.name },
+      }));
+    relatedFinal = [...relatedFinal, ...seedRelated];
+
+    // Final fallback: any seed post regardless of category
+    if (relatedFinal.length < 3) {
+      const haveSlugs2 = new Set([post.slug, ...relatedFinal.map((r) => r.slug)]);
+      const seedAny = SEED_POSTS
+        .filter((s) => !haveSlugs2.has(s.slug))
+        .slice(0, 3 - relatedFinal.length)
+        .map<RelatedItem>((s) => ({
+          id: s.id,
+          slug: s.slug,
+          title: s.title,
+          excerpt: s.excerpt,
+          coverImage: s.coverImage,
+          readTime: s.readTime,
+          category: { name: s.category.name },
+        }));
+      relatedFinal = [...relatedFinal, ...seedAny];
+    }
   }
 
   const postUrl = `https://abud.fun/blog/${post.slug}`;
@@ -67,8 +170,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     headline: post.title,
     description: post.excerpt ?? "",
     image: post.coverImage ?? "https://abud.fun/opengraph-image",
-    datePublished: post.publishedAt?.toISOString() ?? post.createdAt.toISOString(),
-    dateModified: post.updatedAt.toISOString(),
+    datePublished: new Date(post.publishedAt ?? post.createdAt).toISOString(),
+    dateModified: new Date(post.updatedAt).toISOString(),
     author: { "@type": "Person", name: "ABUD", url: "https://abud.fun/about" },
     publisher: { "@type": "Organization", name: "ABUD", url: "https://abud.fun" },
     url: `https://abud.fun/blog/${post.slug}`,
