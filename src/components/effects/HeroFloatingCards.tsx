@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   motion,
@@ -15,46 +15,98 @@ import {
   Hand, type LucideIcon,
 } from "lucide-react";
 
-interface FloatingCardSpec {
-  /**
-   * Initial position relative to center, in viewport-units (vw / vh*0.35).
-   * Cards are placed AROUND the central forbidden zone (wordmark + CTAs).
-   */
-  x: number;
-  y: number;
-  /** Mouse-parallax depth multiplier (0..1). */
-  depth: number;
-  /** Base rotation in degrees. */
-  rotate: number;
-  /** Phase offset for the autonomous drift (sec). */
-  phase: number;
-  /** Drift cycle period (sec) — full sine wave. */
-  speed: number;
-  /** Drift amplitudes (px). */
-  driftX: number;
-  driftY: number;
-  /** Rotation amplitude (deg). */
-  rotAmp: number;
+/* ─────────────────────────────────────────────
+   CARD CATALOG — visual identity (no positions)
+   ───────────────────────────────────────────── */
+interface CardIdentity {
   icon: LucideIcon;
   label: string;
   hint: string;
   accent: string;
   glow: string;
-  /** Where a tap (vs drag) navigates to. */
   href: string;
 }
 
-// 8 cards arranged AROUND the central wordmark.
-const CARDS: FloatingCardSpec[] = [
-  { x: -44, y: -36, depth: 0.7,  rotate: -8,  phase: 0.0, speed: 7.5, driftX: 22, driftY: 16, rotAmp: 6, icon: BrainCircuit, label: "AI Tools",      hint: "GPT \u2022 Claude",      accent: "#c084fc", glow: "rgba(192,132,252,0.55)", href: "/services" },
-  { x:  46, y: -36, depth: 0.9,  rotate:  10, phase: 1.2, speed: 8.5, driftX: 24, driftY: 14, rotAmp: 7, icon: Code2,        label: "Full-Stack",    hint: "Next.js \u2022 TS",       accent: "#67e8f9", glow: "rgba(103,232,249,0.5)",  href: "/services" },
-  { x: -52, y:  -2, depth: 0.55, rotate:  6,  phase: 2.4, speed: 6.5, driftX: 18, driftY: 22, rotAmp: 5, icon: Bot,          label: "Telegram Bots", hint: "Automation",            accent: "#a78bfa", glow: "rgba(167,139,250,0.5)",  href: "/services" },
-  { x:  54, y:   0, depth: 1.0,  rotate: -9,  phase: 3.0, speed: 8.0, driftX: 20, driftY: 18, rotAmp: 7, icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",           accent: "#34d399", glow: "rgba(52,211,153,0.5)",   href: "/services" },
-  { x: -42, y:  40, depth: 0.45, rotate:  4,  phase: 0.8, speed: 7.0, driftX: 22, driftY: 12, rotAmp: 5, icon: Cpu,          label: "Automation",    hint: "Python \u2022 APIs",     accent: "#f0abfc", glow: "rgba(240,171,252,0.5)",  href: "/services" },
-  { x:  44, y:  42, depth: 0.5,  rotate: -5,  phase: 1.8, speed: 7.5, driftX: 24, driftY: 14, rotAmp: 6, icon: Sparkles,     label: "AI Agents",     hint: "Multi-step",            accent: "#fbbf24", glow: "rgba(251,191,36,0.5)",   href: "/services" },
-  { x: -58, y: -28, depth: 0.65, rotate: -3,  phase: 3.6, speed: 9.5, driftX: 16, driftY: 18, rotAmp: 6, icon: Database,     label: "Backend",       hint: "Postgres \u2022 Prisma", accent: "#60a5fa", glow: "rgba(96,165,250,0.5)",   href: "/services" },
-  { x:  60, y:  32, depth: 0.6,  rotate:  7,  phase: 1.5, speed: 8.5, driftX: 18, driftY: 14, rotAmp: 6, icon: Zap,          label: "Performance",   hint: "Edge \u2022 Cache",      accent: "#34d399", glow: "rgba(52,211,153,0.55)",  href: "/services" },
+const CARD_CATALOG: CardIdentity[] = [
+  { icon: BrainCircuit, label: "AI Tools",      hint: "GPT \u2022 Claude",      accent: "#c084fc", glow: "rgba(192,132,252,0.55)", href: "/services" },
+  { icon: Code2,        label: "Full-Stack",    hint: "Next.js \u2022 TS",       accent: "#67e8f9", glow: "rgba(103,232,249,0.5)",  href: "/services" },
+  { icon: Bot,          label: "Telegram Bots", hint: "Automation",            accent: "#a78bfa", glow: "rgba(167,139,250,0.5)",  href: "/services" },
+  { icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",           accent: "#34d399", glow: "rgba(52,211,153,0.5)",   href: "/services" },
+  { icon: Cpu,          label: "Automation",    hint: "Python \u2022 APIs",     accent: "#f0abfc", glow: "rgba(240,171,252,0.5)",  href: "/services" },
+  { icon: Sparkles,     label: "AI Agents",     hint: "Multi-step",            accent: "#fbbf24", glow: "rgba(251,191,36,0.5)",   href: "/services" },
+  { icon: Database,     label: "Backend",       hint: "Postgres \u2022 Prisma", accent: "#60a5fa", glow: "rgba(96,165,250,0.5)",   href: "/services" },
+  { icon: Zap,          label: "Performance",   hint: "Edge \u2022 Cache",      accent: "#34d399", glow: "rgba(52,211,153,0.55)",  href: "/services" },
 ];
+
+/* ─────────────────────────────────────────────
+   ZONES — six safe regions around forbidden zone
+   All zones live INSIDE the viewport (|x| ≤ 38vw)
+   so cards never escape the screen edge.
+   ───────────────────────────────────────────── */
+type Zone = { xMin: number; xMax: number; yMin: number; yMax: number };
+
+const ZONES: Zone[] = [
+  // top-left
+  { xMin: -38, xMax: -24, yMin: -40, yMax: -28 },
+  // top-right
+  { xMin:  24, xMax:  38, yMin: -40, yMax: -28 },
+  // mid-left
+  { xMin: -40, xMax: -28, yMin:  -8, yMax:   8 },
+  // mid-right
+  { xMin:  28, xMax:  40, yMin:  -8, yMax:   8 },
+  // bottom-left
+  { xMin: -38, xMax: -24, yMin:  30, yMax:  44 },
+  // bottom-right
+  { xMin:  24, xMax:  38, yMin:  30, yMax:  44 },
+];
+
+interface FloatingCardInstance extends CardIdentity {
+  x: number;
+  y: number;
+  depth: number;
+  rotate: number;
+  phase: number;
+  speed: number;
+  driftX: number;
+  driftY: number;
+  rotAmp: number;
+}
+
+/* Random helpers */
+const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+
+function shuffle<T>(arr: T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** Build six fully-randomized card instances at mount time. */
+function generateLayout(): FloatingCardInstance[] {
+  // Pick 6 unique identities from the catalog.
+  const picks = shuffle(CARD_CATALOG).slice(0, 6);
+  // Shuffle zone assignment so identical identity ↔ zone pairing is rare.
+  const zones = shuffle(ZONES);
+
+  return picks.map((identity, i) => {
+    const z = zones[i];
+    return {
+      ...identity,
+      x: rand(z.xMin, z.xMax),
+      y: rand(z.yMin, z.yMax),
+      depth: rand(0.45, 1.0),
+      rotate: rand(-10, 10),
+      phase: rand(0, Math.PI * 2),
+      speed: rand(6.5, 10.5),
+      driftX: rand(16, 26),
+      driftY: rand(12, 22),
+      rotAmp: rand(4, 8),
+    };
+  });
+}
 
 /** Smooth lerp toward a target value. */
 function easeToward(mv: MotionValue<number>, target: number, factor: number) {
@@ -66,17 +118,13 @@ function easeToward(mv: MotionValue<number>, target: number, factor: number) {
   mv.set(current + (target - current) * factor);
 }
 
-/**
- * HeroFloatingCards — Living, draggable, persistent service cards.
- *  • 8 cards positioned AROUND the central forbidden zone
- *  • Always-on subtle organic drift (sine-based, around an anchor point)
- *  • DRAG: card sticks where you drop it; drift continues from new anchor
- *  • TAP (small + fast): navigates to /services
- *  • Hover: pause drift, scale up, glow boost
- */
+/* ─────────────────────────────────────────────
+   Public component
+   ───────────────────────────────────────────── */
 export default function HeroFloatingCards() {
   const ref = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
+  // Layout is generated client-side (avoids hydration mismatch).
+  const [cards, setCards] = useState<FloatingCardInstance[] | null>(null);
 
   // Smoothed mouse-parallax tracker
   const mx = useMotionValue(0);
@@ -85,7 +133,7 @@ export default function HeroFloatingCards() {
   const sy = useSpring(my, { stiffness: 70, damping: 22, mass: 0.8 });
 
   useEffect(() => {
-    setMounted(true);
+    setCards(generateLayout());
     function onMove(e: MouseEvent) {
       const rect = ref.current?.getBoundingClientRect();
       if (!rect) return;
@@ -105,18 +153,20 @@ export default function HeroFloatingCards() {
       aria-hidden
       style={{ perspective: "1400px" }}
     >
-      {mounted && CARDS.map((card, i) => (
-        <FloatingCard key={i} card={card} index={i} sx={sx} sy={sy} />
+      {cards && cards.map((card, i) => (
+        <FloatingCard key={`${card.label}-${i}`} card={card} index={i} sx={sx} sy={sy} />
       ))}
     </div>
   );
 }
 
-/* ── Single card: drift loop + drag-to-relocate + tap-to-navigate ── */
+/* ─────────────────────────────────────────────
+   Single card — drift + drag + tap-to-navigate
+   ───────────────────────────────────────────── */
 function FloatingCard({
   card, index, sx, sy,
 }: {
-  card: FloatingCardSpec;
+  card: FloatingCardInstance;
   index: number;
   sx: MotionValue<number>;
   sy: MotionValue<number>;
@@ -127,42 +177,38 @@ function FloatingCard({
   const [dragging, setDragging] = useState(false);
   const [entered, setEntered] = useState(false);
 
-  // Refs read from inside requestAnimationFrame loop
   const draggingRef = useRef(false);
   const hoveredRef = useRef(false);
-  // The "anchor" is the position the card drifts AROUND.
-  // Initially {0,0}; updated to last released position after each drag.
   const anchorRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => { hoveredRef.current = hovered; }, [hovered]);
   useEffect(() => { draggingRef.current = dragging; }, [dragging]);
 
-  // Tap-vs-drag detection (small + fast pointerup ⇒ navigate)
   const pointerStart = useRef<{ x: number; y: number; t: number } | null>(null);
 
-  // Card transform motion values (these are what `drag` mutates)
+  // Independent drift seeds per card (additionally randomized in spec).
+  const seedX = useMemo(() => rand(0, Math.PI * 2), []);
+  const seedY = useMemo(() => rand(0, Math.PI * 2), []);
+  const seedR = useMemo(() => rand(0, Math.PI * 2), []);
+
   const dx = useMotionValue(0);
   const dy = useMotionValue(0);
   const drot = useMotionValue(0);
   const dscale = useMotionValue(1);
 
-  // Mark "entered" after intro delay so drift loop kicks in smoothly
   useEffect(() => {
-    const t = setTimeout(() => setEntered(true), 400 + index * 100 + 900);
+    const t = setTimeout(() => setEntered(true), 400 + index * 100 + 600);
     return () => clearTimeout(t);
   }, [index]);
 
-  // Animation loop — runs every frame
   useAnimationFrame((time) => {
     if (!entered) return;
-    if (draggingRef.current) return; // `drag` prop is in control
+    if (draggingRef.current) return;
 
     const tSec = time / 1000;
     const omega = (Math.PI * 2) / card.speed;
-    const phase = card.phase;
 
     if (hoveredRef.current) {
-      // Ease back to anchor + scale up + flatten rotation
       easeToward(dx, anchorRef.current.x, 0.16);
       easeToward(dy, anchorRef.current.y, 0.16);
       easeToward(drot, 0, 0.18);
@@ -170,24 +216,18 @@ function FloatingCard({
       return;
     }
 
-    // Compound sinusoidal drift (X & Y on different freqs ⇒ figure-8-ish)
-    const omegaX = omega;
-    const omegaY = omega * 0.85;
-    const omegaR = omega * 0.6;
+    // Compound sinusoidal drift (X, Y, rotation use different freqs/seeds)
+    const targetX = anchorRef.current.x + Math.sin(tSec * omega + seedX + card.phase) * card.driftX * 0.6;
+    const targetY = anchorRef.current.y + Math.cos(tSec * omega * 0.85 + seedY + card.phase * 0.7) * card.driftY * 0.6;
+    const targetRot = Math.sin(tSec * omega * 0.6 + seedR) * card.rotAmp;
+    const targetScale = 1 + Math.sin(tSec * omega * 1.3 + card.phase) * 0.025;
 
-    const targetX = anchorRef.current.x + Math.sin(tSec * omegaX + phase) * card.driftX * 0.6;
-    const targetY = anchorRef.current.y + Math.cos(tSec * omegaY + phase * 0.7) * card.driftY * 0.6;
-    const targetRot = Math.sin(tSec * omegaR + phase) * card.rotAmp;
-    const targetScale = 1 + Math.sin(tSec * omega * 1.3 + phase) * 0.025;
-
-    // Smooth toward target so values don't jump after drag-release
     easeToward(dx, targetX, 0.12);
     easeToward(dy, targetY, 0.12);
     easeToward(drot, targetRot, 0.1);
     easeToward(dscale, targetScale, 0.1);
   });
 
-  // Mouse parallax (outer wrapper)
   const tx = useTransform(sx, [-0.5, 0.5], [-card.depth * 60, card.depth * 60]);
   const ty = useTransform(sy, [-0.5, 0.5], [-card.depth * 40, card.depth * 40]);
   const rotZ = useTransform(sx, [-0.5, 0.5], [card.rotate - 4, card.rotate + 4]);
@@ -197,7 +237,7 @@ function FloatingCard({
       className="absolute"
       initial={{ opacity: 0, scale: 0.6, y: 40, filter: "blur(8px)" }}
       animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.9, delay: 0.4 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.9, delay: 0.2 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       style={{
         left: "50%",
         top: "50%",
@@ -209,17 +249,12 @@ function FloatingCard({
         zIndex: dragging ? 30 : "auto",
       }}
     >
-      {/* Drag layer — its x/y are bound to dx/dy, so dragging mutates them
-          directly. After drag-end, anchor follows the released position
-          and the drift loop continues from there. */}
       <motion.div
         drag
         dragMomentum={false}
-        // No snap-to-origin: card stays where dropped.
         whileDrag={{ scale: 1.18, zIndex: 50 }}
         onDragStart={() => setDragging(true)}
         onDragEnd={() => {
-          // Capture wherever the card ended up as the new drift anchor.
           anchorRef.current = { x: dx.get(), y: dy.get() };
           setDragging(false);
         }}
@@ -261,7 +296,6 @@ function FloatingCard({
             minWidth: 168,
           }}
         >
-          {/* Holographic top bar */}
           <span
             className="absolute -top-px left-3 right-3 h-px"
             style={{
@@ -270,7 +304,6 @@ function FloatingCard({
             }}
           />
 
-          {/* Icon tile */}
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300"
             style={{
@@ -283,23 +316,15 @@ function FloatingCard({
             <Icon className="w-4 h-4" style={{ color: card.accent }} />
           </div>
 
-          {/* Text */}
           <div className="flex-1 min-w-0 text-right">
-            <div
-              className="text-white text-[13px] font-bold leading-tight tracking-tight"
-              style={{ letterSpacing: "-0.01em" }}
-            >
+            <div className="text-white text-[13px] font-bold leading-tight tracking-tight" style={{ letterSpacing: "-0.01em" }}>
               {card.label}
             </div>
-            <div
-              className="text-[10px] font-medium mt-0.5 transition-colors"
-              style={{ color: hovered || dragging ? card.accent : `${card.accent}cc` }}
-            >
+            <div className="text-[10px] font-medium mt-0.5 transition-colors" style={{ color: hovered || dragging ? card.accent : `${card.accent}cc` }}>
               {card.hint}
             </div>
           </div>
 
-          {/* Hover-only drag-hint icon */}
           <motion.div
             animate={{
               opacity: hovered && !dragging ? 1 : 0,
@@ -312,7 +337,6 @@ function FloatingCard({
             <Hand className="w-3.5 h-3.5" />
           </motion.div>
 
-          {/* Pulsing status dot */}
           <motion.span
             animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
             transition={{ duration: 2.2, repeat: Infinity, delay: card.phase * 0.3 }}
