@@ -6,18 +6,26 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 بدء عملية التهيئة...");
 
-  // Admin user
-  const hashedPassword = await hash("admin123456", 12);
-  await prisma.adminUser.upsert({
-    where: { email: "admin@abud.com" },
-    update: {},
-    create: {
-      name: "ABUD Admin",
-      email: "admin@abud.com",
-      password: hashedPassword,
-    },
+  // Admin user (default: username=abud, password=abud ─ override via env)
+  const adminUsername = process.env.ADMIN_USERNAME || "abud";
+  const adminEmail = process.env.ADMIN_EMAIL || "abud@abud.fun";
+  const adminPassword = process.env.ADMIN_PASSWORD || "abud";
+  const hashedPassword = await hash(adminPassword, 12);
+
+  const existingAdmin = await prisma.adminUser.findFirst({
+    where: { OR: [{ username: adminUsername }, { email: adminEmail }] },
   });
-  console.log("✅ تم إنشاء المستخدم الإداري");
+  if (existingAdmin) {
+    await prisma.adminUser.update({
+      where: { id: existingAdmin.id },
+      data: { username: adminUsername, email: adminEmail, password: hashedPassword, name: "Abud" },
+    });
+  } else {
+    await prisma.adminUser.create({
+      data: { username: adminUsername, email: adminEmail, password: hashedPassword, name: "Abud" },
+    });
+  }
+  console.log(`✅ Admin: ${adminUsername} / ${adminEmail}`);
 
   // Product categories
   const [catTools, catCourses, catTemplates, catServices] = await Promise.all([

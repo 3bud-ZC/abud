@@ -6,10 +6,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { Lock, Mail, Eye, EyeOff, Terminal } from "lucide-react";
+import { Lock, User, Eye, EyeOff, Terminal } from "lucide-react";
 
 const schema = z.object({
-  email: z.string().email("بريد إلكتروني غير صحيح"),
+  identifier: z.string().min(1, "اسم المستخدم أو البريد مطلوب"),
   password: z.string().min(1, "كلمة المرور مطلوبة"),
 });
 
@@ -22,6 +22,7 @@ export default function AdminLoginPage() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: { identifier: "", password: "" },
   });
 
   async function onSubmit(data: FormData) {
@@ -63,13 +64,13 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="card-base p-8 space-y-5">
           <div>
-            <label className="block text-sm text-[#a0a0b8] mb-1.5">البريد الإلكتروني</label>
+            <label className="block text-sm text-[#a0a0b8] mb-1.5">اسم المستخدم أو البريد</label>
             <div className="relative">
-              <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#606080]" />
-              <input {...register("email")} type="email" placeholder="admin@abud.com" dir="ltr"
+              <User className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#606080]" />
+              <input {...register("identifier")} type="text" placeholder="abud" dir="ltr" autoComplete="username"
                 className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-3 pr-10 text-white text-sm placeholder-[#606080] outline-none transition-colors" />
             </div>
-            {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+            {errors.identifier && <p className="text-red-400 text-xs mt-1">{errors.identifier.message}</p>}
           </div>
 
           <div>
