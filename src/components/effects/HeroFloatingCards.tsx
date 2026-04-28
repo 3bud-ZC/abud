@@ -7,6 +7,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useAnimationFrame,
   type MotionValue,
 } from "framer-motion";
 import {
@@ -16,22 +17,20 @@ import {
 
 interface FloatingCardSpec {
   /**
-   * Position relative to center, in viewport-units (vw / vh*0.35).
-   * Cards are positioned OUTSIDE the central forbidden zone:
-   *   |x| >= 36 (away from horizontal center where wordmark sits)
-   *   OR |y| >= 40 (clear of wordmark + CTAs vertically)
+   * Initial position relative to center, in viewport-units (vw / vh*0.35).
+   * Cards are placed AROUND the central forbidden zone (wordmark + CTAs).
    */
   x: number;
   y: number;
-  /** Parallax depth multiplier (0..1). */
+  /** Mouse-parallax depth multiplier (0..1). */
   depth: number;
   /** Base rotation in degrees. */
   rotate: number;
-  /** Per-card animation phase offset (sec). */
+  /** Phase offset for the autonomous drift (sec). */
   phase: number;
-  /** Drift cycle duration (sec). */
+  /** Drift cycle period (sec) — full sine wave. */
   speed: number;
-  /** Drift amplitudes (px) — autonomous wandering. */
+  /** Drift amplitudes (px). */
   driftX: number;
   driftY: number;
   /** Rotation amplitude (deg). */
@@ -45,33 +44,34 @@ interface FloatingCardSpec {
   href: string;
 }
 
-// 8 cards arranged AROUND the central wordmark — no card crosses
-// the central forbidden zone (rough rectangle: |x| < 36 AND |y| < 40).
+// 8 cards arranged AROUND the central wordmark.
 const CARDS: FloatingCardSpec[] = [
-  // Top row (above wordmark)
-  { x: -44, y: -36, depth: 0.7,  rotate: -8,  phase: 0.0, speed: 8.5, driftX: 30, driftY: 22, rotAmp: 7, icon: BrainCircuit, label: "AI Tools",      hint: "GPT \u2022 Claude",      accent: "#c084fc", glow: "rgba(192,132,252,0.55)", href: "/services" },
-  { x:  46, y: -36, depth: 0.9,  rotate:  10, phase: 1.2, speed: 9.5, driftX: 32, driftY: 18, rotAmp: 8, icon: Code2,        label: "Full-Stack",    hint: "Next.js \u2022 TS",       accent: "#67e8f9", glow: "rgba(103,232,249,0.5)",  href: "/services" },
-
-  // Middle row — far left/right, well clear of "Abud" wordmark
-  { x: -52, y:  -2, depth: 0.55, rotate:  6,  phase: 2.4, speed: 7.5, driftX: 24, driftY: 28, rotAmp: 6, icon: Bot,          label: "Telegram Bots", hint: "Automation",            accent: "#a78bfa", glow: "rgba(167,139,250,0.5)",  href: "/services" },
-  { x:  54, y:   0, depth: 1.0,  rotate: -9,  phase: 3.0, speed: 9.0, driftX: 28, driftY: 24, rotAmp: 8, icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",           accent: "#34d399", glow: "rgba(52,211,153,0.5)",   href: "/services" },
-
-  // Bottom row (below CTAs)
-  { x: -42, y:  40, depth: 0.45, rotate:  4,  phase: 0.8, speed: 8.0, driftX: 30, driftY: 16, rotAmp: 6, icon: Cpu,          label: "Automation",    hint: "Python \u2022 APIs",     accent: "#f0abfc", glow: "rgba(240,171,252,0.5)",  href: "/services" },
-  { x:  44, y:  42, depth: 0.5,  rotate: -5,  phase: 1.8, speed: 8.5, driftX: 32, driftY: 18, rotAmp: 7, icon: Sparkles,     label: "AI Agents",     hint: "Multi-step",            accent: "#fbbf24", glow: "rgba(251,191,36,0.5)",   href: "/services" },
-
-  // Far corners (extra depth at the edges)
-  { x: -58, y: -28, depth: 0.65, rotate: -3,  phase: 3.6, speed: 10.5, driftX: 22, driftY: 24, rotAmp: 7, icon: Database,    label: "Backend",       hint: "Postgres \u2022 Prisma", accent: "#60a5fa", glow: "rgba(96,165,250,0.5)",   href: "/services" },
-  { x:  60, y:  32, depth: 0.6,  rotate:  7,  phase: 1.5, speed: 9.0,  driftX: 24, driftY: 18, rotAmp: 7, icon: Zap,         label: "Performance",   hint: "Edge \u2022 Cache",      accent: "#34d399", glow: "rgba(52,211,153,0.55)",  href: "/services" },
+  { x: -44, y: -36, depth: 0.7,  rotate: -8,  phase: 0.0, speed: 7.5, driftX: 22, driftY: 16, rotAmp: 6, icon: BrainCircuit, label: "AI Tools",      hint: "GPT \u2022 Claude",      accent: "#c084fc", glow: "rgba(192,132,252,0.55)", href: "/services" },
+  { x:  46, y: -36, depth: 0.9,  rotate:  10, phase: 1.2, speed: 8.5, driftX: 24, driftY: 14, rotAmp: 7, icon: Code2,        label: "Full-Stack",    hint: "Next.js \u2022 TS",       accent: "#67e8f9", glow: "rgba(103,232,249,0.5)",  href: "/services" },
+  { x: -52, y:  -2, depth: 0.55, rotate:  6,  phase: 2.4, speed: 6.5, driftX: 18, driftY: 22, rotAmp: 5, icon: Bot,          label: "Telegram Bots", hint: "Automation",            accent: "#a78bfa", glow: "rgba(167,139,250,0.5)",  href: "/services" },
+  { x:  54, y:   0, depth: 1.0,  rotate: -9,  phase: 3.0, speed: 8.0, driftX: 20, driftY: 18, rotAmp: 7, icon: Shield,       label: "CyberSec",      hint: "Pen-Testing",           accent: "#34d399", glow: "rgba(52,211,153,0.5)",   href: "/services" },
+  { x: -42, y:  40, depth: 0.45, rotate:  4,  phase: 0.8, speed: 7.0, driftX: 22, driftY: 12, rotAmp: 5, icon: Cpu,          label: "Automation",    hint: "Python \u2022 APIs",     accent: "#f0abfc", glow: "rgba(240,171,252,0.5)",  href: "/services" },
+  { x:  44, y:  42, depth: 0.5,  rotate: -5,  phase: 1.8, speed: 7.5, driftX: 24, driftY: 14, rotAmp: 6, icon: Sparkles,     label: "AI Agents",     hint: "Multi-step",            accent: "#fbbf24", glow: "rgba(251,191,36,0.5)",   href: "/services" },
+  { x: -58, y: -28, depth: 0.65, rotate: -3,  phase: 3.6, speed: 9.5, driftX: 16, driftY: 18, rotAmp: 6, icon: Database,     label: "Backend",       hint: "Postgres \u2022 Prisma", accent: "#60a5fa", glow: "rgba(96,165,250,0.5)",   href: "/services" },
+  { x:  60, y:  32, depth: 0.6,  rotate:  7,  phase: 1.5, speed: 8.5, driftX: 18, driftY: 14, rotAmp: 6, icon: Zap,          label: "Performance",   hint: "Edge \u2022 Cache",      accent: "#34d399", glow: "rgba(52,211,153,0.55)",  href: "/services" },
 ];
 
+/** Smooth lerp toward a target value. */
+function easeToward(mv: MotionValue<number>, target: number, factor: number) {
+  const current = mv.get();
+  if (Math.abs(current - target) < 0.01) {
+    mv.set(target);
+    return;
+  }
+  mv.set(current + (target - current) * factor);
+}
+
 /**
- * HeroFloatingCards — Living, draggable, clickable service cards.
- *  • 8 cards positioned AROUND a central forbidden zone (wordmark/CTAs)
- *  • Mouse parallax (deeper cards shift more)
- *  • Per-card autonomous drift (X + Y + rotation + scale)
- *  • DRAG: grab any card and throw it; it springs back to its origin
- *  • TAP (small movement, fast release): navigates to /services
+ * HeroFloatingCards — Living, draggable, persistent service cards.
+ *  • 8 cards positioned AROUND the central forbidden zone
+ *  • Always-on subtle organic drift (sine-based, around an anchor point)
+ *  • DRAG: card sticks where you drop it; drift continues from new anchor
+ *  • TAP (small + fast): navigates to /services
  *  • Hover: pause drift, scale up, glow boost
  */
 export default function HeroFloatingCards() {
@@ -101,7 +101,6 @@ export default function HeroFloatingCards() {
   return (
     <div
       ref={ref}
-      // Container ignores pointer events; each card re-enables them.
       className="hidden sm:block absolute inset-0 pointer-events-none z-[5] overflow-hidden"
       aria-hidden
       style={{ perspective: "1400px" }}
@@ -113,7 +112,7 @@ export default function HeroFloatingCards() {
   );
 }
 
-/* ── Single floating card (drag + tap + drift) ── */
+/* ── Single card: drift loop + drag-to-relocate + tap-to-navigate ── */
 function FloatingCard({
   card, index, sx, sy,
 }: {
@@ -126,41 +125,72 @@ function FloatingCard({
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [entered, setEntered] = useState(false);
 
-  // Tap-vs-drag detection: small + fast pointerup ⇒ navigate
+  // Refs read from inside requestAnimationFrame loop
+  const draggingRef = useRef(false);
+  const hoveredRef = useRef(false);
+  // The "anchor" is the position the card drifts AROUND.
+  // Initially {0,0}; updated to last released position after each drag.
+  const anchorRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => { hoveredRef.current = hovered; }, [hovered]);
+  useEffect(() => { draggingRef.current = dragging; }, [dragging]);
+
+  // Tap-vs-drag detection (small + fast pointerup ⇒ navigate)
   const pointerStart = useRef<{ x: number; y: number; t: number } | null>(null);
 
-  // Mouse parallax — deeper cards move more (disabled while dragging)
+  // Card transform motion values (these are what `drag` mutates)
+  const dx = useMotionValue(0);
+  const dy = useMotionValue(0);
+  const drot = useMotionValue(0);
+  const dscale = useMotionValue(1);
+
+  // Mark "entered" after intro delay so drift loop kicks in smoothly
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 400 + index * 100 + 900);
+    return () => clearTimeout(t);
+  }, [index]);
+
+  // Animation loop — runs every frame
+  useAnimationFrame((time) => {
+    if (!entered) return;
+    if (draggingRef.current) return; // `drag` prop is in control
+
+    const tSec = time / 1000;
+    const omega = (Math.PI * 2) / card.speed;
+    const phase = card.phase;
+
+    if (hoveredRef.current) {
+      // Ease back to anchor + scale up + flatten rotation
+      easeToward(dx, anchorRef.current.x, 0.16);
+      easeToward(dy, anchorRef.current.y, 0.16);
+      easeToward(drot, 0, 0.18);
+      easeToward(dscale, 1.12, 0.18);
+      return;
+    }
+
+    // Compound sinusoidal drift (X & Y on different freqs ⇒ figure-8-ish)
+    const omegaX = omega;
+    const omegaY = omega * 0.85;
+    const omegaR = omega * 0.6;
+
+    const targetX = anchorRef.current.x + Math.sin(tSec * omegaX + phase) * card.driftX * 0.6;
+    const targetY = anchorRef.current.y + Math.cos(tSec * omegaY + phase * 0.7) * card.driftY * 0.6;
+    const targetRot = Math.sin(tSec * omegaR + phase) * card.rotAmp;
+    const targetScale = 1 + Math.sin(tSec * omega * 1.3 + phase) * 0.025;
+
+    // Smooth toward target so values don't jump after drag-release
+    easeToward(dx, targetX, 0.12);
+    easeToward(dy, targetY, 0.12);
+    easeToward(drot, targetRot, 0.1);
+    easeToward(dscale, targetScale, 0.1);
+  });
+
+  // Mouse parallax (outer wrapper)
   const tx = useTransform(sx, [-0.5, 0.5], [-card.depth * 60, card.depth * 60]);
   const ty = useTransform(sy, [-0.5, 0.5], [-card.depth * 40, card.depth * 40]);
   const rotZ = useTransform(sx, [-0.5, 0.5], [card.rotate - 4, card.rotate + 4]);
-
-  // Decide what the inner drift layer should do based on state.
-  // Priority: dragging > hovered > drift
-  const driftAnimate =
-    dragging
-      ? undefined // let `drag` control it
-      : hovered
-        ? { x: 0, y: 0, rotate: 0, scale: 1.12 }
-        : {
-            x: [0, card.driftX, -card.driftX * 0.7, card.driftX * 0.4, 0],
-            y: [0, -card.driftY, card.driftY * 0.6, -card.driftY * 0.3, 0],
-            rotate: [0, card.rotAmp, -card.rotAmp * 0.85, card.rotAmp * 0.5, 0],
-            scale: [1, 1.04, 0.97, 1.02, 1],
-          };
-
-  const driftTransition =
-    dragging
-      ? { duration: 0 }
-      : hovered
-        ? { type: "spring" as const, stiffness: 220, damping: 18 }
-        : {
-            duration: card.speed,
-            repeat: Infinity,
-            ease: "easeInOut" as const,
-            delay: card.phase,
-            times: [0, 0.25, 0.5, 0.75, 1],
-          };
 
   return (
     <motion.div
@@ -179,19 +209,20 @@ function FloatingCard({
         zIndex: dragging ? 30 : "auto",
       }}
     >
-      {/* Drift / drag layer */}
+      {/* Drag layer — its x/y are bound to dx/dy, so dragging mutates them
+          directly. After drag-end, anchor follows the released position
+          and the drift loop continues from there. */}
       <motion.div
         drag
-        dragSnapToOrigin
-        dragElastic={0.55}
-        dragMomentum
-        dragTransition={{ bounceStiffness: 180, bounceDamping: 16, power: 0.4 }}
+        dragMomentum={false}
+        // No snap-to-origin: card stays where dropped.
         whileDrag={{ scale: 1.18, zIndex: 50 }}
         onDragStart={() => setDragging(true)}
-        onDragEnd={() => setDragging(false)}
-        animate={driftAnimate}
-        transition={driftTransition}
-        // Tap-vs-drag detection at the pointer level
+        onDragEnd={() => {
+          // Capture wherever the card ended up as the new drift anchor.
+          anchorRef.current = { x: dx.get(), y: dy.get() };
+          setDragging(false);
+        }}
         onPointerDown={(e) => {
           pointerStart.current = { x: e.clientX, y: e.clientY, t: Date.now() };
         }}
@@ -199,27 +230,26 @@ function FloatingCard({
           const start = pointerStart.current;
           pointerStart.current = null;
           if (!start) return;
-          const dx = e.clientX - start.x;
-          const dy = e.clientY - start.y;
-          const dist = Math.hypot(dx, dy);
-          const dur = Date.now() - start.t;
-          // Treat as a click only if movement was tiny + quick.
-          if (dist < 6 && dur < 350) {
-            router.push(card.href);
-          }
+          const distance = Math.hypot(e.clientX - start.x, e.clientY - start.y);
+          const elapsed = Date.now() - start.t;
+          if (distance < 6 && elapsed < 350) router.push(card.href);
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        // Re-enable pointer events for actual interaction
         className="pointer-events-auto select-none"
-        style={{ touchAction: "none", cursor: dragging ? "grabbing" : "grab" }}
+        style={{
+          x: dx,
+          y: dy,
+          rotate: drot,
+          scale: dscale,
+          touchAction: "none",
+          cursor: dragging ? "grabbing" : "grab",
+        }}
       >
         <div
           className="relative rounded-2xl px-3.5 py-2.5 flex items-center gap-2.5 transition-shadow duration-300"
           style={{
-            background: hovered || dragging
-              ? "rgba(15,12,28,0.95)"
-              : "rgba(10,8,18,0.85)",
+            background: hovered || dragging ? "rgba(15,12,28,0.95)" : "rgba(10,8,18,0.85)",
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
             border: `1px solid ${card.accent}${hovered || dragging ? "cc" : "55"}`,
