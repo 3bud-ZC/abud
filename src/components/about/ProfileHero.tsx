@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import { Github, Linkedin, Twitter, Send, Mail, Download, MapPin, Zap } from "lucide-react";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
 
@@ -15,6 +16,7 @@ const SOCIALS = [
 
 export default function ProfileHero() {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [imgError, setImgError] = useState(false);
 
   // 3D tilt
   const mx = useMotionValue(0);
@@ -254,7 +256,7 @@ export default function ProfileHero() {
                   }}
                 />
                 <div
-                  className="relative w-32 h-32 rounded-full flex items-center justify-center"
+                  className="relative w-36 h-36 rounded-full flex items-center justify-center overflow-hidden"
                   style={{
                     background:
                       "linear-gradient(135deg, rgba(192,132,252,0.25) 0%, rgba(103,232,249,0.15) 100%)",
@@ -262,18 +264,49 @@ export default function ProfileHero() {
                     boxShadow: "inset 0 0 30px rgba(147,51,234,0.3), 0 0 24px rgba(192,132,252,0.4)",
                   }}
                 >
-                  <span
-                    className="font-black text-5xl"
-                    style={{
-                      background: "linear-gradient(135deg, #f0abfc, #c084fc, #67e8f9)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      letterSpacing: "-0.04em",
-                    }}
-                  >
-                    AB
-                  </span>
+                  {!imgError ? (
+                    <>
+                      <Image
+                        src="/avatar.jpg"
+                        alt="Abud"
+                        fill
+                        sizes="144px"
+                        priority
+                        onError={() => setImgError(true)}
+                        className="object-cover"
+                        style={{ objectPosition: "center 22%" }}
+                      />
+                      {/* Subtle holographic overlay tint */}
+                      <div
+                        className="absolute inset-0 pointer-events-none mix-blend-overlay"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(192,132,252,0.15) 0%, transparent 40%, rgba(103,232,249,0.12) 100%)",
+                        }}
+                      />
+                      {/* Inner ring vignette */}
+                      <div
+                        className="absolute inset-0 rounded-full pointer-events-none"
+                        style={{
+                          boxShadow:
+                            "inset 0 0 24px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <span
+                      className="font-black text-5xl"
+                      style={{
+                        background: "linear-gradient(135deg, #f0abfc, #c084fc, #67e8f9)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                        letterSpacing: "-0.04em",
+                      }}
+                    >
+                      AB
+                    </span>
+                  )}
                 </div>
                 {/* Status dot */}
                 <span
