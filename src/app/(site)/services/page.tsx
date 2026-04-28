@@ -609,7 +609,7 @@ export default function ServicesPage() {
               <Award className="w-2.5 h-2.5" />
               ليه تختارني
             </span>
-            <h2 className="section-title mb-3">قيمة حقيقية لكل ريال</h2>
+            <h2 className="section-title mb-3">قيمة حقيقية لكل جنيه</h2>
             <p className="section-subtitle">٦ أسباب تخلّيك مرتاح إنك بتشتغل مع شخص محترف</p>
           </AnimatedSection>
 

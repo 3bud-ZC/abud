@@ -36,7 +36,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "كيف تبني وكيل ذكاء اصطناعي (AI Agent) من الصفر",
     excerpt:
       "دليل عملي لبناء AI Agent بـ Python + OpenAI ─ من فهم الـ Tools و Function Calling لحد deployment على VPS مع تيليجرام bot.",
-    coverImage: null,
+    coverImage: "/blog/build-ai-agent-from-scratch.jpg",
     readTime: 12,
     publishedAt: "2026-04-22T10:00:00Z",
     featured: true,
@@ -103,7 +103,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "Next.js 15 — تجربتي بعد سنة كاملة في الإنتاج",
     excerpt:
       "App Router، Server Components، Server Actions ─ إيه شغّال فعلاً وإيه اللي مش هتحتاجه. تجربة من 12+ مشروع حقيقي.",
-    coverImage: null,
+    coverImage: "/blog/next-15-app-router-real-world.jpg",
     readTime: 9,
     publishedAt: "2026-04-15T08:00:00Z",
     featured: true,
@@ -145,10 +145,10 @@ export const SEED_POSTS: SeedPost[] = [
   {
     id: "seed-3",
     slug: "telegram-bot-business-2026",
-    title: "بوتات تيليجرام كبيزنس ─ خطة من الصفر للـ$5K شهرياً",
+    title: "بوتات تيليجرام كبيزنس ─ خطة من الصفر لـ 250 ألف جنيه شهرياً",
     excerpt:
       "ليه بوتات تيليجرام لسه فرصة ذهبية في 2026، أنواع البوتات اللي بتجيب فلوس فعلاً، وإزاي تسعّر شغلك صح.",
-    coverImage: null,
+    coverImage: "/blog/telegram-bot-business-2026.jpg",
     readTime: 10,
     publishedAt: "2026-04-08T14:00:00Z",
     featured: false,
@@ -170,9 +170,9 @@ export const SEED_POSTS: SeedPost[] = [
 <h2>التسعير</h2>
 <table>
 <tr><th>نوع</th><th>سعر</th><th>متوسط الوقت</th></tr>
-<tr><td>بوت بسيط</td><td>$200-500</td><td>3-5 أيام</td></tr>
-<tr><td>بوت متوسط (مع DB)</td><td>$800-1500</td><td>1-2 أسبوع</td></tr>
-<tr><td>SaaS Bot كامل</td><td>$3000+</td><td>3-4 أسابيع</td></tr>
+<tr><td>بوت بسيط</td><td>10,000 ─ 25,000 جنيه</td><td>3-5 أيام</td></tr>
+<tr><td>بوت متوسط (مع DB)</td><td>40,000 ─ 75,000 جنيه</td><td>1-2 أسبوع</td></tr>
+<tr><td>SaaS Bot كامل</td><td>150,000+ جنيه</td><td>3-4 أسابيع</td></tr>
 </table>
 
 <h2>Stack تقني مقترح</h2>
@@ -180,7 +180,7 @@ export const SEED_POSTS: SeedPost[] = [
   <li><strong>Python</strong>: <code>aiogram</code> أو <code>python-telegram-bot</code></li>
   <li><strong>Node.js</strong>: <code>grammY</code> ─ الأخف والأسرع</li>
   <li><strong>Database</strong>: PostgreSQL أو SQLite للبدايات</li>
-  <li><strong>Hosting</strong>: VPS بـ$5/شهر شغّال</li>
+  <li><strong>Hosting</strong>: VPS بـ 250 جنيه/شهر شغّال</li>
 </ul>
 
 <h2>إزاي تجيب أول 3 عملاء؟</h2>
@@ -194,7 +194,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "بناء نظام RAG للمحتوى العربي ─ التحديات والحلول",
     excerpt:
       "الـ RAG شغال زي الفل بالإنجليزي ─ بس مع العربي بتظهر مشاكل التشكيل والـ tokenization. إزاي تبني نظام يفهم العربي صح.",
-    coverImage: null,
+    coverImage: "/blog/rag-system-arabic-content.jpg",
     readTime: 11,
     publishedAt: "2026-04-01T09:00:00Z",
     featured: false,
@@ -233,7 +233,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "إزاي تسعّر شغلك كفريلانسر عربي ─ من تجربة 100+ مشروع",
     excerpt:
       "أكبر غلط بيعمله الفريلانسر العربي: السعر بالساعة. هنا إزاي تتحول لـ value-based pricing وتزوّد دخلك 3-5×.",
-    coverImage: null,
+    coverImage: "/blog/freelancer-pricing-guide-arab.jpg",
     readTime: 8,
     publishedAt: "2026-03-25T11:00:00Z",
     featured: false,
@@ -241,7 +241,7 @@ export const SEED_POSTS: SeedPost[] = [
     category: { name: "فريلانس", slug: "freelance" },
     content: `
 <h2>المشكلة مع التسعير بالساعة</h2>
-<p>لما بتقول "السعر بالساعة $20" ─ العميل بيحط في دماغه إنك "موظف عن بُعد". ده بيقفلك سقف خفي.</p>
+<p>لما بتقول "السعر بالساعة 1000 جنيه" ─ العميل بيحط في دماغه إنك "موظف عن بُعد". ده بيقفلك سقف خفي.</p>
 
 <h2>الـ 3 طُرق الأساسية</h2>
 <ol>
@@ -260,7 +260,7 @@ export const SEED_POSTS: SeedPost[] = [
 
 <h2>قاعدة الـ 10%</h2>
 <p>سعرك = <strong>10%</strong> من القيمة المتوقعة سنوياً للعميل.</p>
-<p>مثال: متجر إلكتروني بيتوقع يبيع $50K في السنة الأولى ─ سعر بنائه: $5K. منطقي؟ منطقي.</p>
+<p>مثال: متجر إلكتروني بيتوقع يبيع 2.5 مليون جنيه في السنة الأولى ─ سعر بنائه: 250 ألف جنيه. منطقي؟ منطقي.</p>
 
 <h2>لما العميل يقول "غالي"</h2>
 <p>متخفّضش. اسأل: <em>"غالي مقارنة بإيه؟"</em>. غالباً جوابه هيوضّح إنه مش فاهم القيمة، مش إن السعر فعلاً غالي.</p>
@@ -275,7 +275,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "n8n vs Make vs Zapier ─ أنهي أداة أتمتة تختار في 2026؟",
     excerpt:
       "مقارنة عملية بعد استخدام التلاتة في مشاريع حقيقية ─ إيه الفروقات في السعر، السرعة، التحكم، والتعقيد.",
-    coverImage: null,
+    coverImage: "/blog/n8n-vs-make-vs-zapier-2026.jpg",
     readTime: 7,
     publishedAt: "2026-03-18T10:00:00Z",
     featured: false,
@@ -323,7 +323,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "أساسيات الأمن السيبراني لازم تعرفها كمطوّر",
     excerpt:
       "10 ثغرات شائعة بشوفها في مواقع العملاء ─ كلها قابلة للحل في 30 دقيقة. لو موقعك ما اتفحصش، احتمال 80% فيها ثغرة منهم.",
-    coverImage: null,
+    coverImage: "/blog/cybersecurity-basics-developer.jpg",
     readTime: 9,
     publishedAt: "2026-03-10T15:00:00Z",
     featured: false,
@@ -373,8 +373,8 @@ export const SEED_POSTS: SeedPost[] = [
     slug: "developer-productivity-stack-2026",
     title: "Stack الإنتاجية اللي بستخدمه يومياً ─ 2026",
     excerpt:
-      "كل أداة بستخدمها يومياً مع السبب ─ من الـ IDE للـ note-taking للـ time tracking. كله مجاني أو ارخص من $10/شهر.",
-    coverImage: null,
+      "كل أداة بستخدمها يومياً مع السبب ─ من الـ IDE للـ note-taking للـ time tracking. كله مجاني أو أرخص من 500 جنيه شهرياً.",
+    coverImage: "/blog/developer-productivity-stack-2026.jpg",
     readTime: 6,
     publishedAt: "2026-03-03T08:00:00Z",
     featured: false,
@@ -427,7 +427,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "الـ Vibe Coding ─ إزاي بطوّر بسرعة 5× مع AI Pair Programming",
     excerpt:
       "اشتغال مع Cascade و Cursor و Copilot غيّر طريقة كتابتي للكود. هنا الـ workflow اللي بستخدمه يومياً وبيخلّي شغل 8 ساعات في 90 دقيقة.",
-    coverImage: null,
+    coverImage: "/blog/vibe-coding-with-cascade.jpg",
     readTime: 10,
     publishedAt: "2026-02-24T13:00:00Z",
     featured: true,
@@ -481,7 +481,7 @@ export const SEED_POSTS: SeedPost[] = [
     title: "Monorepo أو لا؟ خبرة من مشاريع كبيرة وصغيرة",
     excerpt:
       "Turborepo، Nx، pnpm workspaces ─ كلهم بيقولوا monorepo هو الحل. بس امتى فعلاً تحتاجه؟ تجربتي بعد 4 مشاريع.",
-    coverImage: null,
+    coverImage: "/blog/monorepo-or-not-2026.jpg",
     readTime: 7,
     publishedAt: "2026-02-17T09:00:00Z",
     featured: false,
