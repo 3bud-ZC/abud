@@ -267,7 +267,7 @@ export default function ProfileHero() {
                   {!imgError ? (
                     <>
                       <Image
-                        src="/avatar.jpg"
+                        src="/avatar.jpeg"
                         alt="Abud"
                         fill
                         sizes="144px"
