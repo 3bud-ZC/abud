@@ -272,6 +272,7 @@ export default function ProfileHero() {
                         fill
                         sizes="144px"
                         priority
+                        unoptimized
                         onError={() => setImgError(true)}
                         className="object-cover"
                         style={{ objectPosition: "center 22%" }}
