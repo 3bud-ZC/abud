@@ -390,6 +390,33 @@ const FAQ = [
   { q: "ماذا لو لم تكن خدمتي ضمن القائمة؟",           a: "تواصل معي مباشرة! القائمة تغطي 90% من الطلبات، لكن لو عندك حاجة خاصة، تكلمنا واتفقنا. دائماً أحب التحديات الجديدة." },
 ];
 
+const PRICING_OPTIONS = [
+  {
+    id: "quote-calculator",
+    title: "حاسبة سعر سريعة",
+    desc: "احسب تكلفة مبدئية في دقيقة حسب نوع مشروعك والمتطلبات.",
+    icon: Calculator,
+    cta: "افتح الحاسبة",
+    href: "/quote",
+  },
+  {
+    id: "hourly-option",
+    title: "نظام بالساعة",
+    desc: "مناسب للتعديلات والتحسينات المستمرة على مشاريع قائمة.",
+    icon: Clock,
+    cta: "اطلب خطة بالساعة",
+    href: "/contact",
+  },
+  {
+    id: "custom-proposal",
+    title: "عرض سعر مخصص",
+    desc: "لو مشروعك خاص، أجهز لك عرض سعر مرن حسب الميزانية والأولويات.",
+    icon: Wand2,
+    cta: "اطلب عرض مخصص",
+    href: "/contact",
+  },
+] as const;
+
 /* ─────────────────────────────────────────────
    Page
    ───────────────────────────────────────────── */
@@ -559,6 +586,54 @@ export default function ServicesPage() {
               لا توجد خدمات في هذه الفئة حالياً.
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ─────────── PRICING OPTIONS ─────────── */}
+      <section className="py-16 px-4 bg-[#080810] relative overflow-hidden">
+        <FloatingOrbs count={3} />
+
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <AnimatedSection className="text-center mb-10">
+            <span className="section-badge mb-4 mx-auto">
+              <Calculator className="w-2.5 h-2.5" />
+              نظام التسعير
+            </span>
+            <h2 className="section-title mb-3">اختر طريقة التسعير المناسبة لك</h2>
+            <p className="section-subtitle">الأسعار المعروضة داخل الخدمات تقديرية كبداية، وتقدر تختار أي نظام يناسبك</p>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {PRICING_OPTIONS.map(({ id, title, desc, icon: Icon, cta, href }, i) => (
+              <AnimatedSection key={id} delay={i * 0.06}>
+                <div
+                  className="rounded-2xl p-6 h-full"
+                  style={{
+                    background: "linear-gradient(160deg, rgba(15,12,24,0.85), rgba(10,10,18,0.9))",
+                    border: "1px solid rgba(147,51,234,0.2)",
+                  }}
+                >
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                    style={{
+                      background: "rgba(147,51,234,0.14)",
+                      border: "1px solid rgba(168,85,247,0.35)",
+                    }}
+                  >
+                    <Icon className="w-5 h-5 text-purple-300" />
+                  </div>
+
+                  <h3 className="text-white font-bold text-base mb-2" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
+                  <p className="text-[#9090b0] text-sm leading-relaxed mb-5">{desc}</p>
+
+                  <Link href={href} className="inline-flex items-center gap-1.5 text-sm text-purple-300 hover:text-white transition-colors">
+                    {cta}
+                    <ArrowLeft className="w-4 h-4" />
+                  </Link>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -743,7 +818,7 @@ function PopularCard({ service: s }: { service: Service }) {
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-white/5">
-          <span className="text-xs font-bold" style={{ color: `rgb(${s.gradient})` }}>{s.priceFrom}</span>
+          <span className="text-xs font-bold" style={{ color: `rgb(${s.gradient})` }}>بداية تقديرية: {s.priceFrom}</span>
           <span className="inline-flex items-center gap-1 text-xs text-purple-300 group-hover:gap-2 transition-all">
             ابدأ الآن
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -797,7 +872,8 @@ function ServiceCard({ service: s }: { service: Service }) {
             <Clock className="w-2.5 h-2.5" />
             {s.duration}
           </span>
-          <span className="text-xs font-bold mt-0.5" style={{ color: `rgb(${s.gradient})` }}>{s.priceFrom}</span>
+          <span className="text-[10px] text-[#606080] mt-0.5">تسعير مرن</span>
+          <span className="text-xs font-bold" style={{ color: `rgb(${s.gradient})` }}>بداية تقديرية: {s.priceFrom}</span>
         </div>
         <Link href="/contact" className="inline-flex items-center gap-1 text-xs font-medium text-purple-300 hover:text-white transition-colors">
           اطلب

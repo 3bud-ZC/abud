@@ -14,7 +14,6 @@ import StatsCounter from "@/components/about/StatsCounter";
 import SkillConstellation from "@/components/about/SkillConstellation";
 import DailyStack from "@/components/about/DailyStack";
 import PrinciplesSection from "@/components/about/PrinciplesSection";
-import FeaturedWork from "@/components/about/FeaturedWork";
 
 const timeline = [
   { year: "2019", title: "البداية مع البرمجة", desc: "بدأت رحلتي مع HTML و CSS ثم JavaScript — كان كل سطر كود يشعرني بقوة لا نهاية لها." },
@@ -62,11 +61,6 @@ export default function AboutPage() {
 
       {/* ─────────── PRINCIPLES ─────────── */}
       <PrinciplesSection />
-
-      <SectionDivider variant="line" />
-
-      {/* ─────────── FEATURED WORK ─────────── */}
-      <FeaturedWork />
 
       <SectionDivider variant="gradient" height={40} />
 
