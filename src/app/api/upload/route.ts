@@ -36,7 +36,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    const configuredUploadDir = process.env.UPLOAD_DIR?.trim();
+    const uploadDir = configuredUploadDir
+      ? (path.isAbsolute(configuredUploadDir)
+          ? configuredUploadDir
+          : path.join(process.cwd(), configuredUploadDir))
+      : path.join(process.cwd(), "public", "uploads");
+
     await fs.mkdir(uploadDir, { recursive: true });
 
     const safeFileName = validation.sanitizedName!;
@@ -45,7 +51,9 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     await fs.writeFile(filePath, buffer);
 
-    const url = `/uploads/${safeFileName}`;
+    const rawBase = (process.env.PUBLIC_UPLOAD_BASE || "/uploads").trim();
+    const publicBase = `/${rawBase.replace(/^\/+|\/+$/g, "")}`;
+    const url = `${publicBase}/${safeFileName}`;
     logger.uploadSuccess(safeFileName, url);
 
     return NextResponse.json({ url, fileName: safeFileName });

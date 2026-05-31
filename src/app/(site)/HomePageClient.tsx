@@ -23,15 +23,6 @@ import TechMarquee from "@/components/effects/TechMarquee";
 import HolographicCard from "@/components/effects/HolographicCard";
 import AnimatedBar from "@/components/effects/AnimatedBar";
 
-const services = [
-  { icon: Globe, title: "تطوير مواقع", desc: "مواقع ومنصات ويب متكاملة وعالية الأداء", color: "from-purple-600 to-purple-800" },
-  { icon: BrainCircuit, title: "أدوات الذكاء الاصطناعي", desc: "أدوات ذكية مبنية بالنماذج اللغوية الحديثة", color: "from-purple-800 to-indigo-800" },
-  { icon: Layers, title: "أتمتة الأنظمة", desc: "سير عمل آلية توفر الوقت وترفع الإنتاجية", color: "from-indigo-700 to-purple-700" },
-  { icon: Bot, title: "بوتات تيليجرام", desc: "بوتات احترافية تتحكم في كل ما تحتاجه", color: "from-purple-700 to-pink-800" },
-  { icon: Shield, title: "الأمن السيبراني", desc: "حلول حماية وتحليل أمني للأنظمة الرقمية", color: "from-blue-800 to-purple-800" },
-  { icon: Terminal, title: "استشارات تقنية", desc: "توجيه تقني استراتيجي للأفكار والمشاريع", color: "from-purple-600 to-violet-800" },
-];
-
 const stats = [
   { value: "+50", label: "مشروع منجز", percent: 92 },
   { value: "+30", label: "عميل سعيد",  percent: 98 },
@@ -54,6 +45,20 @@ const faqPreview = [
 ];
 
 interface ApiPost { id: string; title: string; slug: string; category?: { name: string } | null; publishedAt?: string | Date | null; createdAt: string | Date; }
+interface ApiService {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string | null;
+  featured?: boolean;
+}
+interface HomeServiceCard {
+  id: string;
+  title: string;
+  desc: string;
+  icon: string;
+  color: string;
+}
 
 export interface HomeBlogPost {
   id: string;
@@ -105,11 +110,30 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
 
+const SERVICE_COLORS = [
+  "from-purple-600 to-purple-800",
+  "from-purple-800 to-indigo-800",
+  "from-indigo-700 to-purple-700",
+  "from-purple-700 to-pink-800",
+  "from-blue-800 to-purple-800",
+  "from-purple-600 to-violet-800",
+];
+
+const DEFAULT_HOME_SERVICES: HomeServiceCard[] = [
+  { id: "default-1", icon: "🌐", title: "تطوير مواقع", desc: "مواقع ومنصات ويب متكاملة وعالية الأداء", color: SERVICE_COLORS[0] },
+  { id: "default-2", icon: "🤖", title: "أدوات الذكاء الاصطناعي", desc: "أدوات ذكية مبنية بالنماذج اللغوية الحديثة", color: SERVICE_COLORS[1] },
+  { id: "default-3", icon: "⚙️", title: "أتمتة الأنظمة", desc: "سير عمل آلية توفر الوقت وترفع الإنتاجية", color: SERVICE_COLORS[2] },
+  { id: "default-4", icon: "📨", title: "بوتات تيليجرام", desc: "بوتات احترافية تتحكم في كل ما تحتاجه", color: SERVICE_COLORS[3] },
+  { id: "default-5", icon: "🛡️", title: "الأمن السيبراني", desc: "حلول حماية وتحليل أمني للأنظمة الرقمية", color: SERVICE_COLORS[4] },
+  { id: "default-6", icon: "💡", title: "استشارات تقنية", desc: "توجيه تقني استراتيجي للأفكار والمشاريع", color: SERVICE_COLORS[5] },
+];
+
 export default function HomePageClient(props: Props) {
   const { latestPosts = [] } = props;
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterDone, setNewsletterDone] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [homeServices, setHomeServices] = useState<HomeServiceCard[]>(DEFAULT_HOME_SERVICES);
   const [cms, setCms] = useState({
     heroBadge: "مطوّر Full-Stack • أدوات AI احترافية • منتجات رقمية جاهزة",
     heroTitle: "خدمات تطوير وذكاء اصطناعي وأتمتة",
@@ -158,6 +182,32 @@ export default function HomePageClient(props: Props) {
       }
     }
     loadCms();
+  }, []);
+
+  useEffect(() => {
+    async function loadServices() {
+      try {
+        const res = await fetch("/api/services", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        const rows: ApiService[] = Array.isArray(data.services) ? data.services : [];
+        if (!rows.length) return;
+
+        const prioritized = [...rows].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).slice(0, 6);
+        setHomeServices(
+          prioritized.map((service, index) => ({
+            id: service.id,
+            title: service.title,
+            desc: service.description,
+            icon: service.icon?.trim() || "✨",
+            color: SERVICE_COLORS[index % SERVICE_COLORS.length],
+          }))
+        );
+      } catch {
+        // keep defaults
+      }
+    }
+    void loadServices();
   }, []);
 
   return (
@@ -397,12 +447,12 @@ export default function HomePageClient(props: Props) {
             viewport={{ once: true, margin: "-100px" }}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {services.map(({ icon: Icon, title, desc, color }, i) => (
-              <m.div key={title} variants={item}>
+            {homeServices.map(({ id, icon, title, desc, color }, i) => (
+              <m.div key={id} variants={item}>
                 <HolographicCard duration={5 + (i % 3)} delay={i * 0.4} className="h-full">
                   <div className="p-6 group relative h-full">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-5 shadow-[0_0_22px_rgba(147,51,234,0.45)] group-hover:shadow-[0_0_38px_rgba(168,85,247,0.7)] transition-shadow duration-500`}>
-                      <Icon className="w-5 h-5 text-white" />
+                      <span className="text-xl">{icon}</span>
                     </div>
                     <h3 className="text-white font-bold text-base mb-2 group-hover:text-purple-200 transition-colors leading-snug">{title}</h3>
                     <p style={{ color: "#9090b0", fontSize: "0.85rem", lineHeight: 1.7 }}>{desc}</p>

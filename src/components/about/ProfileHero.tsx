@@ -14,6 +14,15 @@ const DEFAULT_SOCIALS = [
   { icon: Mail,     label: "Email",    href: "mailto:hello@abud.fun",            accent: "#f0abfc" },
 ];
 
+function isValidObjectPosition(value: string): boolean {
+  const v = value.trim().toLowerCase();
+  const keyword = "(left|center|right|top|bottom)";
+  const percent = "(\\d{1,3}%)";
+  const token = `(${keyword}|${percent})`;
+  const re = new RegExp(`^${token}\\s+${token}$`);
+  return re.test(v);
+}
+
 export default function ProfileHero() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
@@ -38,7 +47,9 @@ export default function ProfileHero() {
         const data = await res.json();
         const s = data.settings || {};
         if (s.about_profile_image) setProfileImage(s.about_profile_image);
-        if (s.about_profile_image_position) setProfileImagePosition(s.about_profile_image_position);
+        if (s.about_profile_image_position && isValidObjectPosition(s.about_profile_image_position)) {
+          setProfileImagePosition(s.about_profile_image_position);
+        }
         setAbout((prev) => ({
           ...prev,
           name: s.about_name || prev.name,

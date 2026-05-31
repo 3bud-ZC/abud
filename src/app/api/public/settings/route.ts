@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const ALLOWED_PUBLIC_KEYS = [
   "brand_name",
   "home_hero_badge",
@@ -45,5 +48,12 @@ export async function GET() {
   const map: Record<string, string> = {};
   for (const s of settings) map[s.key] = s.value;
 
-  return NextResponse.json({ settings: map });
+  return NextResponse.json(
+    { settings: map },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+      },
+    }
+  );
 }
