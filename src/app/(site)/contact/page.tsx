@@ -31,6 +31,8 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [formStarted, setFormStarted] = useState(false);
+  const [siteEmail, setSiteEmail] = useState("abed@abud.fun");
+  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/201080672974");
   const searchParams = useSearchParams();
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
@@ -44,6 +46,25 @@ export default function ContactPage() {
     if (subject) setValue("subject", subject);
     if (message) setValue("message", message);
   }, [searchParams, setValue]);
+
+  useEffect(() => {
+    async function loadPublicSettings() {
+      try {
+        const res = await fetch("/api/public/settings");
+        if (!res.ok) return;
+        const data = await res.json();
+        const s = data.settings || {};
+        if (s.site_email) setSiteEmail(s.site_email);
+        if (s.whatsapp_number) {
+          const phone = String(s.whatsapp_number).replace(/\D/g, "");
+          if (phone) setWhatsappLink(`https://wa.me/${phone}`);
+        }
+      } catch {
+        // keep defaults
+      }
+    }
+    loadPublicSettings();
+  }, []);
 
   async function onSubmit(data: FormData) {
     // Track contact form submit
@@ -249,7 +270,7 @@ export default function ContactPage() {
                     </motion.div>
                     <div>
                       <div className="text-white font-semibold text-sm">البريد الإلكتروني</div>
-                      <a href="mailto:abed@abud.fun" className="text-[#a0a0b8] text-xs hover:text-purple-400 transition-colors" dir="ltr">abed@abud.fun</a>
+                      <a href={`mailto:${siteEmail}`} className="text-[#a0a0b8] text-xs hover:text-purple-400 transition-colors" dir="ltr">{siteEmail}</a>
                     </div>
                   </div>
                   <p className="text-[#9090b0] text-xs">⚡ رد سريع خلال 24 ساعة • 100% خصوصية</p>
@@ -262,7 +283,7 @@ export default function ContactPage() {
                 <div className="p-6">
                   <h3 className="text-white font-semibold text-sm mb-2">تواصل عبر واتساب</h3>
                   <p className="text-[#a0a0b8] text-xs mb-4 leading-relaxed">للمشاريع العاجلة والاستفسارات السريعة</p>
-                  <a href="https://wa.me/201080672974" target="_blank" rel="noopener noreferrer"
+                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer"
                     className="btn-primary btn-glow text-sm py-2.5 w-full justify-center gap-2">
                     <MessageCircle className="w-4 h-4" />
                     ابدأ محادثة

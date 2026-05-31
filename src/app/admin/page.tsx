@@ -32,28 +32,11 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function load() {
       try {
-        const [bRes, ptRes, sRes, mRes, nRes] = await Promise.all([
-          fetch("/api/blog"),
-          fetch("/api/portfolio"),
-          fetch("/api/services"),
-          fetch("/api/contact"),
-          fetch("/api/newsletter"),
-        ]);
-        const [bd, ptd, sd, md, nd] = await Promise.all([
-          bRes.json(), ptRes.json(), sRes.json(), mRes.json(), nRes.json(),
-        ]);
-
-        const messages: RecentMessage[] = md.messages || [];
-
-        setStats({
-          posts: bd.posts?.length || 0,
-          projects: ptd.projects?.length || 0,
-          services: sd.services?.length || 0,
-          messages: messages.length,
-          unreadMessages: messages.filter((m) => !m.isRead).length,
-          subscribers: nd.subscribers?.length || 0,
-        });
-        setRecentMessages(messages.slice(0, 5));
+        const res = await fetch("/api/admin/dashboard");
+        if (!res.ok) throw new Error("dashboard_fetch_failed");
+        const data = await res.json();
+        setStats(data.stats || null);
+        setRecentMessages((data.recentMessages || []).slice(0, 5));
       } catch {
         toast.error("تعذر تحميل بيانات لوحة التحكم");
       }

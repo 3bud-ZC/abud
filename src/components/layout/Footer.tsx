@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { m } from "framer-motion";
 import { Zap, Heart, Github, Twitter, Instagram, Youtube, Send } from "lucide-react";
@@ -21,16 +22,36 @@ const footerLinks = {
   ],
 };
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/3bud-ZC", label: "GitHub" },
-  { icon: Twitter, href: "#", label: "تويتر / X" },
-  { icon: Instagram, href: "#", label: "إنستغرام" },
-  { icon: Youtube, href: "#", label: "يوتيوب" },
-  { icon: Send, href: "#", label: "تيليجرام" },
-];
-
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [socialLinks, setSocialLinks] = useState([
+    { icon: Github, href: "https://github.com/3bud-ZC", label: "GitHub" },
+    { icon: Twitter, href: "", label: "تويتر / X" },
+    { icon: Instagram, href: "", label: "إنستغرام" },
+    { icon: Youtube, href: "", label: "يوتيوب" },
+    { icon: Send, href: "", label: "تيليجرام" },
+  ]);
+
+  useEffect(() => {
+    async function loadPublicSettings() {
+      try {
+        const res = await fetch("/api/public/settings");
+        if (!res.ok) return;
+        const data = await res.json();
+        const s = data.settings || {};
+        setSocialLinks([
+          { icon: Github, href: s.social_github || "https://github.com/3bud-ZC", label: "GitHub" },
+          { icon: Twitter, href: s.social_twitter || "", label: "تويتر / X" },
+          { icon: Instagram, href: s.social_instagram || "", label: "إنستغرام" },
+          { icon: Youtube, href: s.social_linkedin || "", label: "LinkedIn" },
+          { icon: Send, href: s.whatsapp_number ? `https://wa.me/${String(s.whatsapp_number).replace(/\D/g, "")}` : "", label: "واتساب" },
+        ]);
+      } catch {
+        // keep defaults
+      }
+    }
+    loadPublicSettings();
+  }, []);
 
   return (
     <footer
@@ -52,7 +73,7 @@ export default function Footer() {
               صانع تقني وباني حلول رقمية بعقلية سيبرانية. أبني الأدوات والمواقع والأنظمة الذكية.
             </p>
             <div className="flex items-center gap-3">
-              {socialLinks.map(({ icon: Icon, href, label }) => (
+              {socialLinks.filter((l) => l.href).map(({ icon: Icon, href, label }) => (
                 <m.a
                   key={label}
                   href={href}
