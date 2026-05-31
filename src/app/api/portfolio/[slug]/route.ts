@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
@@ -18,6 +19,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
   const body = await req.json();
   if (body.title && !body.slug) body.slug = generateSlug(body.title);
   const project = await prisma.portfolioProject.update({ where: { slug }, data: body });
+  revalidatePath("/portfolio");
+  revalidatePath(`/portfolio/${slug}`);
+  if (body.slug && body.slug !== slug) revalidatePath(`/portfolio/${body.slug}`);
+  revalidatePath("/");
   return NextResponse.json({ project });
 }
 
@@ -27,5 +32,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
 
   const { slug } = await params;
   await prisma.portfolioProject.delete({ where: { slug } });
+  revalidatePath("/portfolio");
+  revalidatePath(`/portfolio/${slug}`);
+  revalidatePath("/");
   return NextResponse.json({ ok: true });
 }

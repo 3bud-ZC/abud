@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
@@ -23,6 +24,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
   if (body.status === "published" && !body.publishedAt) body.publishedAt = new Date();
 
   const post = await prisma.blogPost.update({ where: { slug }, data: body });
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
+  if (body.slug && body.slug !== slug) revalidatePath(`/blog/${body.slug}`);
+  revalidatePath("/");
   return NextResponse.json({ post });
 }
 
@@ -32,5 +37,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
 
   const { slug } = await params;
   await prisma.blogPost.delete({ where: { slug } });
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
+  revalidatePath("/");
   return NextResponse.json({ ok: true });
 }

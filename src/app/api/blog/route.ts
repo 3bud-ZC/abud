@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
@@ -47,5 +48,7 @@ export async function POST(req: NextRequest) {
       publishedAt: body.status === "published" ? new Date() : null,
     },
   });
+  revalidatePath("/blog");
+  revalidatePath("/");
   return NextResponse.json({ post }, { status: 201 });
 }

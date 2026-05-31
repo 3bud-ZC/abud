@@ -20,6 +20,8 @@
     "db:blog-seed": "tsx prisma/blog-seed.ts",
     "db:products-seed": "tsx prisma/products-seed.ts",
     "db:blog-images": "tsx prisma/blog-images.ts",
+    "db:seed-blog-from-data": "tsx prisma/seed-blog-from-seed-data.ts",
+    "db:seed-portfolio": "tsx prisma/seed-portfolio.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force && npm run db:seed"
   },
