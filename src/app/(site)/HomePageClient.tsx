@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion as m } from "framer-motion";
 import { trackHomeHeroCTA, trackHomeFinalCTA } from "@/lib/analytics";
@@ -110,6 +110,55 @@ export default function HomePageClient(props: Props) {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterDone, setNewsletterDone] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [cms, setCms] = useState({
+    heroBadge: "مطوّر Full-Stack • أدوات AI احترافية • منتجات رقمية جاهزة",
+    heroTitle: "خدمات تطوير وذكاء اصطناعي وأتمتة",
+    heroSubtitle: "أدوات ومنتجات رقمية جاهزة للتحميل الفوري، أو خدمات تطوير مخصصة لمشروعك — كل ما تحتاجه لبناء حضورك الرقمي.",
+    heroPrimaryText: "استعرض خدماتي",
+    heroPrimaryLink: "/services",
+    heroSecondaryText: "طلب خدمة مخصصة",
+    heroSecondaryLink: "/contact",
+    aboutTitle: "أبني الأفكار وأحوّلها لواقع رقمي",
+    aboutDesc: "مطور ويب وصانع أدوات رقمية متخصص في بناء الحلول التقنية المتكاملة — من المواقع المتطورة إلى أنظمة الذكاء الاصطناعي والأتمتة.",
+    finalCtaTitle: "جاهز لبناء مشروعك الرقمي؟",
+    finalCtaDesc: "ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.",
+    finalCtaPrimaryText: "تواصل معاي",
+    finalCtaPrimaryLink: "/contact",
+    finalCtaSecondaryText: "استعرض الخدمات",
+    finalCtaSecondaryLink: "/services",
+  });
+
+  useEffect(() => {
+    async function loadCms() {
+      try {
+        const res = await fetch("/api/public/settings");
+        if (!res.ok) return;
+        const data = await res.json();
+        const s = data.settings || {};
+        setCms((prev) => ({
+          ...prev,
+          heroBadge: s.home_hero_badge || prev.heroBadge,
+          heroTitle: s.home_hero_title || prev.heroTitle,
+          heroSubtitle: s.home_hero_subtitle || prev.heroSubtitle,
+          heroPrimaryText: s.home_hero_primary_text || prev.heroPrimaryText,
+          heroPrimaryLink: s.home_hero_primary_link || prev.heroPrimaryLink,
+          heroSecondaryText: s.home_hero_secondary_text || prev.heroSecondaryText,
+          heroSecondaryLink: s.home_hero_secondary_link || prev.heroSecondaryLink,
+          aboutTitle: s.home_about_title || prev.aboutTitle,
+          aboutDesc: s.home_about_desc || prev.aboutDesc,
+          finalCtaTitle: s.home_final_cta_title || prev.finalCtaTitle,
+          finalCtaDesc: s.home_final_cta_desc || prev.finalCtaDesc,
+          finalCtaPrimaryText: s.home_final_cta_primary_text || prev.finalCtaPrimaryText,
+          finalCtaPrimaryLink: s.home_final_cta_primary_link || prev.finalCtaPrimaryLink,
+          finalCtaSecondaryText: s.home_final_cta_secondary_text || prev.finalCtaSecondaryText,
+          finalCtaSecondaryLink: s.home_final_cta_secondary_link || prev.finalCtaSecondaryLink,
+        }));
+      } catch {
+        // keep defaults
+      }
+    }
+    loadCms();
+  }, []);
 
   return (
     <div className="overflow-hidden">
@@ -154,7 +203,7 @@ export default function HomePageClient(props: Props) {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-400" />
             </span>
             <span className="text-purple-300 text-sm font-medium tracking-wide">
-              مطوّر Full-Stack • أدوات AI احترافية • منتجات رقمية جاهزة
+              {cms.heroBadge}
             </span>
           </m.div>
 
@@ -175,7 +224,7 @@ export default function HomePageClient(props: Props) {
               }}
             >
               <TypewriterText
-                text="خدمات تطوير وذكاء اصطناعي وأتمتة"
+                text={cms.heroTitle}
                 speed={70}
                 startDelay={400}
               />
@@ -189,7 +238,7 @@ export default function HomePageClient(props: Props) {
             className="max-w-xl mx-auto mb-10 leading-relaxed"
             style={{ color: "#8888a8", fontSize: "1.05rem" }}
           >
-            أدوات ومنتجات رقمية جاهزة للتحميل الفوري، أو خدمات تطوير مخصصة لمشروعك — كل ما تحتاجه لبناء حضورك الرقمي.
+            {cms.heroSubtitle}
           </m.p>
 
           <m.div
@@ -198,14 +247,14 @@ export default function HomePageClient(props: Props) {
             transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap items-center justify-center gap-3"
           >
-            <Link href="/services" className="btn-primary btn-glow gap-2 py-3 px-8" onClick={() => trackHomeHeroCTA('primary', '/services')}>
+            <Link href={cms.heroPrimaryLink} className="btn-primary btn-glow gap-2 py-3 px-8" onClick={() => trackHomeHeroCTA('primary', cms.heroPrimaryLink)}>
               <Code2 className="w-4 h-4" />
-              <span className="font-bold">استعرض خدماتي</span>
+              <span className="font-bold">{cms.heroPrimaryText}</span>
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <Link href="/contact" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeHeroCTA('secondary', '/contact')}>
+            <Link href={cms.heroSecondaryLink} className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeHeroCTA('secondary', cms.heroSecondaryLink)}>
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>طلب خدمة مخصصة</span>
+              <span>{cms.heroSecondaryText}</span>
             </Link>
           </m.div>
 
@@ -308,9 +357,9 @@ export default function HomePageClient(props: Props) {
                   <Zap className="w-2.5 h-2.5" />
                   من أنا
                 </span>
-                <h2 className="section-title">أبني الأفكار<br />وأحوّلها لواقع رقمي</h2>
+                <h2 className="section-title">{cms.aboutTitle}</h2>
                 <p style={{ color: "#7070a0", lineHeight: 1.75, fontSize: "0.95rem" }}>
-                  مطور ويب وصانع أدوات رقمية متخصص في بناء الحلول التقنية المتكاملة — من المواقع المتطورة إلى أنظمة الذكاء الاصطناعي والأتمتة.
+                  {cms.aboutDesc}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {["React / Next.js", "Python", "Node.js", "AI/LLMs", "Telegram API", "PostgreSQL"].map((skill) => (
@@ -696,20 +745,20 @@ export default function HomePageClient(props: Props) {
                     <Zap className="w-6 h-6 text-purple-200" />
                   </m.div>
                   <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
-                    جاهز لبناء مشروعك الرقمي؟
+                    {cms.finalCtaTitle}
                   </h2>
                   <p className="mb-8 leading-relaxed" style={{ color: "#a0a0c0", fontSize: "0.95rem" }}>
-                    ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.
+                    {cms.finalCtaDesc}
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                    <Link href="/contact" className="btn-primary btn-glow gap-2 py-3 px-8" onClick={() => trackHomeFinalCTA('/contact')}>
+                    <Link href={cms.finalCtaPrimaryLink} className="btn-primary btn-glow gap-2 py-3 px-8" onClick={() => trackHomeFinalCTA(cms.finalCtaPrimaryLink)}>
                       <MessageSquare className="w-4 h-4" />
-                      <span className="font-bold">تواصل معاي</span>
+                      <span className="font-bold">{cms.finalCtaPrimaryText}</span>
                       <ArrowLeft className="w-4 h-4" />
                     </Link>
-                    <Link href="/services" className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeFinalCTA('/services')}>
+                    <Link href={cms.finalCtaSecondaryLink} className="btn-outline py-3 px-6 gap-2" onClick={() => trackHomeFinalCTA(cms.finalCtaSecondaryLink)}>
                       <Code2 className="w-3.5 h-3.5" />
-                      <span>استعرض الخدمات</span>
+                      <span>{cms.finalCtaSecondaryText}</span>
                     </Link>
                   </div>
                   <div className="flex items-center justify-center gap-2.5">

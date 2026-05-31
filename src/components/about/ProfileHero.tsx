@@ -20,6 +20,15 @@ export default function ProfileHero() {
   const [profileImage, setProfileImage] = useState("/avatar.jpeg");
   const [profileImagePosition, setProfileImagePosition] = useState("58% 65%");
   const [socials, setSocials] = useState(DEFAULT_SOCIALS);
+  const [about, setAbout] = useState({
+    name: "Abud",
+    role: "Full-Stack Developer • AI Engineer",
+    intro: "مطور Full-Stack وصانع أدوات الذكاء الاصطناعي ─ أبني الحلول التقنية المتكاملة بعقلية سيبرانية وشغف حقيقي بالتقنية.",
+    statusBadge: "متاح للمشاريع الجديدة",
+    location: "القاهرة، مصر • UTC+3",
+    experience: "5+ سنوات خبرة",
+    cvUrl: "/cv-abud.pdf",
+  });
 
   useEffect(() => {
     async function loadPublicSettings() {
@@ -30,6 +39,16 @@ export default function ProfileHero() {
         const s = data.settings || {};
         if (s.about_profile_image) setProfileImage(s.about_profile_image);
         if (s.about_profile_image_position) setProfileImagePosition(s.about_profile_image_position);
+        setAbout((prev) => ({
+          ...prev,
+          name: s.about_name || prev.name,
+          role: s.about_role || prev.role,
+          intro: s.about_intro || prev.intro,
+          statusBadge: s.about_status_badge || prev.statusBadge,
+          location: s.about_location || prev.location,
+          experience: s.about_experience || prev.experience,
+          cvUrl: s.about_cv_url || prev.cvUrl,
+        }));
         setSocials([
           { icon: Github, label: "GitHub", href: s.social_github || "https://github.com/3bud-ZC", accent: "#c084fc" },
           { icon: Linkedin, label: "LinkedIn", href: s.social_linkedin || "https://linkedin.com/in/abud", accent: "#67e8f9" },
@@ -78,7 +97,7 @@ export default function ProfileHero() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
           </span>
-          <span className="text-green-300 text-xs font-bold tracking-wider">متاح للمشاريع الجديدة</span>
+          <span className="text-green-300 text-xs font-bold tracking-wider">{about.statusBadge}</span>
         </motion.div>
 
         <motion.div
@@ -106,9 +125,7 @@ export default function ProfileHero() {
           className="text-base md:text-lg leading-relaxed mb-6 max-w-xl mx-auto lg:mr-0 lg:ml-auto"
           style={{ color: "#a0a0c0" }}
         >
-          مطور <span className="text-purple-300 font-bold">Full-Stack</span> وصانع{" "}
-          <span className="text-cyan-300 font-bold">أدوات الذكاء الاصطناعي</span> ─ أبني الحلول التقنية
-          المتكاملة بعقلية سيبرانية وشغف حقيقي بالتقنية.
+          {about.intro}
         </motion.p>
 
         {/* Meta row */}
@@ -120,11 +137,11 @@ export default function ProfileHero() {
         >
           <span className="inline-flex items-center gap-2 text-sm" style={{ color: "#9090b0" }}>
             <MapPin className="w-4 h-4 text-purple-400" />
-            <span>القاهرة، مصر • UTC+3</span>
+            <span>{about.location}</span>
           </span>
           <span className="inline-flex items-center gap-2 text-sm" style={{ color: "#9090b0" }}>
             <Zap className="w-4 h-4 text-yellow-400" />
-            <span>5+ سنوات خبرة</span>
+            <span>{about.experience}</span>
           </span>
         </motion.div>
 
@@ -139,7 +156,7 @@ export default function ProfileHero() {
             <span>تواصل معي</span>
           </a>
           <a
-            href="/cv-abud.pdf"
+            href={about.cvUrl}
             download
             className="btn-outline inline-flex gap-2 items-center"
           >
@@ -349,10 +366,10 @@ export default function ProfileHero() {
               </div>
 
               <h3 className="text-white font-black text-xl mb-1" style={{ letterSpacing: "-0.02em" }}>
-                Abud
+                {about.name}
               </h3>
               <p className="text-purple-300 text-xs font-semibold mb-4" style={{ letterSpacing: "0.05em" }}>
-                Full-Stack Developer • AI Engineer
+                {about.role}
               </p>
 
               {/* Inline stats */}

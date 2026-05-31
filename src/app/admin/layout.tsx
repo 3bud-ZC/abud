@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, BookOpen, Layers, Briefcase,
   MessageSquare, Settings, LogOut, Menu, X,
-  ChevronLeft, Terminal, Mail
+  ChevronLeft, Terminal, Mail, FileText
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -17,6 +17,7 @@ const navItems = [
   { href: "/admin/services", label: "الخدمات", icon: Briefcase },
   { href: "/admin/messages", label: "الرسائل", icon: MessageSquare },
   { href: "/admin/newsletter", label: "المشتركون", icon: Mail },
+  { href: "/admin/content", label: "إدارة المحتوى", icon: FileText },
   { href: "/admin/settings", label: "الإعدادات", icon: Settings },
 ];
 
