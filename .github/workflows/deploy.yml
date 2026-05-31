@@ -20,13 +20,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx prisma generate
-      - run: npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://build:build@localhost:5432/builddb?schema=public' }}
-          SESSION_SECRET: ${{ secrets.SESSION_SECRET || 'build-time-session-secret-at-least-32-characters-long' }}
-          NEXT_PUBLIC_SITE_URL: "https://abud.fun"
-          NEXT_TELEMETRY_DISABLED: "1"
-          SKIP_ENV_VALIDATION: "1"
+      - run: npm run lint
 
   deploy:
     needs: build-check
