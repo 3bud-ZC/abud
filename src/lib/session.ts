@@ -34,8 +34,6 @@ function getSessionSecret(): Uint8Array {
   return new TextEncoder().encode(sessionSecret);
 }
 
-const secret = getSessionSecret();
-
 export interface SessionPayload {
   userId: string;
   email: string;
@@ -44,6 +42,7 @@ export interface SessionPayload {
 
 export async function createSession(payload: Omit<SessionPayload, "expiresAt">) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const secret = getSessionSecret();
 
   const token = await new SignJWT({ ...payload, expiresAt })
     .setProtectedHeader({ alg: "HS256" })
@@ -70,6 +69,7 @@ export async function getSession(): Promise<SessionPayload | null> {
   if (!token) return null;
 
   try {
+    const secret = getSessionSecret();
     const { payload } = await jwtVerify(token, secret, {
       algorithms: ["HS256"],
     });
@@ -89,6 +89,7 @@ export async function verifySession(request: NextRequest): Promise<SessionPayloa
   if (!token) return null;
 
   try {
+    const secret = getSessionSecret();
     const { payload } = await jwtVerify(token, secret, {
       algorithms: ["HS256"],
     });
