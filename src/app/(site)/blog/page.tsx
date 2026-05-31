@@ -2,8 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { SEED_POSTS, SEED_CATEGORIES, type SeedPost } from "@/data/blog-seed";
 import BlogPageClient from "./BlogPageClient";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 interface ClientPost {
   id: string;

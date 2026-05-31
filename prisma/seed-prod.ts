@@ -1,11 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "../src/lib/password-policy";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL || "admin@abud.com";
-  const password = process.env.ADMIN_PASSWORD || "Admin@1234";
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!email || !password) {
+    throw new Error("Missing required env vars: ADMIN_EMAIL, ADMIN_PASSWORD");
+  }
+  if (!isStrongPassword(password)) {
+    throw new Error(PASSWORD_POLICY_MESSAGE);
+  }
 
   console.log("🌱 Production seed starting…");
   console.log(`   admin email: ${email}`);

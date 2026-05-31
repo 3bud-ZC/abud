@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Settings, Save, KeyRound, User } from "lucide-react";
+import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "@/lib/password-policy";
 
 const settingFields = [
   { key: "site_title", label: "عنوان الموقع", placeholder: "ABUD Platform" },
@@ -73,8 +74,8 @@ export default function AdminSettingsPage() {
       toast.error("املأ الحقول كلها");
       return;
     }
-    if (newPassword.length < 4) {
-      toast.error("كلمة المرور الجديدة قصيرة (على الأقل 4 حروف)");
+    if (!isStrongPassword(newPassword)) {
+      toast.error(PASSWORD_POLICY_MESSAGE);
       return;
     }
     if (newPassword !== confirmPassword) {

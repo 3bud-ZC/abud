@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BookOpen, Layers, MessageSquare, Briefcase, Clock, ArrowUpRight, Mail } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 interface Stats {
   posts: number;
@@ -53,7 +54,9 @@ export default function AdminDashboard() {
           subscribers: nd.subscribers?.length || 0,
         });
         setRecentMessages(messages.slice(0, 5));
-      } catch { /* ignore */ }
+      } catch {
+        toast.error("تعذر تحميل بيانات لوحة التحكم");
+      }
       finally { setLoading(false); }
     }
     load();
@@ -81,6 +84,18 @@ export default function AdminDashboard() {
         <div className="text-left">
           <div className="text-xs text-[#505070]">{now.toLocaleDateString("ar-EG", { weekday: "long", day: "numeric", month: "long" })}</div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <Link href="/admin/blog" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
+          + مقال جديد
+        </Link>
+        <Link href="/admin/portfolio" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
+          + مشروع جديد
+        </Link>
+        <Link href="/admin/services" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
+          + خدمة جديدة
+        </Link>
       </div>
 
       {loading ? (
@@ -165,7 +180,7 @@ export default function AdminDashboard() {
                   {msg.subject && (
                     <span className="text-xs text-[#808090] max-w-[140px] truncate hidden sm:inline">{msg.subject}</span>
                   )}
-                  <span className="text-xs text-[#505070]">{formatDate(msg.createdAt)}</span>
+                  <span className="text-xs text-[#505070] whitespace-nowrap">{formatDate(msg.createdAt)}</span>
                   {!msg.isRead && (
                     <span className="w-2 h-2 rounded-full bg-purple-500" />
                   )}

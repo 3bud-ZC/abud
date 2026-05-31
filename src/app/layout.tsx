@@ -4,6 +4,11 @@ import { Tajawal, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import MotionProvider from "@/components/providers/MotionProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { validateEnvOrThrow } from "@/lib/env-validator";
+
+if (process.env.SKIP_ENV_VALIDATION !== "1") {
+  validateEnvOrThrow();
+}
 
 const tajawal = Tajawal({
   subsets: ["arabic"],

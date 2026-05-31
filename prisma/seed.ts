@@ -1,15 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "../src/lib/password-policy";
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log("🌱 بدء عملية التهيئة...");
 
-  // Admin user (default: username=abud, password=abud ─ override via env)
-  const adminUsername = process.env.ADMIN_USERNAME || "abud";
-  const adminEmail = process.env.ADMIN_EMAIL || "abud@abud.fun";
-  const adminPassword = process.env.ADMIN_PASSWORD || "abud";
+  // Admin user
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminUsername || !adminEmail || !adminPassword) {
+    throw new Error("Missing required env vars: ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD");
+  }
+  if (!isStrongPassword(adminPassword)) {
+    throw new Error(PASSWORD_POLICY_MESSAGE);
+  }
   const hashedPassword = await hash(adminPassword, 12);
 
   const existingAdmin = await prisma.adminUser.findFirst({
@@ -1003,9 +1010,8 @@ async function main() {
   console.log("✅ تم إنشاء إعدادات الدفع");
 
   console.log("\n🎉 تمت عملية التهيئة بنجاح!");
-  console.log("📧 البريد الإداري: admin@abud.com");
-  console.log("🔑 كلمة المرور: admin123456");
-  console.log("⚠️  يُرجى تغيير كلمة المرور بعد أول تسجيل دخول");
+  console.log(`📧 البريد الإداري: ${adminEmail}`);
+  console.log("✅ كلمة المرور تم ضبطها من ADMIN_PASSWORD");
 }
 
 main()

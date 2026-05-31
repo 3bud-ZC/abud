@@ -41,8 +41,6 @@ export async function POST(req: NextRequest) {
     const id = identifier.trim().toLowerCase();
     logger.authAttempt(id);
 
-    let usingLegacyEmailOnlyLookup = false;
-
     // Lookup by email OR username (case-insensitive on the identifier we stored)
     let admin: AuthAdmin | null = null;
     try {
@@ -76,7 +74,6 @@ export async function POST(req: NextRequest) {
         throw lookupError;
       }
 
-      usingLegacyEmailOnlyLookup = true;
       logger.warn("Login fallback to legacy email-only lookup", { identifier: id });
 
       const legacyFound = await prisma.adminUser.findFirst({
@@ -98,69 +95,6 @@ export async function POST(req: NextRequest) {
             username: null,
           }
         : null;
-    }
-
-    // Auto-bootstrap: if there are NO admin users in DB at all and the caller
-    // provided the default bootstrap credentials, create the initial admin.
-    // This makes first-deploy on a fresh DB just work without a separate seed step.
-    if (!admin) {
-      const totalAdmins = await prisma.adminUser.count();
-      if (totalAdmins === 0) {
-        const bootstrapUser = (process.env.ADMIN_USERNAME || "abud").toLowerCase();
-        const bootstrapEmail = (process.env.ADMIN_EMAIL || "abud@abud.fun").toLowerCase();
-        const bootstrapPassword = process.env.ADMIN_PASSWORD || "abud";
-        if ((id === bootstrapUser || id === bootstrapEmail) && password === bootstrapPassword) {
-          const hashed = await bcrypt.hash(bootstrapPassword, 12);
-          if (usingLegacyEmailOnlyLookup) {
-            const created = await prisma.adminUser.create({
-              data: {
-                email: bootstrapEmail,
-                password: hashed,
-                name: "Abud",
-              },
-              select: {
-                id: true,
-                email: true,
-                password: true,
-                name: true,
-              },
-            });
-
-            admin = {
-              id: created.id,
-              email: created.email,
-              password: created.password,
-              name: created.name,
-              username: null,
-            };
-          } else {
-            const created = await prisma.adminUser.create({
-              data: {
-                username: bootstrapUser,
-                email: bootstrapEmail,
-                password: hashed,
-                name: "Abud",
-              },
-              select: {
-                id: true,
-                email: true,
-                password: true,
-                name: true,
-                username: true,
-              },
-            });
-
-            admin = {
-              id: created.id,
-              email: created.email,
-              password: created.password,
-              name: created.name,
-              username: created.username,
-            };
-          }
-          logger.authSuccess(`bootstrap:${bootstrapUser}`);
-        }
-      }
     }
 
     if (!admin) {

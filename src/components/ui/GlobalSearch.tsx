@@ -17,7 +17,7 @@ interface SearchItem {
 /* ── Static catalog (pages only) ── */
 const CATALOG: SearchItem[] = [
   { id: "pg1", title: "الخدمات",     desc: "تطوير وذكاء اصطناعي وأتمتة",          href: "/services",  category: "page" },
-  { id: "pg2", title: "أعمالي",      desc: "مشاريع GitHub وسابقة الأعمال",        href: "/portfolio", category: "page" },
+  { id: "pg2", title: "أعمالي",      desc: "روابط مباشرة للتطبيقات وسابقة الأعمال", href: "/portfolio", category: "page" },
   { id: "pg3", title: "المدونة",     desc: "مقالات تقنية متخصصة",                 href: "/blog",      category: "page" },
   { id: "pg4", title: "المصادر",     desc: "أدوات ومصادر مجانية",                 href: "/resources", category: "page" },
   { id: "pg5", title: "تواصل معاي",  desc: "تحدث معاي مباشرةً",                   href: "/contact",   category: "page" },
@@ -32,7 +32,7 @@ const CAT_META = {
 
 const QUICK_LINKS: SearchItem[] = [
   { id: "q1", title: "استعراض الخدمات",  href: "/services",  category: "page" },
-  { id: "q2", title: "أعمالي على GitHub", href: "/portfolio", category: "page" },
+  { id: "q2", title: "أعمالي (تطبيقات)", href: "/portfolio", category: "page" },
   { id: "q3", title: "قراءة المدونة",     href: "/blog",      category: "page" },
   { id: "q4", title: "تواصل معاي",        href: "/contact",   category: "page" },
 ];

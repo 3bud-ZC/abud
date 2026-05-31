@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await verifySession(req);
+  if (!session) return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
+
   const settings = await prisma.siteSetting.findMany();
   const map: Record<string, string> = {};
   for (const s of settings) map[s.key] = s.value;

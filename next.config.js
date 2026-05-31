@@ -2,8 +2,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  // Railway - NO Static Generation at all
-  generateBuildId: async () => 'build',
   staticPageGenerationTimeout: 60,
   onDemandEntries: {
     maxInactiveAge: 60 * 60 * 1000,
@@ -94,6 +92,22 @@ const nextConfig = {
           {
             key: "X-Content-Type-Options",
             value: "nosniff",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://api.github.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
           },
         ],
       },

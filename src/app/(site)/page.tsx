@@ -2,8 +2,7 @@
 import { SEED_POSTS } from "@/data/blog-seed";
 import HomePageClient, { type HomeBlogPost } from "./HomePageClient";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 async function loadLatestPosts(limit = 3): Promise<HomeBlogPost[]> {
   let dbPosts: HomeBlogPost[] = [];

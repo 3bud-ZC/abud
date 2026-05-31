@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { verifySession, deleteSession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import { logger } from "@/lib/logger";
+import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "@/lib/password-policy";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
@@ -25,8 +26,8 @@ export async function POST(req: NextRequest) {
     if (!currentPassword || !newPassword) {
       return NextResponse.json({ error: "كلمة المرور الحالية والجديدة مطلوبتان" }, { status: 400 });
     }
-    if (newPassword.length < 4) {
-      return NextResponse.json({ error: "كلمة المرور الجديدة قصيرة جداً (على الأقل 4 حروف)" }, { status: 400 });
+    if (!isStrongPassword(newPassword)) {
+      return NextResponse.json({ error: PASSWORD_POLICY_MESSAGE }, { status: 400 });
     }
 
     const admin = await prisma.adminUser.findUnique({ where: { id: session.userId } });

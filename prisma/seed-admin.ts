@@ -2,10 +2,10 @@
  * Idempotent admin seed.
  * Creates (or upserts) the default admin user used for the dashboard at /admin.
  *
- * Defaults:
- *   username: abud
- *   email:    abud@abud.fun
- *   password: abud   (override with ADMIN_PASSWORD env var)
+ * Required env vars:
+ *   ADMIN_USERNAME
+ *   ADMIN_EMAIL
+ *   ADMIN_PASSWORD
  *
  * Run with:
  *   npx tsx prisma/seed-admin.ts
@@ -13,14 +13,22 @@
  */
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "../src/lib/password-policy";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const username = process.env.ADMIN_USERNAME || "abud";
-  const email = process.env.ADMIN_EMAIL || "abud@abud.fun";
-  const password = process.env.ADMIN_PASSWORD || "abud";
+  const username = process.env.ADMIN_USERNAME;
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
   const name = process.env.ADMIN_NAME || "Abud";
+
+  if (!username || !email || !password) {
+    throw new Error("Missing required env vars: ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD");
+  }
+  if (!isStrongPassword(password)) {
+    throw new Error(PASSWORD_POLICY_MESSAGE);
+  }
 
   const hashed = await hash(password, 12);
 
