@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Settings, Save, KeyRound, User } from "lucide-react";
+import { Settings, Save, KeyRound, User, Upload } from "lucide-react";
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "@/lib/password-policy";
 
 const settingFields = [
@@ -16,6 +16,8 @@ const settingFields = [
   { key: "social_github", label: "GitHub", placeholder: "https://github.com/...", dir: "ltr" },
   { key: "social_linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/...", dir: "ltr" },
   { key: "social_instagram", label: "Instagram", placeholder: "https://instagram.com/...", dir: "ltr" },
+  { key: "about_profile_image", label: "صورة صفحة من أنا (URL)", placeholder: "/uploads/your-image.jpg", dir: "ltr" },
+  { key: "about_profile_image_position", label: "مكان الصورة (object-position)", placeholder: "58% 65%", dir: "ltr" },
 ];
 
 interface AdminInfo {
@@ -38,6 +40,7 @@ export default function AdminSettingsPage() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -67,6 +70,24 @@ export default function AdminSettingsPage() {
       toast.success("تم حفظ الإعدادات");
     } catch { toast.error("فشل الحفظ"); }
     finally { setSaving(false); }
+  }
+
+  async function handleAboutImageUpload(file: File) {
+    setUploadingImage(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      form.append("context", "image");
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || "upload_failed");
+      setValues((v) => ({ ...v, about_profile_image: data.url }));
+      toast.success("تم رفع الصورة بنجاح");
+    } catch {
+      toast.error("فشل رفع الصورة");
+    } finally {
+      setUploadingImage(false);
+    }
   }
 
   async function handleChangePassword() {
@@ -122,6 +143,29 @@ export default function AdminSettingsPage() {
         </div>
 
         <div className="card-base p-5 space-y-4">
+          <div>
+            <label className="block text-sm text-[#a0a0b8] mb-1">رفع صورة من أنا</label>
+            <div className="flex items-center gap-3">
+              <label className="btn-outline text-sm cursor-pointer inline-flex items-center gap-2">
+                <Upload className="w-4 h-4" />
+                {uploadingImage ? "جاري الرفع..." : "اختيار صورة ورفعها"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  disabled={uploadingImage}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) void handleAboutImageUpload(file);
+                  }}
+                />
+              </label>
+              {values.about_profile_image && (
+                <span className="text-xs text-[#8080a0] truncate" dir="ltr">{values.about_profile_image}</span>
+              )}
+            </div>
+          </div>
+
           {settingFields.map(({ key, label, placeholder, dir }) => (
             <div key={key}>
               <label className="block text-sm text-[#a0a0b8] mb-1">{label}</label>

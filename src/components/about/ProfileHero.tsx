@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Github, Linkedin, Twitter, Send, Mail, Download, MapPin, Zap } from "lucide-react";
+import { Github, Linkedin, Twitter, Send, Mail, Download, MapPin, Zap, Instagram } from "lucide-react";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
 
-const SOCIALS = [
+const DEFAULT_SOCIALS = [
   { icon: Github,   label: "GitHub",   href: "https://github.com/3bud-ZC",      accent: "#c084fc" },
   { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/abud",     accent: "#67e8f9" },
   { icon: Twitter,  label: "X",        href: "https://x.com/abud",               accent: "#a78bfa" },
@@ -17,6 +17,32 @@ const SOCIALS = [
 export default function ProfileHero() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
+  const [profileImage, setProfileImage] = useState("/avatar.jpeg");
+  const [profileImagePosition, setProfileImagePosition] = useState("58% 65%");
+  const [socials, setSocials] = useState(DEFAULT_SOCIALS);
+
+  useEffect(() => {
+    async function loadPublicSettings() {
+      try {
+        const res = await fetch("/api/public/settings");
+        if (!res.ok) return;
+        const data = await res.json();
+        const s = data.settings || {};
+        if (s.about_profile_image) setProfileImage(s.about_profile_image);
+        if (s.about_profile_image_position) setProfileImagePosition(s.about_profile_image_position);
+        setSocials([
+          { icon: Github, label: "GitHub", href: s.social_github || "https://github.com/3bud-ZC", accent: "#c084fc" },
+          { icon: Linkedin, label: "LinkedIn", href: s.social_linkedin || "https://linkedin.com/in/abud", accent: "#67e8f9" },
+          { icon: Instagram, label: "Instagram", href: s.social_instagram || "", accent: "#f472b6" },
+          { icon: Twitter, label: "X", href: s.social_twitter || "", accent: "#a78bfa" },
+          { icon: Mail, label: "Email", href: s.site_email ? `mailto:${s.site_email}` : "mailto:hello@abud.fun", accent: "#f0abfc" },
+        ]);
+      } catch {
+        // keep defaults
+      }
+    }
+    loadPublicSettings();
+  }, []);
 
   // 3D tilt
   const mx = useMotionValue(0);
@@ -129,7 +155,7 @@ export default function ProfileHero() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="flex flex-wrap gap-2 justify-center lg:justify-end"
         >
-          {SOCIALS.map((s, i) => {
+          {socials.filter((s) => s.href).map((s, i) => {
             const Icon = s.icon;
             return (
               <motion.a
@@ -267,7 +293,7 @@ export default function ProfileHero() {
                   {!imgError ? (
                     <>
                       <Image
-                        src="/avatar.jpeg"
+                        src={profileImage}
                         alt="Abud"
                         fill
                         sizes="160px"
@@ -276,7 +302,7 @@ export default function ProfileHero() {
                         onError={() => setImgError(true)}
                         className="object-cover"
                         style={{
-                          objectPosition: "58% 65%",
+                          objectPosition: profileImagePosition,
                           transform: "scale(1.05) translateX(-3px)",
                         }}
                       />

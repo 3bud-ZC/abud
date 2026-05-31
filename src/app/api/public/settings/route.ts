@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 const ALLOWED_PUBLIC_KEYS = [
+  "about_profile_image",
+  "about_profile_image_position",
   "site_email",
   "site_phone",
   "whatsapp_number",
