@@ -4,7 +4,7 @@ module.exports = {
       name: "abud-platform",
       script: "node_modules/.bin/next",
       args: "start",
-      cwd: "/home/abdullah/abud-platform",
+      cwd: "/var/www/abud-platform",
       instances: 1,
       autorestart: true,
       watch: false,
@@ -21,9 +21,9 @@ module.exports = {
       },
       
       // Logging configuration
-      error_file: "/home/abdullah/.pm2/logs/abud-platform-error.log",
-      out_file: "/home/abdullah/.pm2/logs/abud-platform-out.log",
-      log_file: "/home/abdullah/.pm2/logs/abud-platform.log",
+      error_file: "/var/www/abud-platform/logs/error.log",
+      out_file: "/var/www/abud-platform/logs/out.log",
+      log_file: "/var/www/abud-platform/logs/combined.log",
       time: true,
       merge_logs: true,
       log_date_format: "YYYY-MM-DD HH:mm:ss Z",

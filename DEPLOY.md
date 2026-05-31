@@ -1,5 +1,17 @@
 # ABUD Platform — VPS Deployment Guide
 
+## Server Information
+- **VPS IP**: 161.35.54.6
+- **SSH User**: root
+- **OS**: Ubuntu
+- **Web Server**: Nginx
+- **Process Manager**: PM2
+- **Database**: PostgreSQL (local)
+- **Default Path**: /var/www/abud-platform
+- **Domain**: abud-platform.abud.fun
+
+---
+
 ## Prerequisites
 - Ubuntu 22.04 VPS (1GB+ RAM recommended)
 - A domain name pointed to your VPS IP (A record)
@@ -10,9 +22,9 @@
 ## Quick Deploy (Automated)
 
 ```bash
-ssh root@YOUR_VPS_IP
-git clone YOUR_REPO_URL /tmp/abud-setup
-cd /tmp/abud-setup
+ssh root@161.35.54.6
+git clone https://github.com/3bud-ZC/abud.git /var/www/abud-platform
+cd /var/www/abud-platform
 bash deploy.sh
 ```
 
@@ -43,7 +55,7 @@ pm2 startup systemd -u root --hp /root
 ### 2. Clone & Configure
 
 ```bash
-git clone YOUR_REPO_URL /var/www/abud-platform
+git clone https://github.com/3bud-ZC/abud.git /var/www/abud-platform
 cd /var/www/abud-platform
 cp .env.example .env
 nano .env
@@ -100,7 +112,7 @@ pm2 list
 
 ```bash
 # Copy and configure Nginx
-sed 's/yourdomain.com/YOUR_DOMAIN/g' /var/www/abud-platform/nginx.conf \
+sed 's/yourdomain.com/abud-platform.abud.fun/g' /var/www/abud-platform/nginx.conf \
   > /etc/nginx/sites-available/abud-platform
 
 ln -s /etc/nginx/sites-available/abud-platform /etc/nginx/sites-enabled/
@@ -111,9 +123,9 @@ nginx -t && systemctl reload nginx
 ### 7. SSL with Let's Encrypt
 
 ```bash
-certbot --nginx -d yourdomain.com -d www.yourdomain.com \
+certbot --nginx -d abud-platform.abud.fun \
   --non-interactive --agree-tos \
-  --email admin@yourdomain.com \
+  --email admin@abud.fun \
   --redirect
 ```
 
@@ -180,22 +192,20 @@ pm2 restart abud-platform
 
 | URL | Description |
 |-----|-------------|
-| `https://yourdomain.com` | Homepage |
-| `https://yourdomain.com/store` | Digital Products Store |
-| `https://yourdomain.com/services` | Services |
-| `https://yourdomain.com/blog` | Blog |
-| `https://yourdomain.com/portfolio` | Portfolio / Projects |
-| `https://yourdomain.com/faq` | FAQ |
-| `https://yourdomain.com/about` | About |
-| `https://yourdomain.com/contact` | Contact |
-| `https://yourdomain.com/admin` | Admin Dashboard |
-| `https://yourdomain.com/sitemap.xml` | Sitemap |
+| `https://abud-platform.abud.fun` | Homepage |
+| `https://abud-platform.abud.fun/services` | Services |
+| `https://abud-platform.abud.fun/blog` | Blog |
+| `https://abud-platform.abud.fun/portfolio` | Portfolio / Projects |
+| `https://abud-platform.abud.fun/about` | About |
+| `https://abud-platform.abud.fun/contact` | Contact |
+| `https://abud-platform.abud.fun/admin` | Admin Dashboard |
+| `https://abud-platform.abud.fun/sitemap.xml` | Sitemap |
 
 ---
 
 ## Admin Dashboard
 
-Go to `https://yourdomain.com/admin` and log in with the credentials set in `.env`.
+Go to `https://abud-platform.abud.fun/admin` and log in with the credentials set in `.env`.
 
 ### Admin Pages
 - **Orders** — View and manage all orders
