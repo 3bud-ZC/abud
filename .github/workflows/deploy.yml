@@ -46,7 +46,7 @@ jobs:
             git pull origin main
 
             echo ">>> [3/6] تثبيت الـ dependencies..."
-            npm ci --omit=dev
+            npm ci
 
             echo ">>> [4/6] توليد Prisma Client..."
             npx prisma generate
