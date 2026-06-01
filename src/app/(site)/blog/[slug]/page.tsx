@@ -341,9 +341,17 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 <BookOpen className="w-8 h-8 mx-auto mb-3" style={{ color: "#c084fc", filter: "drop-shadow(0 0 12px rgba(168,85,247,0.7))" }} />
                 <p className="text-white font-semibold mb-1">أعجبك هذا المقال؟</p>
                 <p className="text-[#9090b0] text-sm mb-5">تصفح المزيد من مساحتي الكتابية</p>
-                <Link href="/blog" className="btn-primary btn-glow inline-flex">
-                  جميع المقالات
-                </Link>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <Link href="/blog" className="btn-primary btn-glow inline-flex">
+                    جميع المقالات
+                  </Link>
+                  <Link href="/services" className="btn-outline inline-flex text-sm px-4 py-2.5">
+                    استعرض الخدمات
+                  </Link>
+                  <Link href="/contact" className="btn-outline inline-flex text-sm px-4 py-2.5">
+                    تواصل معي
+                  </Link>
+                </div>
               </div>
             </HolographicCard>
           </div>

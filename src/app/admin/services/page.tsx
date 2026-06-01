@@ -5,6 +5,12 @@ import toast from "react-hot-toast";
 import { Briefcase, Plus, Pencil, Trash2, X, Save, ArrowDownUp } from "lucide-react";
 import { generateSlug } from "@/lib/utils";
 import { SERVICE_CATEGORIES, normalizeServiceCategory } from "@/lib/service-categories";
+import {
+  THEMED_ICONS,
+  getThemedIconPreset,
+  normalizeThemedIconKey,
+  resolveServiceIconKey,
+} from "@/lib/themed-icons";
 
 interface Service {
   id: string;
@@ -28,7 +34,7 @@ const emptyForm = {
   description: "",
   longDesc: "",
   useCase: "consulting",
-  icon: "",
+  icon: "sparkles",
   priceType: "request",
   price: "",
   ctaLabel: "",
@@ -74,7 +80,7 @@ export default function AdminServicesPage() {
       description: s.description || "",
       longDesc: s.longDesc || "",
       useCase: normalizeServiceCategory(s.useCase),
-      icon: s.icon || "",
+      icon: resolveServiceIconKey(s.icon, s.useCase),
       priceType: s.priceType || "request",
       price: s.price ? String(s.price) : "",
       ctaLabel: s.ctaLabel || "",
@@ -100,7 +106,7 @@ export default function AdminServicesPage() {
         description: form.description.trim(),
         longDesc: form.longDesc.trim() || null,
         useCase: normalizeServiceCategory(form.useCase),
-        icon: form.icon.trim() || null,
+        icon: normalizeThemedIconKey(form.icon, resolveServiceIconKey(null, form.useCase)),
         priceType: form.priceType,
         price: form.price.trim() ? parseFloat(form.price) : null,
         ctaLabel: form.ctaLabel.trim() || null,
@@ -165,6 +171,9 @@ export default function AdminServicesPage() {
     free: "مجاني",
   };
 
+  const activeIconPreset = getThemedIconPreset(form.icon, resolveServiceIconKey(null, form.useCase));
+  const ActiveServiceIcon = activeIconPreset.icon;
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -203,9 +212,16 @@ export default function AdminServicesPage() {
             {services.map((s) => (
               <div key={s.id} className="flex items-center justify-between px-5 py-3 hover:bg-[#0d0d18] transition-colors">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-purple-600/15 flex items-center justify-center text-xl">
-                    {s.icon || "⚡"}
-                  </div>
+                  {(() => {
+                    const iconPreset = getThemedIconPreset(resolveServiceIconKey(s.icon, s.useCase));
+                    const ServiceIcon = iconPreset.icon;
+
+                    return (
+                      <div className="w-10 h-10 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center">
+                        <ServiceIcon className="w-5 h-5" style={{ color: iconPreset.color }} />
+                      </div>
+                    );
+                  })()}
                   <div className="min-w-0">
                     <div className="text-white text-sm font-medium truncate">{s.title}</div>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -304,14 +320,31 @@ export default function AdminServicesPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-[#a0a0b8] mb-1">الأيقونة (Emoji)</label>
-                  <input
-                    type="text"
-                    value={form.icon}
-                    onChange={(e) => setField("icon", e.target.value)}
-                    placeholder="⚡"
-                    className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm outline-none"
-                  />
+                  <label className="block text-sm text-[#a0a0b8] mb-1">أيقونة الخدمة (ثيم الموقع)</label>
+                  <div className="rounded-xl border border-[#1a1a2e] bg-[#0d0d14] p-2">
+                    <div className="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto">
+                      {THEMED_ICONS.map((preset) => {
+                        const Icon = preset.icon;
+                        const active = form.icon === preset.key;
+
+                        return (
+                          <button
+                            key={preset.key}
+                            type="button"
+                            onClick={() => setField("icon", preset.key)}
+                            className={`rounded-lg px-2 py-1.5 text-xs inline-flex items-center gap-1.5 border transition-colors ${
+                              active
+                                ? "border-purple-500/50 bg-purple-600/20 text-white"
+                                : "border-[#25253a] bg-[#121222] text-[#a0a0b8] hover:border-purple-500/25 hover:text-white"
+                            }`}
+                          >
+                            <Icon className="w-3.5 h-3.5" style={{ color: preset.color }} />
+                            <span>{preset.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm text-[#a0a0b8] mb-1">ترتيب الظهور</label>
@@ -323,6 +356,16 @@ export default function AdminServicesPage() {
                     placeholder="1"
                     className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm outline-none"
                   />
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-[#1a1a2e] bg-[#0d0d14] p-3">
+                <span className="text-xs text-[#80809d] block mb-2">معاينة الأيقونة</span>
+                <div className="inline-flex items-center gap-2 text-sm text-white">
+                  <span className="w-9 h-9 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center">
+                    <ActiveServiceIcon className="w-4 h-4" style={{ color: activeIconPreset.color }} />
+                  </span>
+                  <span>{activeIconPreset.label}</span>
                 </div>
               </div>
 

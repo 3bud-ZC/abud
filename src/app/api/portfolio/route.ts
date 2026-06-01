@@ -4,6 +4,18 @@ import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
 
+function safeParseArray(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value !== "string") return [];
+
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET() {
   const projects = await prisma.portfolioProject.findMany({
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
@@ -11,12 +23,8 @@ export async function GET() {
   return NextResponse.json({
     projects: projects.map((project) => ({
       ...project,
-      tags:
-        typeof project.tags === "string" ? JSON.parse(project.tags) : project.tags,
-      links:
-        typeof project.links === "string"
-          ? JSON.parse(project.links)
-          : project.links,
+      tags: safeParseArray(project.tags),
+      links: safeParseArray(project.links),
     })),
   });
 }
@@ -36,6 +44,7 @@ export async function POST(req: NextRequest) {
     },
   });
   revalidatePath("/portfolio");
+  revalidatePath(`/portfolio/${slug}`);
   revalidatePath("/");
   return NextResponse.json({ project }, { status: 201 });
 }

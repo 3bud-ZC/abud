@@ -23,6 +23,12 @@ interface LongDesc {
   results?: string[];
 }
 
+interface NormalizedProjectLink {
+  url: string;
+  label: string;
+  type: "github" | "live" | "demo" | "other";
+}
+
 interface Project {
   id: string;
   title: string;
@@ -31,7 +37,7 @@ interface Project {
   longDesc?: string;
   thumbnail?: string;
   tags: string | string[];
-  links: string | string[];
+  links: unknown;
   featured: boolean;
   status: string;
 }
@@ -55,6 +61,65 @@ function CategoryBadge({ category }: { category?: string }) {
   );
 }
 
+function normalizeProjectLinks(raw: unknown): NormalizedProjectLink[] {
+  if (!Array.isArray(raw)) {
+    if (typeof raw !== "string") return [];
+    try {
+      return normalizeProjectLinks(JSON.parse(raw));
+    } catch {
+      return [];
+    }
+  }
+
+  return raw.reduce<NormalizedProjectLink[]>((acc, item) => {
+    if (typeof item === "string") {
+      const url = item.trim();
+      if (!url) return acc;
+
+      if (/github\.com/i.test(url)) {
+        acc.push({ url, label: "GitHub", type: "github" });
+      } else {
+        acc.push({ url, label: "زيارة المشروع", type: "live" });
+      }
+      return acc;
+    }
+
+    if (item && typeof item === "object") {
+      const link = item as Record<string, unknown>;
+      const url = String(link.url || "").trim();
+      if (!url) return acc;
+
+      const guessedType =
+        String(link.type || "").toLowerCase() ||
+        (/github\.com/i.test(url) ? "github" : "live");
+
+      const type: NormalizedProjectLink["type"] =
+        guessedType === "github"
+          ? "github"
+          : guessedType === "live"
+            ? "live"
+            : guessedType === "demo"
+              ? "demo"
+              : "other";
+
+      acc.push({
+        url,
+        label:
+          typeof link.label === "string" && link.label.trim()
+            ? link.label.trim()
+            : type === "github"
+              ? "GitHub"
+              : type === "demo"
+                ? "Demo"
+                : "زيارة المشروع",
+        type,
+      });
+    }
+
+    return acc;
+  }, []);
+}
+
 export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = await prisma.portfolioProject.findUnique({
     where: { slug: params.slug },
@@ -63,7 +128,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
   if (!project) notFound();
 
   const tags: string[] = Array.isArray(project.tags) ? project.tags : (() => { try { return JSON.parse(project.tags as string); } catch { return []; } })();
-  const links: string[] = Array.isArray(project.links) ? project.links : (() => { try { return JSON.parse(project.links as string); } catch { return []; } })();
+  const links = normalizeProjectLinks(project.links);
   let ld: LongDesc = {};
   if (project.longDesc) {
     try { ld = JSON.parse(project.longDesc); } catch { ld = {}; }
@@ -128,13 +193,13 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
 
           {links.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {links.map((url, i) => {
-                const isGithub = url.toLowerCase().includes("github.com");
+              {links.map((link, i) => {
+                const isGithub = link.type === "github";
                 return (
-                  <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+                  <a key={`${link.url}-${i}`} href={link.url} target="_blank" rel="noopener noreferrer"
                     className="btn-primary inline-flex gap-2 text-sm py-2.5 px-5">
                     {isGithub ? <Github className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
-                    {isGithub ? "View on GitHub" : "View Project"}
+                    {link.label || (isGithub ? "GitHub" : "زيارة المشروع")}
                   </a>
                 );
               })}

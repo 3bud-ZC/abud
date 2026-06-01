@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { trackContactFormStart, trackContactQualificationField, trackContactFormSubmit } from "@/lib/analytics";
+import { trackContactFormStart, trackContactFormSubmit } from "@/lib/analytics";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { MessageSquare, Mail, Send, Zap, MessageCircle } from "lucide-react";
+import { MessageSquare, Mail, Send, Zap, MessageCircle, Briefcase, BookOpen, Folder } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
@@ -288,6 +289,31 @@ export default function ContactPage() {
                     <MessageCircle className="w-4 h-4" />
                     ابدأ محادثة
                   </a>
+                </div>
+              </HolographicCard>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.28}>
+              <HolographicCard duration={6} delay={0.8}>
+                <div className="p-6">
+                  <h3 className="text-white font-semibold text-sm mb-3">روابط سريعة</h3>
+                  <p className="text-[#9090b0] text-xs mb-4 leading-relaxed">
+                    قبل إرسال الرسالة، يمكنك الاطلاع على الخدمات والأعمال والمقالات لمعرفة ما يناسب مشروعك.
+                  </p>
+                  <div className="space-y-2">
+                    <Link href="/services" className="btn-outline w-full justify-between text-xs inline-flex items-center">
+                      <span className="inline-flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5" />الخدمات</span>
+                      <span>→</span>
+                    </Link>
+                    <Link href="/portfolio" className="btn-outline w-full justify-between text-xs inline-flex items-center">
+                      <span className="inline-flex items-center gap-1.5"><Folder className="w-3.5 h-3.5" />أعمالي</span>
+                      <span>→</span>
+                    </Link>
+                    <Link href="/blog" className="btn-outline w-full justify-between text-xs inline-flex items-center">
+                      <span className="inline-flex items-center gap-1.5"><BookOpen className="w-3.5 h-3.5" />المدونة</span>
+                      <span>→</span>
+                    </Link>
+                  </div>
                 </div>
               </HolographicCard>
             </AnimatedSection>

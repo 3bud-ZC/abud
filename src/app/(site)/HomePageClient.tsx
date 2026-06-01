@@ -22,6 +22,7 @@ import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
 import HolographicCard from "@/components/effects/HolographicCard";
 import AnimatedBar from "@/components/effects/AnimatedBar";
+import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
 
 const stats = [
   { value: "+50", label: "مشروع منجز", percent: 92 },
@@ -50,13 +51,14 @@ interface ApiService {
   title: string;
   description: string;
   icon?: string | null;
+  useCase?: string | null;
   featured?: boolean;
 }
 interface HomeServiceCard {
   id: string;
   title: string;
   desc: string;
-  icon: string;
+  iconKey: string;
   color: string;
 }
 
@@ -120,12 +122,12 @@ const SERVICE_COLORS = [
 ];
 
 const DEFAULT_HOME_SERVICES: HomeServiceCard[] = [
-  { id: "default-1", icon: "🌐", title: "تطوير مواقع", desc: "مواقع ومنصات ويب متكاملة وعالية الأداء", color: SERVICE_COLORS[0] },
-  { id: "default-2", icon: "🤖", title: "أدوات الذكاء الاصطناعي", desc: "أدوات ذكية مبنية بالنماذج اللغوية الحديثة", color: SERVICE_COLORS[1] },
-  { id: "default-3", icon: "⚙️", title: "أتمتة الأنظمة", desc: "سير عمل آلية توفر الوقت وترفع الإنتاجية", color: SERVICE_COLORS[2] },
-  { id: "default-4", icon: "📨", title: "بوتات تيليجرام", desc: "بوتات احترافية تتحكم في كل ما تحتاجه", color: SERVICE_COLORS[3] },
-  { id: "default-5", icon: "🛡️", title: "الأمن السيبراني", desc: "حلول حماية وتحليل أمني للأنظمة الرقمية", color: SERVICE_COLORS[4] },
-  { id: "default-6", icon: "💡", title: "استشارات تقنية", desc: "توجيه تقني استراتيجي للأفكار والمشاريع", color: SERVICE_COLORS[5] },
+  { id: "default-1", iconKey: "globe", title: "تطوير مواقع", desc: "مواقع ومنصات ويب متكاملة وعالية الأداء", color: SERVICE_COLORS[0] },
+  { id: "default-2", iconKey: "brain", title: "أدوات الذكاء الاصطناعي", desc: "أدوات ذكية مبنية بالنماذج اللغوية الحديثة", color: SERVICE_COLORS[1] },
+  { id: "default-3", iconKey: "workflow", title: "أتمتة الأنظمة", desc: "سير عمل آلية توفر الوقت وترفع الإنتاجية", color: SERVICE_COLORS[2] },
+  { id: "default-4", iconKey: "bot", title: "بوتات تيليجرام", desc: "بوتات احترافية تتحكم في كل ما تحتاجه", color: SERVICE_COLORS[3] },
+  { id: "default-5", iconKey: "shield", title: "الأمن السيبراني", desc: "حلول حماية وتحليل أمني للأنظمة الرقمية", color: SERVICE_COLORS[4] },
+  { id: "default-6", iconKey: "lightbulb", title: "استشارات تقنية", desc: "توجيه تقني استراتيجي للأفكار والمشاريع", color: SERVICE_COLORS[5] },
 ];
 
 export default function HomePageClient(props: Props) {
@@ -199,7 +201,7 @@ export default function HomePageClient(props: Props) {
             id: service.id,
             title: service.title,
             desc: service.description,
-            icon: service.icon?.trim() || "✨",
+            iconKey: resolveServiceIconKey(service.icon, service.useCase),
             color: SERVICE_COLORS[index % SERVICE_COLORS.length],
           }))
         );
@@ -447,19 +449,24 @@ export default function HomePageClient(props: Props) {
             viewport={{ once: true, margin: "-100px" }}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
           >
-            {homeServices.map(({ id, icon, title, desc, color }, i) => (
-              <m.div key={id} variants={item}>
-                <HolographicCard duration={5 + (i % 3)} delay={i * 0.4} className="h-full">
-                  <div className="p-6 group relative h-full">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-5 shadow-[0_0_22px_rgba(147,51,234,0.45)] group-hover:shadow-[0_0_38px_rgba(168,85,247,0.7)] transition-shadow duration-500`}>
-                      <span className="text-xl">{icon}</span>
+            {homeServices.map(({ id, iconKey, title, desc, color }, i) => {
+              const iconPreset = getThemedIconPreset(iconKey);
+              const ServiceIcon = iconPreset.icon;
+
+              return (
+                <m.div key={id} variants={item}>
+                  <HolographicCard duration={5 + (i % 3)} delay={i * 0.4} className="h-full">
+                    <div className="p-6 group relative h-full">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-5 shadow-[0_0_22px_rgba(147,51,234,0.45)] group-hover:shadow-[0_0_38px_rgba(168,85,247,0.7)] transition-shadow duration-500`}>
+                        <ServiceIcon className="w-5 h-5" style={{ color: iconPreset.color }} />
+                      </div>
+                      <h3 className="text-white font-bold text-base mb-2 group-hover:text-purple-200 transition-colors leading-snug">{title}</h3>
+                      <p style={{ color: "#9090b0", fontSize: "0.85rem", lineHeight: 1.7 }}>{desc}</p>
                     </div>
-                    <h3 className="text-white font-bold text-base mb-2 group-hover:text-purple-200 transition-colors leading-snug">{title}</h3>
-                    <p style={{ color: "#9090b0", fontSize: "0.85rem", lineHeight: 1.7 }}>{desc}</p>
-                  </div>
-                </HolographicCard>
-              </m.div>
-            ))}
+                  </HolographicCard>
+                </m.div>
+              );
+            })}
           </m.div>
 
           <AnimatedSection className="text-center mt-10">

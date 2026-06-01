@@ -4,6 +4,18 @@ import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
 
+function safeParseArray(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value !== "string") return [];
+
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await prisma.portfolioProject.findUnique({ where: { slug } });
@@ -11,12 +23,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   return NextResponse.json({
     project: {
       ...project,
-      tags:
-        typeof project.tags === "string" ? JSON.parse(project.tags) : project.tags,
-      links:
-        typeof project.links === "string"
-          ? JSON.parse(project.links)
-          : project.links,
+      tags: safeParseArray(project.tags),
+      links: safeParseArray(project.links),
     },
   });
 }

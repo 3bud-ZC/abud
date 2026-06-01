@@ -10,9 +10,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/blog`,    lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
     { url: `${BASE}/services`,lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/portfolio`,lastModified: new Date(),changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${BASE}/resources`,lastModified: new Date(),changeFrequency: "weekly",  priority: 0.78 },
     { url: `${BASE}/faq`,     lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/about`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/quote`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.55 },
+    { url: `${BASE}/privacy-policy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
+    { url: `${BASE}/terms`,   lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
   ];
 
   let blogRoutes: MetadataRoute.Sitemap = [];
@@ -36,6 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     const projects = await prisma.portfolioProject.findMany({
+      where: { status: "published" },
       select: { slug: true, updatedAt: true },
       orderBy: { updatedAt: "desc" },
     });

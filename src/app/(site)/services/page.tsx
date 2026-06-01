@@ -9,6 +9,7 @@ import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
 import { SERVICE_CATEGORIES, normalizeServiceCategory } from "@/lib/service-categories";
+import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
 
 interface ServiceRow {
   id: string;
@@ -63,7 +64,61 @@ export default function ServicesPage() {
     void loadServices();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const syncCategoryFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const categoryFromQuery = params.get("category");
+      const categoryFromHash = window.location.hash.replace("#", "").trim();
+      const raw = (categoryFromQuery || categoryFromHash || "").toLowerCase();
+
+      if (!raw) return;
+
+      const direct = SERVICE_CATEGORIES.find((item) => item.id === raw && item.id !== "all");
+      if (direct) {
+        setActiveCategory(direct.id);
+        return;
+      }
+
+      const normalized = normalizeServiceCategory(raw);
+      if (normalized) setActiveCategory(normalized);
+    };
+
+    syncCategoryFromUrl();
+    window.addEventListener("hashchange", syncCategoryFromUrl);
+    return () => window.removeEventListener("hashchange", syncCategoryFromUrl);
+  }, []);
+
   const featuredServices = useMemo(() => services.filter((s) => s.featured).slice(0, 6), [services]);
+
+  const servicesSchema = useMemo(() => {
+    const base = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "خدمات ABUD",
+      description: "خدمات تطوير مواقع، ذكاء اصطناعي، أتمتة، SEO، وأمن سيبراني.",
+      itemListElement: services.slice(0, 20).map((service, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Service",
+          name: service.title,
+          description: service.description,
+          serviceType: normalizeServiceCategory(service.useCase),
+          provider: {
+            "@type": "Person",
+            name: "ABUD",
+            url: `${base}/about`,
+          },
+          areaServed: "Worldwide",
+          url: `${base}/services#${normalizeServiceCategory(service.useCase)}`,
+        },
+      })),
+    };
+  }, [services]);
 
   const filteredServices = useMemo(() => {
     if (activeCategory === "all") return services;
@@ -74,6 +129,10 @@ export default function ServicesPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+      />
       <FloatingOrbs count={6} />
       <ScanLine duration={12} />
 
@@ -109,7 +168,13 @@ export default function ServicesPage() {
               return (
                 <motion.button
                   key={id}
-                  onClick={() => setActiveCategory(id)}
+                  onClick={() => {
+                    setActiveCategory(id);
+
+                    if (typeof window === "undefined") return;
+                    const nextUrl = id === "all" ? "/services" : `/services#${id}`;
+                    window.history.replaceState(null, "", nextUrl);
+                  }}
                   whileTap={{ scale: 0.97 }}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px]"
                   style={
@@ -240,6 +305,9 @@ function StatCard({ title, value }: { title: string; value: string }) {
 }
 
 function FeaturedServiceCard({ service }: { service: ServiceRow }) {
+  const iconPreset = getThemedIconPreset(resolveServiceIconKey(service.icon, service.useCase));
+  const ServiceIcon = iconPreset.icon;
+
   return (
     <Link href="/contact" className="block h-full group">
       <div
@@ -253,7 +321,12 @@ function FeaturedServiceCard({ service }: { service: ServiceRow }) {
           <Star className="w-2.5 h-2.5" fill="currentColor" />
           مميز
         </div>
-        <h3 className="text-white font-black text-lg mb-2">{service.title}</h3>
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <h3 className="text-white font-black text-lg leading-tight">{service.title}</h3>
+          <span className="w-8 h-8 rounded-lg bg-purple-600/15 border border-purple-600/20 flex items-center justify-center flex-shrink-0">
+            <ServiceIcon className="w-4 h-4" style={{ color: iconPreset.color }} />
+          </span>
+        </div>
         <p className="text-[#a3a3c3] text-sm leading-relaxed mb-4">{service.description}</p>
         <div className="flex items-center justify-between pt-3 border-t border-white/10">
           <span className="text-xs text-purple-300">{formatPrice(service)}</span>
@@ -270,6 +343,8 @@ function FeaturedServiceCard({ service }: { service: ServiceRow }) {
 function ServiceCard({ service }: { service: ServiceRow }) {
   const points = extractPoints(service.longDesc);
   const category = SERVICE_CATEGORIES.find((c) => c.id === normalizeServiceCategory(service.useCase));
+  const iconPreset = getThemedIconPreset(resolveServiceIconKey(service.icon, service.useCase));
+  const ServiceIcon = iconPreset.icon;
 
   return (
     <div
@@ -281,15 +356,9 @@ function ServiceCard({ service }: { service: ServiceRow }) {
     >
       <div className="flex items-center justify-between gap-3 mb-3">
         <h3 className="text-white font-bold text-base">{service.title}</h3>
-        {service.icon ? (
-          <span className="w-9 h-9 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center text-lg">
-            {service.icon}
-          </span>
-        ) : (
-          <span className="w-9 h-9 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center text-lg">
-            ✨
-          </span>
-        )}
+        <span className="w-9 h-9 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center">
+          <ServiceIcon className="w-[18px] h-[18px]" style={{ color: iconPreset.color }} />
+        </span>
       </div>
 
       <p className="text-[#9898ba] text-sm leading-relaxed mb-4">{service.description}</p>

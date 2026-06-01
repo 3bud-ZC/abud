@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Bot, ExternalLink, Github, Layers, Sparkles, User } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, User } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
+import { getThemedIconPreset } from "@/lib/themed-icons";
 
 export interface AppCard {
   slug: string;
@@ -19,14 +20,6 @@ export interface AppCard {
   iconType: string;
   badge: string;
 }
-
-const ICON_MAP: Record<string, React.ElementType> = {
-  sparkles: Sparkles,
-  layers: Layers,
-  github: Github,
-  bot: Bot,
-  user: User,
-};
 
 const GITHUB_URL = "https://github.com/3bud-ZC";
 
@@ -86,13 +79,15 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
         <div className="relative z-10 max-w-6xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {apps.map((app) => {
-              const Icon = ICON_MAP[app.iconType] ?? Layers;
+              const iconPreset = getThemedIconPreset(app.iconType, "layers");
+              const Icon = iconPreset.icon;
+
               return (
                 <motion.div key={app.slug} variants={cardAnim} initial="hidden" animate="show">
                   <HolographicCard duration={6}>
                     <div className="p-6 md:p-7 h-full flex flex-col">
-                      <div className="flex items-start justify-between gap-3 mb-4">
-                        <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex items-center justify-between gap-3 mb-4">
+                        <div className="flex items-center gap-3 min-w-0">
                           <div
                             className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
                             style={{

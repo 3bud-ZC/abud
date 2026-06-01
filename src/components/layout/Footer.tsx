@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { m } from "framer-motion";
-import { Zap, Heart, Github, Twitter, Instagram, Youtube, Send } from "lucide-react";
+import { Zap, Heart, Github, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 
 const footerLinks = {
   pages: [
@@ -14,7 +14,7 @@ const footerLinks = {
     { href: "/contact", label: "تواصل" },
   ],
   services: [
-    { href: "/services#web", label: "تطوير مواقع" },
+    { href: "/services#development", label: "تطوير مواقع" },
     { href: "/services#ai", label: "أدوات الذكاء الاصطناعي" },
     { href: "/services#automation", label: "الأتمتة والأنظمة" },
     { href: "/services#bots", label: "بوتات تيليجرام" },
@@ -28,7 +28,7 @@ export default function Footer() {
     { icon: Github, href: "https://github.com/3bud-ZC", label: "GitHub" },
     { icon: Twitter, href: "", label: "تويتر / X" },
     { icon: Instagram, href: "", label: "إنستغرام" },
-    { icon: Youtube, href: "", label: "يوتيوب" },
+    { icon: Linkedin, href: "", label: "LinkedIn" },
     { icon: Send, href: "", label: "تيليجرام" },
   ]);
 
@@ -43,7 +43,7 @@ export default function Footer() {
           { icon: Github, href: s.social_github || "https://github.com/3bud-ZC", label: "GitHub" },
           { icon: Twitter, href: s.social_twitter || "", label: "تويتر / X" },
           { icon: Instagram, href: s.social_instagram || "", label: "إنستغرام" },
-          { icon: Youtube, href: s.social_linkedin || "", label: "LinkedIn" },
+          { icon: Linkedin, href: s.social_linkedin || "", label: "LinkedIn" },
           { icon: Send, href: s.whatsapp_number ? `https://wa.me/${String(s.whatsapp_number).replace(/\D/g, "")}` : "", label: "واتساب" },
         ]);
       } catch {

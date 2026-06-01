@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Save, Upload, FileText, ExternalLink } from "lucide-react";
+import { Save, FileText, ExternalLink } from "lucide-react";
 
 type FieldDef = { key: string; label: string; placeholder?: string; dir?: "ltr" | "rtl" };
 
@@ -34,7 +34,6 @@ const aboutFields: FieldDef[] = [
   { key: "about_location", label: "الموقع", placeholder: "القاهرة، مصر • UTC+3" },
   { key: "about_experience", label: "الخبرة", placeholder: "5+ سنوات خبرة" },
   { key: "about_cv_url", label: "رابط الـCV", placeholder: "/cv-abud.pdf", dir: "ltr" },
-  { key: "about_profile_image", label: "رابط صورة من أنا", placeholder: "/uploads/profile.jpg", dir: "ltr" },
   { key: "about_profile_image_position", label: "مكان الصورة (object-position)", placeholder: "58% 65%", dir: "ltr" },
 ];
 
@@ -81,7 +80,6 @@ export default function AdminContentPage() {
   const [values, setValues] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -119,24 +117,6 @@ export default function AdminContentPage() {
     }
   }
 
-  async function handleUpload(file: File) {
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      form.append("context", "image");
-      const res = await fetch("/api/upload", { method: "POST", body: form });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error("upload_failed");
-      setValues((v) => ({ ...v, about_profile_image: data.url }));
-      toast.success("تم رفع صورة من أنا");
-    } catch {
-      toast.error("فشل رفع الصورة");
-    } finally {
-      setUploading(false);
-    }
-  }
-
   if (loading) {
     return (
       <div className="p-8 text-center">
@@ -158,27 +138,14 @@ export default function AdminContentPage() {
         </button>
       </div>
 
-      <div className="card-base p-5 space-y-3">
-        <h2 className="text-white font-bold text-sm">رفع صورة "من أنا"</h2>
-        <div className="flex flex-wrap items-center gap-3">
-          <label className="btn-outline text-sm cursor-pointer inline-flex items-center gap-2">
-            <Upload className="w-4 h-4" />
-            {uploading ? "جاري الرفع..." : "اختيار صورة ورفعها"}
-            <input
-              type="file"
-              accept="image/*"
-              disabled={uploading}
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) void handleUpload(file);
-              }}
-            />
-          </label>
-          {values.about_profile_image && (
-            <span className="text-xs text-[#9090b0]" dir="ltr">{values.about_profile_image}</span>
-          )}
-        </div>
+      <div className="card-base p-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-[#9090b0]">
+          رفع وقص صورة "من أنا" أصبح من صفحة الإعدادات لضمان نتيجة أفضل وعدم تكرار الخيارات.
+        </p>
+        <Link href="/admin/settings" className="btn-outline text-sm inline-flex items-center gap-2">
+          <ExternalLink className="w-4 h-4" />
+          فتح صفحة الإعدادات
+        </Link>
       </div>
 
       <Section title="الرئيسية (Home)" fields={homeFields} values={values} onChange={updateValue} />
