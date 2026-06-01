@@ -8,7 +8,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   const { slug } = await params;
   const project = await prisma.portfolioProject.findUnique({ where: { slug } });
   if (!project) return NextResponse.json({ error: "المشروع غير موجود" }, { status: 404 });
-  return NextResponse.json({ project });
+  return NextResponse.json({
+    project: {
+      ...project,
+      tags:
+        typeof project.tags === "string" ? JSON.parse(project.tags) : project.tags,
+      links:
+        typeof project.links === "string"
+          ? JSON.parse(project.links)
+          : project.links,
+    },
+  });
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -18,7 +28,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
   const { slug } = await params;
   const body = await req.json();
   if (body.title && !body.slug) body.slug = generateSlug(body.title);
-  const project = await prisma.portfolioProject.update({ where: { slug }, data: body });
+  const project = await prisma.portfolioProject.update({
+    where: { slug },
+    data: {
+      ...body,
+      tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags,
+      links: Array.isArray(body.links) ? JSON.stringify(body.links) : body.links,
+    },
+  });
   revalidatePath("/portfolio");
   revalidatePath(`/portfolio/${slug}`);
   if (body.slug && body.slug !== slug) revalidatePath(`/portfolio/${body.slug}`);

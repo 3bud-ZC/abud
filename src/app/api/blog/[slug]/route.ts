@@ -11,7 +11,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     include: { category: { select: { id: true, name: true, slug: true } } },
   });
   if (!post) return NextResponse.json({ error: "المقال غير موجود" }, { status: 404 });
-  return NextResponse.json({ post });
+  return NextResponse.json({
+    post: {
+      ...post,
+      tags:
+        typeof post.tags === "string" ? JSON.parse(post.tags) : post.tags,
+    },
+  });
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -23,7 +29,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
   if (body.title && !body.slug) body.slug = generateSlug(body.title);
   if (body.status === "published" && !body.publishedAt) body.publishedAt = new Date();
 
-  const post = await prisma.blogPost.update({ where: { slug }, data: body });
+  const post = await prisma.blogPost.update({
+    where: { slug },
+    data: {
+      ...body,
+      tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags,
+    },
+  });
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
   if (body.slug && body.slug !== slug) revalidatePath(`/blog/${body.slug}`);

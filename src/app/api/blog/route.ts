@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       coverImage: true,
       readTime: true,
       publishedAt: true,
+      createdAt: true,
       featured: true,
       status: true,
       tags: true,
@@ -31,7 +32,13 @@ export async function GET(req: NextRequest) {
     orderBy: [{ featured: "desc" }, { publishedAt: "desc" }],
   });
 
-  return NextResponse.json({ posts });
+  return NextResponse.json({
+    posts: posts.map((post) => ({
+      ...post,
+      tags:
+        typeof post.tags === "string" ? JSON.parse(post.tags) : post.tags,
+    })),
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -44,7 +51,7 @@ export async function POST(req: NextRequest) {
     data: {
       ...body,
       slug,
-      tags: body.tags || [],
+      tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : body.tags || "[]",
       publishedAt: body.status === "published" ? new Date() : null,
     },
   });

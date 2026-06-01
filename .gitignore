@@ -45,3 +45,12 @@ next-env.d.ts
 # Claude Code local files
 .claude/
 
+# Deployment temp files
+abud-platform.tgz
+env_correct.sh
+fix_db.sh
+fix_db2.sh
+fix_pkg.py
+nginx_abud.conf
+reset_db.sql
+
