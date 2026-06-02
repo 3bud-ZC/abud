@@ -498,23 +498,47 @@ export default function AdminPortfolioPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-end">
-                  <div>
-                    <label className="block text-sm text-[#a0a0b8] mb-1">لون التمييز (Accent)</label>
+                <div>
+                  <label className="block text-sm text-[#a0a0b8] mb-1">لون التمييز (Accent)</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={normalizeAccent(form.accent)}
+                      onChange={(e) => setField("accent", e.target.value)}
+                      className="w-12 h-10 rounded-xl border border-[#1a1a2e] bg-transparent cursor-pointer"
+                    />
                     <input
                       type="text"
                       dir="ltr"
                       value={form.accent}
                       onChange={(e) => setField("accent", e.target.value)}
                       placeholder="#a855f7"
-                      className="w-full bg-[#090914] border border-[#1a1a2e] rounded-xl px-3 py-2 text-white text-sm outline-none"
+                      className="flex-1 bg-[#090914] border border-[#1a1a2e] rounded-xl px-3 py-2 text-white text-sm outline-none"
+                    />
+                    <span
+                      className="w-10 h-10 rounded-xl border border-white/10 flex-shrink-0"
+                      style={{ background: normalizeAccent(form.accent) }}
+                      title="معاينة اللون"
                     />
                   </div>
-                  <span
-                    className="w-11 h-11 rounded-xl border border-white/10"
-                    style={{ background: normalizeAccent(form.accent) }}
-                    title="معاينة اللون"
-                  />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {[
+                      "#ef4444", "#f97316", "#f59e0b", "#84cc16",
+                      "#22c55e", "#10b981", "#14b8a6", "#06b6d4",
+                      "#0ea5e9", "#3b82f6", "#6366f1", "#8b5cf6",
+                      "#a855f7", "#d946ef", "#ec4899", "#f43f5e",
+                      "#c084fc", "#67e8f9", "#38bdf8", "#34d399",
+                    ].map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setField("accent", c)}
+                        className="w-6 h-6 rounded-full border border-white/10 hover:scale-110 transition-transform"
+                        style={{ background: c }}
+                        title={c}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 <div>
