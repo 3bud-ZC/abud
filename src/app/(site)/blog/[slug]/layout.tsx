@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-
-const BASE = "https://abud.fun";
+import { siteUrl } from "@/lib/site-url";
 
 export async function generateMetadata({
   params,
@@ -24,7 +23,7 @@ export async function generateMetadata({
       openGraph: {
         title: post.title,
         description: post.excerpt || `اقرأ مقال: ${post.title}`,
-        url: `${BASE}/blog/${post.slug}`,
+        url: siteUrl(`/blog/${post.slug}`),
         type: "article",
         publishedTime: post.publishedAt?.toISOString(),
         authors: ["ABUD"],
@@ -38,7 +37,7 @@ export async function generateMetadata({
         description: post.excerpt || `اقرأ مقال: ${post.title}`,
         images: post.coverImage ? [post.coverImage] : undefined,
       },
-      alternates: { canonical: `${BASE}/blog/${post.slug}` },
+      alternates: { canonical: siteUrl(`/blog/${post.slug}`) },
     };
   } catch {
     return { title: "ABUD Blog" };

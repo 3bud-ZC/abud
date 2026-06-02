@@ -6,6 +6,7 @@ const REQUIRED_ENV_VARS = [
 
 const OPTIONAL_ENV_VARS = [
   "NEXT_PUBLIC_SITE_URL",
+  "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION",
   "UPLOAD_DIR",
   "AI_MODEL_API_KEY",
   "AI_MODEL_PROVIDER",
@@ -38,6 +39,9 @@ export function validateEnv(): EnvValidationResult {
   if (process.env.NODE_ENV === "production") {
     if (!process.env.NEXT_PUBLIC_SITE_URL) {
       warnings.push("NEXT_PUBLIC_SITE_URL is not set in production");
+    }
+    if (!process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION) {
+      warnings.push("NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION is not set in production");
     }
   }
 

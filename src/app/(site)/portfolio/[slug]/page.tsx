@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { siteUrl } from "@/lib/site-url";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -138,9 +139,9 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://abud.fun" },
-      { "@type": "ListItem", position: 2, name: "الأعمال", item: "https://abud.fun/portfolio" },
-      { "@type": "ListItem", position: 3, name: project.title, item: `https://abud.fun/portfolio/${project.slug}` },
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: siteUrl() },
+      { "@type": "ListItem", position: 2, name: "الأعمال", item: siteUrl("/portfolio") },
+      { "@type": "ListItem", position: 3, name: project.title, item: siteUrl(`/portfolio/${project.slug}`) },
     ],
   };
 

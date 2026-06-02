@@ -3,12 +3,13 @@ import { FileText, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "شروط الخدمة | ABUD",
   description: "شروط الخدمة لمنصة ABUD — القواعد والسياسات المنظِّمة لاستخدام الموقع وشراء المنتجات الرقمية.",
-  alternates: { canonical: "https://abud.fun/terms" },
-  openGraph: { url: "https://abud.fun/terms", title: "شروط الخدمة | ABUD" },
+  alternates: { canonical: siteUrl("/terms") },
+  openGraph: { url: siteUrl("/terms"), title: "شروط الخدمة | ABUD" },
 };
 
 export default function TermsPage() {

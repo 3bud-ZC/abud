@@ -91,6 +91,7 @@ SESSION_SECRET="$(openssl rand -base64 32)"
 # Application
 NODE_ENV=production
 NEXT_PUBLIC_SITE_URL="https://${DOMAIN}"
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION="aInpxugIE89WV0r15UaNrsdNe7kGN2t7ODzA8"
 
 # Upload
 UPLOAD_DIR="public/uploads"

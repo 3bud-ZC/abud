@@ -6,20 +6,21 @@ import ScrollProgress from "@/components/effects/ScrollProgress";
 import GlobalBackground from "@/components/effects/GlobalBackground";
 import FloatingContact from "@/components/ui/FloatingContact";
 import CommandPalette from "@/components/ui/CommandPalette";
+import { siteUrl } from "@/lib/site-url";
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://abud.fun/#organization",
+  "@id": siteUrl("/#organization"),
   name: "ABUD",
-  url: "https://abud.fun",
+  url: siteUrl(),
   logo: {
     "@type": "ImageObject",
-    url: "https://abud.fun/logo.svg",
+    url: siteUrl("/logo.svg"),
     width: 512,
     height: 512,
   },
-  image: "https://abud.fun/logo.svg",
+  image: siteUrl("/logo.svg"),
   description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
   email: "abed@abud.fun",
   founder: {

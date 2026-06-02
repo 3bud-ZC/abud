@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { normalizeThemedIconKey } from "@/lib/themed-icons";
 import JsonLd from "@/components/JsonLd";
 import PortfolioPageClient, { type AppCard } from "./PortfolioPageClient";
+import { siteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -23,7 +24,6 @@ function normalizeLinks(raw: unknown): string[] {
 
 export default async function PortfolioPage() {
   let apps: AppCard[] = [];
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
 
   try {
     const projects = await prisma.portfolioProject.findMany({
@@ -77,7 +77,7 @@ export default async function PortfolioPage() {
         name: app.title,
         description: app.desc,
         applicationCategory: app.tagline || "Web Application",
-        url: `${base}/portfolio/${app.slug}`,
+        url: siteUrl(`/portfolio/${app.slug}`),
       },
     })),
   };

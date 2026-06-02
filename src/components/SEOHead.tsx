@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { generateSEOTitle, generateSEODescription } from "@/lib/utils";
+import { siteUrl } from "@/lib/site-url";
 
 interface SEOHeadProps {
   title: string;
@@ -30,9 +31,8 @@ export default function SEOHead({
   currency = "EGP",
   availability = "in_stock"
 }: SEOHeadProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
-  const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
-  const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+  const fullUrl = url ? siteUrl(url) : siteUrl();
+  const fullImageUrl = siteUrl(image);
   
   const seoTitle = generateSEOTitle(title);
   const seoDescription = generateSEODescription(description);

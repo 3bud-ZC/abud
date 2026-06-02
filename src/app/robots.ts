@@ -1,14 +1,15 @@
 import type { MetadataRoute } from "next";
+import { getSiteBaseUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
+  const baseUrl = getSiteBaseUrl();
 
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/api/", "/checkout/success"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

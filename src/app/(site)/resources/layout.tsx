@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "مكتبة المصادر — أدوات مجانية للمطورين والمستقلين",
@@ -7,9 +8,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "مكتبة المصادر | ABUD",
     description: "40+ أداة ومصدر مجاني للمطورين والمستقلين وعشاق الأمن السيبراني",
-    url: "/resources",
+    url: siteUrl("/resources"),
   },
-  alternates: { canonical: "https://abud.fun/resources" },
+  alternates: { canonical: siteUrl("/resources") },
 };
 
 export default function ResourcesLayout({ children }: { children: React.ReactNode }) {

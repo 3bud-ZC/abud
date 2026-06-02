@@ -3,12 +3,13 @@ import { Shield, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "سياسة الخصوصية | ABUD",
   description: "سياسة الخصوصية لمنصة ABUD — كيف نجمع بياناتك ونستخدمها ونحميها.",
-  alternates: { canonical: "https://abud.fun/privacy-policy" },
-  openGraph: { url: "https://abud.fun/privacy-policy", title: "سياسة الخصوصية | ABUD" },
+  alternates: { canonical: siteUrl("/privacy-policy") },
+  openGraph: { url: siteUrl("/privacy-policy"), title: "سياسة الخصوصية | ABUD" },
 };
 
 export default function PrivacyPolicyPage() {

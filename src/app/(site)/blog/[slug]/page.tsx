@@ -13,6 +13,7 @@ import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
 import SocialShare from "@/components/blog/SocialShare";
 import RelatedPosts from "@/components/blog/RelatedPosts";
+import { siteUrl } from "@/lib/site-url";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -162,19 +163,19 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     }
   }
 
-  const postUrl = `https://abud.fun/blog/${post.slug}`;
+  const postUrl = siteUrl(`/blog/${post.slug}`);
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt ?? "",
-    image: post.coverImage ?? "https://abud.fun/opengraph-image",
+    image: post.coverImage ?? siteUrl("/opengraph-image"),
     datePublished: new Date(post.publishedAt ?? post.createdAt).toISOString(),
     dateModified: new Date(post.updatedAt).toISOString(),
-    author: { "@type": "Person", name: "ABUD", url: "https://abud.fun/about" },
-    publisher: { "@type": "Organization", name: "ABUD", url: "https://abud.fun" },
-    url: `https://abud.fun/blog/${post.slug}`,
+    author: { "@type": "Person", name: "ABUD", url: siteUrl("/about") },
+    publisher: { "@type": "Organization", name: "ABUD", url: siteUrl() },
+    url: siteUrl(`/blog/${post.slug}`),
     keywords: tags.join(", "),
     articleSection: post.category?.name ?? "تقنية",
     wordCount: post.content.split(/\s+/).length,
@@ -185,9 +186,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "الرئيسية", item: "https://abud.fun" },
-      { "@type": "ListItem", position: 2, name: "المدونة", item: "https://abud.fun/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://abud.fun/blog/${post.slug}` },
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: siteUrl() },
+      { "@type": "ListItem", position: 2, name: "المدونة", item: siteUrl("/blog") },
+      { "@type": "ListItem", position: 3, name: post.title, item: siteUrl(`/blog/${post.slug}`) },
     ],
   };
 

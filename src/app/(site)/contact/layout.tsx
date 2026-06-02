@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "تواصل معي — ABUD",
@@ -7,9 +8,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "تواصل مع ABUD",
     description: "تحدث معي حول مشروعك — أرد على الرسائل خلال 24 ساعة",
-    url: "/contact",
+    url: siteUrl("/contact"),
   },
-  alternates: { canonical: "https://abud.fun/contact" },
+  alternates: { canonical: siteUrl("/contact") },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

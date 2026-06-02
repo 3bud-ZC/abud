@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "خدماتي — تطوير مواقع وذكاء اصطناعي وأمن سيبراني",
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "خدماتي | ABUD",
     description: "تطوير مواقع احترافية، بوتات تيليغرام، تطبيقات AI، وأنظمة أتمتة متكاملة",
-    url: "/services",
+    url: siteUrl("/services"),
   },
-  alternates: { canonical: "https://abud.fun/services" },
+  alternates: { canonical: siteUrl("/services") },
 };
 
 export default function ServicesLayout({ children }: { children: React.ReactNode }) {

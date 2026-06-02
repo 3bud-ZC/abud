@@ -1,22 +1,21 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { SEED_POSTS } from "@/data/blog-seed";
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
+import { siteUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE,              lastModified: new Date(), changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${BASE}/blog`,    lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
-    { url: `${BASE}/services`,lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${BASE}/portfolio`,lastModified: new Date(),changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${BASE}/resources`,lastModified: new Date(),changeFrequency: "weekly",  priority: 0.78 },
-    { url: `${BASE}/faq`,     lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/about`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${BASE}/quote`,   lastModified: new Date(), changeFrequency: "monthly", priority: 0.55 },
-    { url: `${BASE}/privacy-policy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
-    { url: `${BASE}/terms`,   lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
+    { url: siteUrl(),              lastModified: new Date(), changeFrequency: "weekly",  priority: 1.0 },
+    { url: siteUrl("/blog"),       lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
+    { url: siteUrl("/services"),   lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
+    { url: siteUrl("/portfolio"),  lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
+    { url: siteUrl("/resources"),   lastModified: new Date(), changeFrequency: "weekly",  priority: 0.78 },
+    { url: siteUrl("/faq"),        lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: siteUrl("/about"),      lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: siteUrl("/contact"),    lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: siteUrl("/quote"),      lastModified: new Date(), changeFrequency: "monthly", priority: 0.55 },
+    { url: siteUrl("/privacy-policy"), lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
+    { url: siteUrl("/terms"),      lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
   ];
 
   let blogRoutes: MetadataRoute.Sitemap = [];
@@ -32,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     blogRoutes = posts.map(p => {
       dbBlogSlugs.add(p.slug);
       return {
-        url: `${BASE}/blog/${p.slug}`,
+        url: siteUrl(`/blog/${p.slug}`),
         lastModified: p.updatedAt,
         changeFrequency: "weekly" as const,
         priority: 0.8,
@@ -45,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       orderBy: { updatedAt: "desc" },
     });
     portfolioRoutes = projects.map(p => ({
-      url: `${BASE}/portfolio/${p.slug}`,
+      url: siteUrl(`/portfolio/${p.slug}`),
       lastModified: p.updatedAt,
       changeFrequency: "monthly" as const,
       priority: 0.65,
@@ -58,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const seedRoutes: MetadataRoute.Sitemap = SEED_POSTS
     .filter((s) => !dbBlogSlugs.has(s.slug))
     .map((s) => ({
-      url: `${BASE}/blog/${s.slug}`,
+      url: siteUrl(`/blog/${s.slug}`),
       lastModified: new Date(s.publishedAt),
       changeFrequency: "weekly" as const,
       priority: 0.75,

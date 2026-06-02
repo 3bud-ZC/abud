@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import MotionProvider from "@/components/providers/MotionProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { validateEnvOrThrow } from "@/lib/env-validator";
+import { getSiteBaseUrl } from "@/lib/site-url";
 
 if (process.env.SKIP_ENV_VALIDATION !== "1") {
   validateEnvOrThrow();
@@ -54,11 +55,11 @@ export const metadata: Metadata = {
     "full stack developer", "Next.js", "React", "productivity tools", "online income",
     "تطوير مواقع", "ذكاء اصطناعي", "منتجات رقمية", "أتمتة", "أمن سيبراني", "فريلانس",
   ],
-  authors: [{ name: "ABUD", url: "https://abud.fun" }],
+  authors: [{ name: "ABUD", url: getSiteBaseUrl() }],
   creator: "ABUD",
   publisher: "ABUD",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun"),
-  alternates: { canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun" },
+  metadataBase: new URL(getSiteBaseUrl()),
+  alternates: { canonical: getSiteBaseUrl() },
   icons: {
     icon: [
       { url: "/favicon.ico",       sizes: "any",      type: "image/x-icon" },
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ar_EG",
     alternateLocale: "en_US",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun",
+    url: getSiteBaseUrl(),
     siteName: "ABUD",
     title: "ABUD | AI Tools, Digital Solutions & Automation",
     description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
@@ -106,7 +107,12 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning className={`${tajawal.variable} ${ibmPlexArabic.variable}`}>
       <head>
-        <meta name="google-site-verification" content="" />
+        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() ? (
+          <meta
+            name="google-site-verification"
+            content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION.trim()}
+          />
+        ) : null}
         {/* iOS PWA-like behaviour */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

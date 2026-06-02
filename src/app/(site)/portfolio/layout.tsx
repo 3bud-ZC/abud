@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "أعمالي — تطبيقات وروابط مباشرة",
@@ -17,9 +18,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Portfolio | ABUD",
     description: "روابط مباشرة لأحدث التطبيقات اللي بنيتها.",
-    url: "/portfolio",
+    url: siteUrl("/portfolio"),
   },
-  alternates: { canonical: "https://abud.fun/portfolio" },
+  alternates: { canonical: siteUrl("/portfolio") },
 };
 
 export default function PortfolioLayout({ children }: { children: React.ReactNode }) {

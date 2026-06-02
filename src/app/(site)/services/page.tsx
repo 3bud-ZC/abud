@@ -10,6 +10,7 @@ import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
 import { SERVICE_CATEGORIES, normalizeServiceCategory } from "@/lib/service-categories";
 import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
+import { siteUrl } from "@/lib/site-url";
 
 interface ServiceRow {
   id: string;
@@ -93,8 +94,6 @@ export default function ServicesPage() {
   const featuredServices = useMemo(() => services.filter((s) => s.featured).slice(0, 6), [services]);
 
   const servicesSchema = useMemo(() => {
-    const base = process.env.NEXT_PUBLIC_SITE_URL || "https://abud.fun";
-
     return {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -111,10 +110,10 @@ export default function ServicesPage() {
           provider: {
             "@type": "Person",
             name: "ABUD",
-            url: `${base}/about`,
+            url: siteUrl("/about"),
           },
           areaServed: "Worldwide",
-          url: `${base}/services#${normalizeServiceCategory(service.useCase)}`,
+          url: siteUrl(`/services#${normalizeServiceCategory(service.useCase)}`),
         },
       })),
     };
@@ -400,4 +399,3 @@ function ServiceCard({ service }: { service: ServiceRow }) {
     </div>
   );
 }
-

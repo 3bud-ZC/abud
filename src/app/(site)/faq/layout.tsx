@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "الأسئلة الشائعة — ABUD",
@@ -7,9 +8,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "الأسئلة الشائعة | ABUD",
     description: "كل ما تريد معرفته قبل التعامل معي — أسئلة وأجوبة واضحة",
-    url: "/faq",
+    url: siteUrl("/faq"),
   },
-  alternates: { canonical: "https://abud.fun/faq" },
+  alternates: { canonical: siteUrl("/faq") },
 };
 
 export default function FaqLayout({ children }: { children: React.ReactNode }) {
