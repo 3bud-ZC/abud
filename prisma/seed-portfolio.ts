@@ -245,6 +245,80 @@ const apps = [
       ],
     }),
   },
+  {
+    title: "PromptForge AI",
+    slug: "promptforge-ai",
+    description:
+      "منصة لهندسة الـ Prompts وتوليد نماذج أسئلة ذكية للـ LLMs مع واجهة عربية سهلة الاستخدام.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["AI", "LLM", "Prompt Engineering", "Next.js", "TypeScript"]),
+    links: JSON.stringify([
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/promptforge" },
+    ]),
+    featured: true,
+    order: 7,
+    longDesc: JSON.stringify({
+      tagline: "منصة هندسة Prompts للذكاء الاصطناعي",
+      accent: "#8b5cf6",
+      iconType: "brain",
+      badge: "GitHub",
+      category: "AI",
+      overview:
+        "PromptForge أداة تساعد المطورين والمستخدمين العرب في صياغة prompts فعّالة للنماذج اللغوية الكبيرة.",
+      problem:
+        "صياغة الـ Prompts بشكل فعّال يحتاج خبرة تقنية — كثير من المستخدمين يواجهون صعوبة في الحصول على نتائج دقيقة من LLMs.",
+      features: [
+        "واجهة عربية لصياغة وتخزين الـ Prompts",
+        "قوالب جاهزة لاستخدامات مختلفة",
+        "تحسين Prompts تلقائيًا",
+        "مشاركة النماذج مع الفريق",
+        "ربط مع LLMs شائعة",
+      ],
+      tech: ["Next.js", "TypeScript", "Tailwind CSS", "AI APIs", "Node.js"],
+      results: [
+        "تسريع عملية صياغة الـ Prompts",
+        "قاعدة نماذج عربية قابلة للتوسع",
+      ],
+    }),
+  },
+  {
+    title: "Iqtida Platform",
+    slug: "iqtida-platform",
+    description:
+      "منصة تعليمية لاقتداء النماذج والقدوات في المجالات المختلفة مع محتوى منظم ومصنف.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Education", "Arabic", "Next.js", "Platform", "Community"]),
+    links: JSON.stringify([
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/iqtida" },
+    ]),
+    featured: false,
+    order: 8,
+    longDesc: JSON.stringify({
+      tagline: "منصة القدوة والاقتداء",
+      accent: "#10b981",
+      iconType: "lightbulb",
+      badge: "GitHub",
+      category: "Education",
+      overview:
+        "Iqtida منصة تجمع نماذج ملهمة وقدوات في مجالات متنوعة، تسهل على المستخدمين الاستفادة من تجارب الآخرين.",
+      problem:
+        "صعوبة الوصول لنماذج حقيقية ملهمة في بيئة رقمية منظمة — المحتوى المبعثر يصعب التعلم الموجه.",
+      features: [
+        "عرض نماذج وقدوات مصنفة",
+        "محتوى عربي موجه للمجتمع",
+        "تصنيفات سهلة للتصفح",
+        "واجهة بسيطة وواضحة",
+        "قابلية توسعة لإضافة مجالات جديدة",
+      ],
+      tech: ["Next.js", "TypeScript", "Tailwind CSS", "Node.js"],
+      results: [
+        "تجميع نماذج ملهمة في منصة واحدة",
+        "تسهيل الوصول للمحتوى التعليمي الموجه",
+      ],
+    }),
+  },
 ];
 
 async function main() {
