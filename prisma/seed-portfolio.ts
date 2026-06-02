@@ -1,5 +1,5 @@
 /**
- * Seeds the 5 real portfolio apps into PortfolioProject table.
+ * Seeds the main GitHub portfolio apps into PortfolioProject table.
  * Run:  npx tsx prisma/seed-portfolio.ts
  * Safe to re-run — upsert by slug (existing rows updated, not duplicated).
  *
@@ -14,137 +14,40 @@ const prisma = new PrismaClient();
 
 const apps = [
   {
-    title: "Iqtidaa (اقتداء)",
-    slug: "iqtidaa",
+    title: "3BUD ERP System",
+    slug: "3bud-erp-system",
     description:
-      "تطبيق ويب جاهز للتجربة. ركّزت فيه على تجربة استخدام سريعة + لوحة إدارة + قاعدة بيانات محلية على الـ VPS.",
-    tags: JSON.stringify(["Web App", "Next.js", "Islamic", "VPS"]),
-    links: JSON.stringify(["https://iqtidaa.abud.fun/"]),
+      "نظام ERP عملي لإدارة المبيعات والطلبات والعملاء والمخزون، مع لوحة تحكم وتقارير تشغيلية واضحة.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["ERP", "Business", "Next.js", "Dashboard", "PostgreSQL"]),
+    links: JSON.stringify([
+      { label: "الموقع المباشر", type: "live", url: "https://erp.abud.fun/" },
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/ERP" },
+    ]),
     featured: true,
     order: 1,
     longDesc: JSON.stringify({
-      tagline: "منصة إسلامية — ممارسات وأذكار ومحتوى",
-      accent: "#67e8f9",
-      iconType: "sparkles",
-      badge: "Live",
-      category: "Tool",
-      overview:
-        "تطبيق ويب إسلامي يوفر ممارسات يومية وأذكار ومحتوى تعليمي، مع لوحة إدارة كاملة وقاعدة بيانات محلية على الـ VPS.",
-      problem:
-        "الحاجة إلى منصة إسلامية خفيفة وسريعة يمكن نشرها على VPS بتكلفة منخفضة وأداء عالٍ.",
-      features: [
-        "واجهة مستخدم سريعة وجذابة",
-        "لوحة إدارة لإدارة المحتوى بالكامل",
-        "قاعدة بيانات محلية على الـ VPS",
-        "أذكار وممارسات يومية",
-        "تصميم متجاوب لجميع الأجهزة",
-      ],
-      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind CSS", "PM2"],
-      results: [
-        "نشر ناجح على VPS بأداء عالٍ",
-        "تجربة مستخدم سلسة وسريعة",
-      ],
-    }),
-  },
-  {
-    title: "PromptForge AI",
-    slug: "promptforge-ai",
-    description:
-      "واجهة بسيطة لتجهيز البرومبتس وإدارة الأدوات. مناسب كقاعدة لأتمتة شغل الـ AI.",
-    tags: JSON.stringify(["AI", "Prompt Engineering", "Next.js", "Tools"]),
-    links: JSON.stringify(["https://promptforge.abud.fun/"]),
-    featured: true,
-    order: 2,
-    longDesc: JSON.stringify({
-      tagline: "Prompt builder + أدوات ذكاء اصطناعي",
-      accent: "#c084fc",
-      iconType: "layers",
-      badge: "Live",
-      category: "AI",
-      overview:
-        "منصة لبناء وإدارة البرومبتس لنماذج الذكاء الاصطناعي المختلفة، مع مكتبة جاهزة وأدوات للأتمتة.",
-      problem:
-        "كتابة برومبتس فعّالة وإدارتها يستغرق وقتاً كبيراً — يحتاج المطورون إلى أداة مركزية لإنشائها وتنظيمها.",
-      features: [
-        "محرر برومبتس متقدم مع معاينة مباشرة",
-        "مكتبة قوالب جاهزة للمهام المختلفة",
-        "دعم متعدد النماذج (GPT, Claude, Gemini)",
-        "تصدير واستيراد البرومبتس",
-        "أدوات مساعدة لتحسين وتقييم البرومبتس",
-      ],
-      tech: ["Next.js", "TypeScript", "OpenAI API", "Tailwind CSS", "Framer Motion"],
-      results: [
-        "توفير وقت بناء البرومبتس بنسبة 70%",
-        "نشر ناجح ومتاح للجميع على الإنترنت",
-      ],
-    }),
-  },
-  {
-    title: "Personal Task Manager Bot",
-    slug: "personal-task-manager-bot",
-    description:
-      "إضافة مهام بالأزرار أو باللغة الطبيعية، تنظيم حسب المشاريع، أولويات، تذكيرات، ملخص يومي، وإحصائيات — شغال 24/7 على VPS بـ Docker.",
-    tags: JSON.stringify(["Telegram Bot", "Python", "Docker", "Automation", "VPS"]),
-    links: JSON.stringify([
-      "https://github.com/3bud-ZC/Personal-Task-Manager-Telegram-Bot",
-    ]),
-    featured: false,
-    order: 3,
-    longDesc: JSON.stringify({
-      tagline: "بوت تيليجرام ذكي لإدارة المهام",
-      accent: "#38bdf8",
-      iconType: "github",
-      badge: "GitHub",
-      category: "Automation",
-      overview:
-        "بوت تيليجرام متكامل لإدارة المهام الشخصية — يعمل 24/7 على VPS بـ Docker مع دعم اللغة الطبيعية.",
-      problem:
-        "إدارة المهام عبر تطبيقات متعددة يشتت التركيز — بوت واحد في تيليجرام يكفي ويكون دائماً في متناول اليد.",
-      features: [
-        "إضافة مهام باللغة الطبيعية أو بالأزرار",
-        "تنظيم حسب المشاريع والأولويات",
-        "تذكيرات وإشعارات مجدولة",
-        "ملخص يومي تلقائي",
-        "إحصائيات وتقارير الإنتاجية",
-        "تشغيل 24/7 على VPS بـ Docker",
-      ],
-      tech: ["Python", "python-telegram-bot", "SQLite", "Docker", "VPS"],
-      results: [
-        "مشروع مفتوح المصدر على GitHub",
-        "يعمل بشكل موثوق على VPS بـ Docker",
-      ],
-    }),
-  },
-  {
-    title: "OG E‑Store",
-    slug: "og-estore",
-    description:
-      "نظام ERP عملي لإدارة المبيعات والطلبات والعملاء والمخزون، مع لوحة تحكم وتقارير — جاهز للتجربة مباشرة.",
-    tags: JSON.stringify(["ERP", "Next.js", "Business", "E-commerce", "TypeScript"]),
-    links: JSON.stringify(["https://erp.abud.fun/"]),
-    featured: true,
-    order: 4,
-    longDesc: JSON.stringify({
-      tagline: "ERP / نظام محاسبة وإدارة متجر",
+      tagline: "ERP عربي لإدارة المتجر والعمليات",
       accent: "#34d399",
-      iconType: "layers",
+      iconType: "shopping-bag",
       badge: "Live",
       category: "Business",
       overview:
-        "نظام ERP متكامل لإدارة المتاجر — يغطي المبيعات والطلبات والعملاء والمخزون مع لوحة تحكم شاملة.",
+        "منصة ERP متكاملة تساعد أصحاب المتاجر على تشغيل المبيعات والمخزون والطلبات من لوحة تحكم واحدة.",
       problem:
-        "أنظمة ERP التقليدية معقدة وغالية — يحتاج أصحاب المتاجر الصغيرة لحل بسيط وفعّال بدون تعقيد.",
+        "كثير من المتاجر الصغيرة تدير العمليات يدويًا أو عبر أدوات منفصلة، مما يسبب أخطاء وتشتت في المتابعة اليومية.",
       features: [
-        "إدارة كاملة للمبيعات والطلبات",
-        "متابعة العملاء وسجل التواصل",
-        "إدارة المخزون والتنبيهات",
-        "لوحة تحكم مع رسوم بيانية وتقارير",
-        "واجهة عربية سهلة الاستخدام",
+        "إدارة الطلبات والمبيعات من شاشة واحدة",
+        "متابعة المخزون والتنبيهات عند النقص",
+        "سجل عملاء وفواتير قابل للتتبع",
+        "تقارير أداء يومية وأسبوعية",
+        "واجهة عربية متجاوبة وسريعة",
       ],
       tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind CSS"],
       results: [
-        "نشر ناجح ومتاح للتجربة المباشرة",
-        "يخدم متاجر متعددة بكفاءة",
+        "تشغيل مباشر على الدومين للإستخدام الفعلي",
+        "تقليل الوقت الضائع في متابعة العمليات اليومية",
       ],
     }),
   },
@@ -152,32 +55,193 @@ const apps = [
     title: "VPS Monitor Bot",
     slug: "vps-monitor-bot",
     description:
-      "بوت تيليجرام لمراقبة موارد الـ VPS والتنبيهات عند ارتفاع الاستهلاك — مع لوحة أوامر بسيطة وتشغيل 24/7.",
-    tags: JSON.stringify(["Telegram Bot", "Python", "DevOps", "Monitoring", "VPS"]),
-    links: JSON.stringify(["https://github.com/3bud-ZC/vps_bot"]),
+      "بوت تيليجرام لمراقبة موارد الـ VPS (CPU / RAM / Disk) وإرسال تنبيهات فورية عند ارتفاع الاستهلاك.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Telegram Bot", "Python", "Monitoring", "DevOps", "VPS"]),
+    links: JSON.stringify([
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/vps_bot" },
+    ]),
     featured: false,
-    order: 5,
+    order: 2,
     longDesc: JSON.stringify({
-      tagline: "بوت مراقبة السيرفر (Telegram)",
+      tagline: "مراقبة سيرفر من تيليجرام مباشرة",
       accent: "#fbbf24",
-      iconType: "github",
+      iconType: "server",
       badge: "GitHub",
       category: "Tool",
       overview:
-        "بوت تيليجرام لمراقبة موارد الـ VPS (CPU، RAM، Disk) مع تنبيهات فورية عند ارتفاع الاستهلاك.",
+        "أداة DevOps خفيفة لمراقبة صحة السيرفرات عن بُعد من خلال بوت تيليجرام بسيط وسريع.",
       problem:
-        "مراقبة السيرفر تتطلب تسجيل الدخول وتشغيل أوامر — بوت تيليجرام يجعلها سهلة من أي مكان.",
+        "المتابعة اليدوية لحالة السيرفر تحتاج دخول مستمر للـ VPS، وهذا غير عملي وقت الأعطال أو عند التنقل.",
       features: [
-        "مراقبة CPU وRAM وDisk في الوقت الفعلي",
-        "تنبيهات فورية عند تجاوز حدود الاستهلاك",
-        "لوحة أوامر تيليجرام بسيطة",
-        "تقارير دورية عن حالة السيرفر",
-        "تشغيل 24/7 مع إعادة تشغيل تلقائية",
+        "قراءة الموارد الحالية في ثواني",
+        "تنبيهات تلقائية عند تجاوز الحدود",
+        "أوامر تيليجرام سهلة وسريعة",
+        "تقارير دورية لحالة الخادم",
+        "تصميم مناسب للتشغيل 24/7",
       ],
       tech: ["Python", "python-telegram-bot", "psutil", "Linux", "VPS"],
       results: [
-        "مشروع مفتوح المصدر على GitHub",
-        "موثوق ويعمل 24/7 على VPS",
+        "تحسين سرعة اكتشاف مشاكل الاستهلاك",
+        "مشروع مفتوح المصدر قابل للتطوير",
+      ],
+    }),
+  },
+  {
+    title: "ABUD Platform",
+    slug: "abud-platform",
+    description:
+      "المنصة الشخصية التي تجمع الواجهة التسويقية، البورتفوليو، المتجر، ولوحة الإدارة في مشروع متكامل واحد.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Next.js", "TypeScript", "Prisma", "Admin Panel", "Full-Stack"]),
+    links: JSON.stringify([
+      { label: "الموقع الرسمي", type: "live", url: "https://abud.fun/" },
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/abud" },
+    ]),
+    featured: true,
+    order: 3,
+    longDesc: JSON.stringify({
+      tagline: "منصة شخصية كاملة مع لوحة تحكم",
+      accent: "#60a5fa",
+      iconType: "globe",
+      badge: "Live",
+      category: "Business",
+      overview:
+        "مشروع Full-Stack واحد يجمع إدارة المحتوى، عرض الأعمال، وصفحات الخدمات، وإدارة البيانات من خلال لوحة Admin.",
+      problem:
+        "الفصل بين الموقع ولوحة الإدارة يزيد التعقيد. المطلوب كان منصة موحدة وسهلة الإدارة والتوسعة.",
+      features: [
+        "واجهة موقع احترافية متعددة الصفحات",
+        "لوحة إدارة متكاملة للمحتوى والمشاريع",
+        "API Routes لإدارة البيانات بشكل آمن",
+        "إمكانية نشر مرنة على VPS/Cloud",
+        "معمارية قابلة للتطوير لمنتجات جديدة",
+      ],
+      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind CSS"],
+      results: [
+        "منصة فعّالة لإدارة الهوية الرقمية والمحتوى",
+        "ربط فعلي بين العرض التسويقي والإدارة اليومية",
+      ],
+    }),
+  },
+  {
+    title: "Mohamy Platform",
+    slug: "mohamy-platform",
+    description:
+      "منصة قانونية رقمية لتقديم واستعراض الخدمات القانونية بشكل منظم مع تجربة استخدام واضحة للعميل.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Legal Tech", "Web App", "Next.js", "Arabic UI", "TypeScript"]),
+    links: JSON.stringify([
+      { label: "GitHub", type: "github", url: "https://github.com/3bud-ZC/Mohamy" },
+    ]),
+    featured: false,
+    order: 4,
+    longDesc: JSON.stringify({
+      tagline: "حل قانوني رقمي بواجهة عربية",
+      accent: "#f97316",
+      iconType: "shield",
+      badge: "GitHub",
+      category: "Business",
+      overview:
+        "منصة تستهدف تنظيم رحلة العميل في الخدمات القانونية بداية من عرض الخدمة وحتى طلب الاستشارة.",
+      problem:
+        "القطاع القانوني غالبًا يفتقد واجهات رقمية واضحة وسهلة، مما يجعل وصول العميل للخدمة أبطأ وأصعب.",
+      features: [
+        "تنظيم الخدمات القانونية في تجربة واحدة",
+        "تصميم RTL واضح ومناسب للمستخدم العربي",
+        "هيكلة مرنة لإضافة خدمات جديدة",
+        "صفحات معلومات وتواصل احترافية",
+        "تهيئة جيدة لمحركات البحث SEO",
+      ],
+      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Tailwind CSS"],
+      results: [
+        "عرض رقمي احترافي للخدمات القانونية",
+        "قاعدة تقنية جاهزة للتوسع مستقبلاً",
+      ],
+    }),
+  },
+  {
+    title: "3BUD Store Telegram Mini App",
+    slug: "3bud-store-telegram-mini-app",
+    description:
+      "تطبيق متجر مصغّر داخل تيليجرام لتصفّح المنتجات وإتمام الطلبات بسرعة من داخل المحادثة.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Telegram Mini App", "E-commerce", "TypeScript", "Bot", "Mobile UX"]),
+    links: JSON.stringify([
+      {
+        label: "GitHub",
+        type: "github",
+        url: "https://github.com/3bud-ZC/3BUD-Store-Telegram-Mini-App",
+      },
+    ]),
+    featured: true,
+    order: 5,
+    longDesc: JSON.stringify({
+      tagline: "تجربة متجر داخل تيليجرام مباشرة",
+      accent: "#22d3ee",
+      iconType: "smartphone",
+      badge: "Telegram",
+      category: "Automation",
+      overview:
+        "تطبيق Mini App مدمج داخل تيليجرام يسهّل رحلة الشراء عبر واجهة خفيفة وسريعة بدون الخروج من التطبيق.",
+      problem:
+        "التحويل إلى متجر خارجي يسبب تسربًا في رحلة المستخدم. الحل كان متجرًا مدمجًا داخل بيئة تيليجرام نفسها.",
+      features: [
+        "واجهة Mini App متوافقة مع تيليجرام",
+        "عرض المنتجات بطريقة سلسة وسريعة",
+        "تحسين تجربة الشراء على الموبايل",
+        "هيكلية جاهزة لربط المدفوعات والطلبات",
+        "قابلية توسعة لإضافة ميزات التجارة",
+      ],
+      tech: ["TypeScript", "Telegram Mini Apps", "Next.js", "Tailwind CSS"],
+      results: [
+        "نموذج عملي لتجربة تجارة داخل تيليجرام",
+        "تجربة استخدام أسرع للمستخدم النهائي",
+      ],
+    }),
+  },
+  {
+    title: "Personal Task Manager Telegram Bot",
+    slug: "personal-task-manager-telegram-bot",
+    description:
+      "بوت لإدارة المهام اليومية بالأوامر أو اللغة الطبيعية مع تذكيرات، أولويات، وتقارير إنتاجية.",
+    thumbnail:
+      "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1600&auto=format&fit=crop&q=80",
+    tags: JSON.stringify(["Telegram Bot", "Productivity", "Python", "Automation", "Docker"]),
+    links: JSON.stringify([
+      {
+        label: "GitHub",
+        type: "github",
+        url: "https://github.com/3bud-ZC/Personal-Task-Manager-Telegram-Bot",
+      },
+    ]),
+    featured: false,
+    order: 6,
+    longDesc: JSON.stringify({
+      tagline: "مساعد مهام شخصي داخل تيليجرام",
+      accent: "#38bdf8",
+      iconType: "bot",
+      badge: "GitHub",
+      category: "Automation",
+      overview:
+        "بوت إنتاجية يومي يساعد في إدارة المهام والمشاريع والتذكيرات بدون الحاجة لتطبيقات إضافية.",
+      problem:
+        "التنقل بين أدوات إدارة المهام المختلفة يسبب فقدان تركيز — وجود المساعد داخل تيليجرام يختصر كل شيء.",
+      features: [
+        "إضافة مهام بالأوامر أو باللغة الطبيعية",
+        "تنظيم المهام حسب المشروع والأولوية",
+        "تذكيرات مجدولة وتنبيهات تلقائية",
+        "ملخص يومي للإنجازات",
+        "تشغيل مستقر 24/7 على VPS",
+      ],
+      tech: ["Python", "python-telegram-bot", "SQLite", "Docker", "VPS"],
+      results: [
+        "تحسين الالتزام اليومي بالمهام",
+        "مشروع مفتوح المصدر قابل للتخصيص",
       ],
     }),
   },
@@ -192,6 +256,7 @@ async function main() {
       update: {
         title: app.title,
         description: app.description,
+        thumbnail: app.thumbnail,
         tags: app.tags,
         links: app.links,
         featured: app.featured,
@@ -203,6 +268,7 @@ async function main() {
         title: app.title,
         slug: app.slug,
         description: app.description,
+        thumbnail: app.thumbnail,
         tags: app.tags,
         links: app.links,
         featured: app.featured,
