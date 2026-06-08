@@ -45,10 +45,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "ABUD | AI Tools, Digital Solutions & Automation",
+    default: "ABUD | مواقع، أنظمة ERP، أدوات AI، وبوتات تيليجرام",
     template: "%s | ABUD",
   },
-  description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
+  description:
+    "موقع عبدالله Ragab، مطوّر Full-Stack متخصص في بناء مواقع احترافية، أنظمة ERP/CRM، بوتات تيليجرام، أدوات AI، وأتمتة الأعمال للشركات والأفراد.",
   keywords: [
     "ABUD", "AI tools", "digital solutions", "automation", "web development", "digital products",
     "online business", "freelancing", "passive income", "cybersecurity", "telegram bots",
@@ -75,8 +76,9 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     url: getSiteBaseUrl(),
     siteName: "ABUD",
-    title: "ABUD | AI Tools, Digital Solutions & Automation",
-    description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
+    title: "ABUD | مواقع، أنظمة ERP، أدوات AI، وبوتات تيليجرام",
+    description:
+      "موقع عبدالله Ragab، مطوّر Full-Stack متخصص في بناء مواقع احترافية، أنظمة ERP/CRM، بوتات تيليجرام، أدوات AI، وأتمتة الأعمال للشركات والأفراد.",
     images: [
       {
         url: "/opengraph-image",
@@ -88,8 +90,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ABUD | AI Tools, Digital Solutions & Automation",
-    description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
+    title: "ABUD | مواقع، أنظمة ERP، أدوات AI، وبوتات تيليجرام",
+    description:
+      "موقع عبدالله Ragab، مطوّر Full-Stack متخصص في بناء مواقع احترافية، أنظمة ERP/CRM، بوتات تيليجرام، أدوات AI، وأتمتة الأعمال للشركات والأفراد.",
     images: ["/opengraph-image"],
   },
   robots: {

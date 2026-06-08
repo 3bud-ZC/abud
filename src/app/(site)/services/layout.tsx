@@ -2,17 +2,22 @@ import type { Metadata } from "next";
 import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
-  title: "خدماتي — تطوير مواقع وذكاء اصطناعي وأمن سيبراني",
-  description: "أقدم خدمات احترافية في تطوير مواقع الويب، بناء بوتات التيليغرام، تطبيقات الذكاء الاصطناعي، الأمن السيبراني، وأنظمة الأتمتة.",
+  title: "خدمات برمجة وتطوير مواقع وأنظمة رقمية | ABUD",
+  description: "خدمات تطوير مواقع، أنظمة ERP/CRM، بوتات تيليجرام، أدوات AI، أتمتة الأعمال، ونشر المشاريع على VPS.",
   keywords: [
-    "تطوير مواقع", "web development", "بوت تيليغرام", "telegram bot",
-    "ذكاء اصطناعي", "AI development", "أمن سيبراني", "cybersecurity",
-    "أتمتة", "automation", "Next.js developer", "freelance developer",
+    "تطوير مواقع",
+    "Web Development",
+    "ERP",
+    "CRM",
+    "بوتات تيليجرام",
+    "AI Automation",
+    "VPS Deployment",
   ],
   openGraph: {
-    title: "خدماتي | ABUD",
-    description: "تطوير مواقع احترافية، بوتات تيليغرام، تطبيقات AI، وأنظمة أتمتة متكاملة",
+    title: "خدمات برمجة وتطوير مواقع وأنظمة رقمية | ABUD",
+    description: "حلول رقمية متكاملة تشمل المواقع والأنظمة والبوتات وأدوات الأتمتة والنشر على VPS.",
     url: siteUrl("/services"),
+    type: "website",
   },
   alternates: { canonical: siteUrl("/services") },
 };

@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { SEED_POSTS } from "@/data/blog-seed";
+import { PRIMARY_SERVICES } from "@/data/services";
 import { siteUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -20,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let blogRoutes: MetadataRoute.Sitemap = [];
   let portfolioRoutes: MetadataRoute.Sitemap = [];
+  let serviceRoutes: MetadataRoute.Sitemap = [];
   const dbBlogSlugs = new Set<string>();
 
   try {
@@ -49,8 +51,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.65,
     }));
+
+    const services = await prisma.service.findMany({
+      where: { isActive: true },
+      select: { slug: true, updatedAt: true },
+      orderBy: [{ order: "asc" }, { updatedAt: "desc" }],
+    });
+
+    serviceRoutes = services.map((service) => ({
+      url: siteUrl(`/services/${service.slug}`),
+      lastModified: service.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.72,
+    }));
   } catch {
-    // silently continue if DB unavailable at build time
+    serviceRoutes = PRIMARY_SERVICES.map((service) => ({
+      url: siteUrl(`/services/${service.slug}`),
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.72,
+    }));
   }
 
   // Append seed posts (curated fallback content) deduped against DB
@@ -63,5 +83,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     }));
 
-  return [...staticRoutes, ...blogRoutes, ...seedRoutes, ...portfolioRoutes];
+  return [...staticRoutes, ...blogRoutes, ...seedRoutes, ...portfolioRoutes, ...serviceRoutes];
 }

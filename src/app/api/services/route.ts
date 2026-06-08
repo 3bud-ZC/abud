@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { generateSlug } from "@/lib/utils";
+import { PRIMARY_SERVICES } from "@/data/services";
+
+function fallbackServices() {
+  return PRIMARY_SERVICES.map((service) => ({
+    id: `seed-${service.slug}`,
+    title: service.title,
+    slug: service.slug,
+    description: service.description,
+    longDesc: `${service.longDesc}\n\nمدة التسليم: ${service.deliveryTime}`,
+    useCase: service.category,
+    icon: service.icon,
+    priceType: service.priceType,
+    price: service.price,
+    ctaType: "contact",
+    ctaLabel: service.ctaLabel,
+    featured: service.featured,
+    isActive: true,
+    order: service.order,
+    createdAt: new Date(0),
+    updatedAt: new Date(0),
+  }));
+}
 
 export async function GET(req: NextRequest) {
   const includeAll = new URL(req.url).searchParams.get("all") === "1";
@@ -11,12 +33,24 @@ export async function GET(req: NextRequest) {
     if (!session) return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
   }
 
-  const services = await prisma.service.findMany({
-    where: includeAll ? undefined : { isActive: true },
-    orderBy: [{ featured: "desc" }, { order: "asc" }, { createdAt: "desc" }],
-  });
+  try {
+    const services = await prisma.service.findMany({
+      where: includeAll ? undefined : { isActive: true },
+      orderBy: [{ featured: "desc" }, { order: "asc" }, { createdAt: "desc" }],
+    });
 
-  return NextResponse.json({ services });
+    if (!includeAll && services.length === 0) {
+      return NextResponse.json({ services: fallbackServices() });
+    }
+
+    return NextResponse.json({ services });
+  } catch {
+    if (!includeAll) {
+      return NextResponse.json({ services: fallbackServices() });
+    }
+
+    return NextResponse.json({ error: "فشل تحميل الخدمات" }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {

@@ -19,6 +19,7 @@ interface LongDesc {
   category?: string;
   overview?: string;
   problem?: string;
+  solution?: string;
   features?: string[];
   tech?: string[];
   results?: string[];
@@ -159,7 +160,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
           className="inline-flex items-center gap-2 text-sm transition-colors group text-[#606070] hover:text-[#c084fc]"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1 duration-200" />
-          Back to Portfolio
+          العودة إلى الأعمال
         </Link>
       </div>
 
@@ -170,7 +171,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
             {ld.category && <CategoryBadge category={ld.category} />}
             {project.featured && (
               <span className="badge-purple flex items-center gap-1 text-xs">
-                <Zap className="w-2.5 h-2.5" /> Featured
+                <Zap className="w-2.5 h-2.5" /> مميز
               </span>
             )}
           </div>
@@ -258,6 +259,21 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
           </AnimatedSection>
         )}
 
+        {ld.solution && (
+          <AnimatedSection delay={0.06}>
+            <div className="glass-card p-7">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)" }}>
+                  <Lightbulb className="w-4 h-4 text-emerald-400" />
+                </div>
+                <h2 className="text-white font-bold text-lg" style={{ letterSpacing: "-0.02em" }}>Solution</h2>
+              </div>
+              <p className="leading-relaxed" style={{ color: "#8ed0b2", lineHeight: 1.8 }}>{ld.solution}</p>
+            </div>
+          </AnimatedSection>
+        )}
+
         {/* Features */}
         {ld.features && ld.features.length > 0 && (
           <AnimatedSection delay={0.08}>
@@ -341,10 +357,10 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link href="/contact" className="btn-primary gap-2 text-sm py-2.5 px-6">
-                  <TagIcon className="w-3.5 h-3.5" /> Get a Custom Quote
+                  <TagIcon className="w-3.5 h-3.5" /> اطلب مشروع مشابه
                 </Link>
                 <Link href="/portfolio" className="btn-outline text-sm py-2.5 px-5">
-                  ← View All Projects
+                  ← عرض كل المشاريع
                 </Link>
               </div>
             </div>

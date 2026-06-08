@@ -31,6 +31,11 @@ echo -e "${YELLOW}🗄️ Running database migrations...${NC}"
 npx prisma generate
 npx prisma db push
 
+# Seed required public content
+echo -e "${YELLOW}🌱 Seeding services and portfolio content...${NC}"
+npm run db:seed-services
+npm run db:seed-portfolio
+
 # Build the project
 echo -e "${YELLOW}🏗️ Building project...${NC}"
 npm run build

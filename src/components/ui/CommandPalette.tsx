@@ -34,11 +34,11 @@ const ITEMS: Item[] = [
   { id: "contact", label: "تواصل معي", hint: "/contact", icon: MessageSquare, href: "/contact", group: "navigate", keywords: ["contact", "email", "reach"] },
 
   // Services shortcuts
-  { id: "svc-web", label: "تطوير مواقع احترافية", hint: "خدمة تطوير", icon: Globe, href: "/services#web", group: "services" },
-  { id: "svc-ai", label: "أدوات الذكاء الاصطناعي", hint: "خدمة AI", icon: BrainCircuit, href: "/services#ai", group: "services" },
-  { id: "svc-bot", label: "بوتات تيليجرام", hint: "خدمة Bots", icon: Send, href: "/services#bots", group: "services" },
-  { id: "svc-cyber", label: "الأمن السيبراني", hint: "خدمة Security", icon: Shield, href: "/services#cyber", group: "services" },
-  { id: "svc-auto", label: "الأتمتة وسير العمل", hint: "خدمة Automation", icon: Layers, href: "/services#automation", group: "services" },
+  { id: "svc-web", label: "تطوير مواقع احترافية", hint: "Web Development", icon: Globe, href: "/services#web-development", group: "services" },
+  { id: "svc-systems", label: "أنظمة ERP / CRM", hint: "Business Systems", icon: Layers, href: "/services#business-systems", group: "services" },
+  { id: "svc-bot", label: "بوتات تيليجرام", hint: "Telegram", icon: Send, href: "/services#telegram", group: "services" },
+  { id: "svc-ai", label: "أدوات AI وأتمتة", hint: "AI & Automation", icon: BrainCircuit, href: "/services#ai-automation", group: "services" },
+  { id: "svc-devops", label: "نشر وإدارة VPS", hint: "DevOps", icon: Shield, href: "/services#devops", group: "services" },
 
   // Resources categories
   { id: "res-ai", label: "أدوات AI", hint: "مصادر", icon: BrainCircuit, href: "/resources#ai-tools", group: "resources" },

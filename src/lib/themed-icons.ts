@@ -175,6 +175,10 @@ export function getThemedIconPreset(
 }
 
 export const SERVICE_ICON_FALLBACK: Record<string, ThemedIconKey> = {
+  "web-development": "code2",
+  "business-systems": "layers",
+  telegram: "bot",
+  "ai-automation": "workflow",
   development: "code2",
   ecommerce: "shopping-bag",
   mobile: "smartphone",

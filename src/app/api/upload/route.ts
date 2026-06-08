@@ -53,7 +53,12 @@ export async function POST(req: NextRequest) {
 
     const rawBase = (process.env.PUBLIC_UPLOAD_BASE || "/uploads").trim();
     const publicBase = `/${rawBase.replace(/^\/+|\/+$/g, "")}`;
-    const url = `${publicBase}/${safeFileName}`;
+    const relativeUrl = `${publicBase}/${safeFileName}`;
+    
+    // Use absolute URL for better compatibility across deployment environments
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const url = `${siteUrl.replace(/\/$/, "")}${relativeUrl}`;
+    
     logger.uploadSuccess(safeFileName, url);
 
     return NextResponse.json({ url, fileName: safeFileName });

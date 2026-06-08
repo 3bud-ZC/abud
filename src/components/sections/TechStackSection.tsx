@@ -8,6 +8,7 @@ import {
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import { TRUST_METRICS } from "@/data/trust-metrics";
 
 const TECH_GROUPS = [
   {
@@ -49,6 +50,13 @@ const TECH_GROUPS = [
 ];
 
 export default function TechStackSection() {
+  const trustCards = [
+    { metric: TRUST_METRICS[0], icon: Layers, accent: "#67e8f9" },
+    { metric: TRUST_METRICS[1], icon: Code2, accent: "#c084fc" },
+    { metric: TRUST_METRICS[2], icon: Terminal, accent: "#fbbf24" },
+    { metric: TRUST_METRICS[4], icon: Zap, accent: "#34d399" },
+  ];
+
   return (
     <section
       className="py-20 px-4 relative overflow-hidden"
@@ -164,30 +172,24 @@ export default function TechStackSection() {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 pt-8"
           style={{ borderTop: "1px solid rgba(168,85,247,0.15)" }}
         >
-          {[
-            { icon: Code2,   value: "+30",  label: "تقنية أتقنها", accent: "#c084fc" },
-            { icon: Layers,  value: "+50",  label: "مشروع منجز",   accent: "#67e8f9" },
-            { icon: Zap,     value: "99%",  label: "Uptime ضمان",  accent: "#34d399" },
-            { icon: Terminal,value: "5+",   label: "سنوات خبرة",   accent: "#fbbf24" },
-          ].map((s, i) => {
-            const Icon = s.icon;
+          {trustCards.map(({ metric, icon: Icon, accent }) => {
             return (
-              <div key={s.label} className="flex items-center gap-3 px-3">
+              <div key={metric.id} className="flex items-center gap-3 px-3">
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{
-                    background: `${s.accent}15`,
-                    border: `1px solid ${s.accent}30`,
+                    background: `${accent}15`,
+                    border: `1px solid ${accent}30`,
                   }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: s.accent }} />
+                  <Icon className="w-4 h-4" style={{ color: accent }} />
                 </div>
                 <div className="min-w-0">
                   <div className="text-white text-xl font-black leading-none" style={{ letterSpacing: "-0.02em" }}>
-                    {s.value}
+                    {`${metric.prefix || ""}${metric.value}${metric.suffix || ""}`}
                   </div>
                   <div className="text-[11px] mt-1 truncate" style={{ color: "#9090b0" }}>
-                    {s.label}
+                    {metric.label}
                   </div>
                 </div>
               </div>

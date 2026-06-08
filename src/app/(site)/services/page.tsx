@@ -8,9 +8,10 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
-import { SERVICE_CATEGORIES, normalizeServiceCategory } from "@/lib/service-categories";
+import { SERVICE_CATEGORIES, SERVICE_CATEGORY_MAP, normalizeServiceCategory } from "@/lib/service-categories";
 import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
 import { siteUrl } from "@/lib/site-url";
+import { TRUST_METRICS, formatTrustMetricValue } from "@/data/trust-metrics";
 
 interface ServiceRow {
   id: string;
@@ -37,11 +38,25 @@ function extractPoints(longDesc?: string | null): string[] {
     .slice(0, 6);
 }
 
+function extractDeliveryTime(longDesc?: string | null): string | null {
+  if (!longDesc) return null;
+  const match = longDesc.match(/مدة التسليم\s*[:：]\s*(.+)/);
+  return match?.[1]?.trim() || null;
+}
+
 function formatPrice(service: ServiceRow): string {
   if (service.priceType === "free") return "مجاني";
   if (service.priceType === "hourly") return service.price ? `${service.price} ج.م / ساعة` : "سعر بالساعة";
   if (service.priceType === "fixed") return service.price ? `${service.price} ج.م` : "سعر ثابت";
   return service.price ? `يبدأ من ${service.price} ج.م` : "حسب الطلب";
+}
+
+function buildContactLink(service: ServiceRow): string {
+  const params = new URLSearchParams({
+    subject: `طلب خدمة: ${service.title}`,
+    message: `مرحبًا، مهتم بخدمة "${service.title}".\n\nأحتاج عرض سعر مبدئي وخطة تنفيذ مناسبة.`,
+  });
+  return `/contact?${params.toString()}`;
 }
 
 export default function ServicesPage() {
@@ -138,10 +153,10 @@ export default function ServicesPage() {
       <section className="relative z-10 pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <AnimatedSection>
-            <span className="section-badge mb-4 mx-auto">خدماتي</span>
-            <h1 className="section-title mb-3">كل خدمة في مكان واحد</h1>
+            <span className="section-badge mb-4 mx-auto">خدمات ABUD</span>
+            <h1 className="section-title mb-3">حلول رقمية تبني نمو مشروعك</h1>
             <p className="section-subtitle max-w-2xl mx-auto">
-              الخدمات هنا مرتبطة مباشرة بلوحة الأدمن. أي إضافة أو تعديل أو حذف يظهر على الموقع فورًا.
+              اختر من خدمات تطوير المواقع والأنظمة والأتمتة، أو اطلب خدمة مخصصة حسب احتياج مشروعك.
             </p>
           </AnimatedSection>
 
@@ -150,6 +165,14 @@ export default function ServicesPage() {
               <StatCard title="إجمالي الخدمات" value={totalLabel} />
               <StatCard title="الخدمات المميزة" value={`${featuredServices.length}`} />
               <StatCard title="فئات الخدمات" value={`${SERVICE_CATEGORIES.length - 1}`} />
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.12} className="mt-4">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+              {TRUST_METRICS.map((metric) => (
+                <StatCard key={metric.id} title={metric.label} value={formatTrustMetricValue(metric)} />
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -264,19 +287,19 @@ export default function ServicesPage() {
             <HolographicCard duration={6}>
               <div className="p-8 md:p-10 text-center">
                 <h2 className="font-black text-white mb-3" style={{ fontSize: "clamp(1.6rem, 4vw, 2.4rem)" }}>
-                  جاهز نبدأ مشروعك؟
+                  هل تحتاج خدمة مخصصة خارج الباقات؟
                 </h2>
                 <p className="text-[#a0a0c0] mb-7 leading-relaxed">
-                  اختار خدمة من القائمة أو راسلني مباشرة، وهيوصلك عرض واضح بالوقت والتكلفة.
+                  ابعت فكرة مشروعك وهرد عليك بخطة مبدئية وتكلفة تقريبية مناسبة لميزانيتك.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Link href="/quote" className="btn-primary btn-glow inline-flex items-center gap-2">
                     <Calculator className="w-4 h-4" />
-                    احسب سعر مشروعك
+                    اطلب عرض سعر
                   </Link>
                   <Link href="/contact" className="btn-outline inline-flex items-center gap-2">
                     <MessageSquare className="w-4 h-4" />
-                    تواصل مباشر
+                    اطلب خدمة مخصصة
                   </Link>
                 </div>
               </div>
@@ -341,9 +364,11 @@ function FeaturedServiceCard({ service }: { service: ServiceRow }) {
 
 function ServiceCard({ service }: { service: ServiceRow }) {
   const points = extractPoints(service.longDesc);
-  const category = SERVICE_CATEGORIES.find((c) => c.id === normalizeServiceCategory(service.useCase));
+  const category = SERVICE_CATEGORY_MAP[normalizeServiceCategory(service.useCase)];
   const iconPreset = getThemedIconPreset(resolveServiceIconKey(service.icon, service.useCase));
   const ServiceIcon = iconPreset.icon;
+  const delivery = extractDeliveryTime(service.longDesc);
+  const contactLink = buildContactLink(service);
 
   return (
     <div
@@ -358,6 +383,10 @@ function ServiceCard({ service }: { service: ServiceRow }) {
         <span className="w-9 h-9 rounded-xl bg-purple-600/15 border border-purple-600/20 flex items-center justify-center">
           <ServiceIcon className="w-[18px] h-[18px]" style={{ color: iconPreset.color }} />
         </span>
+      </div>
+
+      <div className="mb-3 text-[10px] px-2 py-1 rounded-full inline-flex border border-purple-600/30 bg-purple-600/10 text-purple-200">
+        {category?.label || "خدمة تقنية"}
       </div>
 
       <p className="text-[#9898ba] text-sm leading-relaxed mb-4">{service.description}</p>
@@ -380,13 +409,28 @@ function ServiceCard({ service }: { service: ServiceRow }) {
         <div className="space-y-1">
           <div className="text-[10px] text-[#7f7fa5] inline-flex items-center gap-1">
             <Clock className="w-2.5 h-2.5" />
-            {category?.label || "استشارة تقنية"}
+            {delivery || "حسب نوع المشروع"}
           </div>
           <div className="text-xs font-bold text-purple-300">{formatPrice(service)}</div>
         </div>
-        <Link href="/contact" className="inline-flex items-center gap-1 text-xs text-white hover:text-purple-200 transition-colors">
+        <Link href={contactLink} className="inline-flex items-center gap-1 text-xs text-white hover:text-purple-200 transition-colors">
           {service.ctaLabel || "اطلب"}
           <ArrowLeft className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Link
+          href={`/services/${service.slug}`}
+          className="btn-outline text-xs py-2 px-3 inline-flex items-center justify-center gap-1"
+        >
+          عرض التفاصيل
+        </Link>
+        <Link
+          href={contactLink}
+          className="btn-primary btn-glow text-xs py-2 px-3 inline-flex items-center justify-center gap-1"
+        >
+          {service.ctaLabel || "اطلب الآن"}
         </Link>
       </div>
 

@@ -8,40 +8,76 @@ import FloatingContact from "@/components/ui/FloatingContact";
 import CommandPalette from "@/components/ui/CommandPalette";
 import { siteUrl } from "@/lib/site-url";
 
-const organizationSchema = {
+const structuredData = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": siteUrl("/#organization"),
-  name: "ABUD",
-  url: siteUrl(),
-  logo: {
-    "@type": "ImageObject",
-    url: siteUrl("/logo.svg"),
-    width: 512,
-    height: 512,
-  },
-  image: siteUrl("/logo.svg"),
-  description: "ABUD is a digital platform offering AI tools, automation systems, websites, digital products and modern online solutions.",
-  email: "abed@abud.fun",
-  founder: {
-    "@type": "Person",
-    name: "ABUD",
-    jobTitle: "Full-Stack Developer & Digital Product Creator",
-  },
-  sameAs: [
-    "https://github.com/3bud-ZC",
-    "https://t.me/abud_dev",
-  ],
-  knowsAbout: [
-    "Web Development", "Next.js", "React", "TypeScript", "Cybersecurity",
-    "Artificial Intelligence", "Telegram Bots", "DevOps", "Digital Products",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": siteUrl("/#organization"),
+      name: "ABUD",
+      url: siteUrl(),
+      logo: {
+        "@type": "ImageObject",
+        url: siteUrl("/logo.svg"),
+        width: 512,
+        height: 512,
+      },
+      image: siteUrl("/logo.svg"),
+      description:
+        "ABUD provides web development, ERP/CRM systems, Telegram bots, AI tools, and VPS deployment services.",
+      email: "abed@abud.fun",
+      founder: { "@id": siteUrl("/#person") },
+      sameAs: ["https://github.com/3bud-ZC", "https://t.me/abud_dev"],
+    },
+    {
+      "@type": "Person",
+      "@id": siteUrl("/#person"),
+      name: "Abdullah Ragab",
+      alternateName: "ABUD",
+      url: siteUrl("/about"),
+      image: siteUrl("/avatar.jpeg"),
+      jobTitle: "Full-Stack Developer",
+      worksFor: { "@id": siteUrl("/#organization") },
+      sameAs: ["https://github.com/3bud-ZC", "https://t.me/abud_dev"],
+      knowsAbout: [
+        "Web Development",
+        "ERP Systems",
+        "CRM Systems",
+        "Telegram Bots",
+        "AI Automation",
+        "VPS Deployment",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": siteUrl("/#website"),
+      name: "ABUD",
+      url: siteUrl(),
+      inLanguage: ["ar", "en"],
+      publisher: { "@id": siteUrl("/#organization") },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": siteUrl("/#professional-service"),
+      name: "ABUD Software Services",
+      url: siteUrl("/services"),
+      provider: { "@id": siteUrl("/#person") },
+      areaServed: "EG",
+      serviceType: [
+        "Web Development",
+        "ERP/CRM Systems",
+        "Telegram Bots & Mini Apps",
+        "AI & Automation Tools",
+        "VPS Deployment and Maintenance",
+      ],
+    },
   ],
 };
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <JsonLd data={organizationSchema} />
+      <JsonLd data={structuredData} />
       <GlobalBackground />
       <ScrollProgress />
       <Navbar />

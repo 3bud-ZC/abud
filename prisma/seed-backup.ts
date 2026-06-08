@@ -803,7 +803,7 @@ async function main() {
       where: { slug: "freelancing-egypt-guide" },
       update: {},
       create: {
-        title: "دليل الفريلانس في مصر 2024: من الصفر إلى الاحتراف",
+        title: "دليل الفريلانس في مصر: من الصفر إلى أول عميل",
         slug: "freelancing-egypt-guide",
         excerpt: "كيف تبدأ مشوارك كمستقل في مصر وتحقق دخلاً بالدولار",
         content: "<p>الفريلانس أصبح من أكثر المجالات نمواً في مصر والوطن العربي. دليلنا الشامل يوضح كل خطوة.</p>",

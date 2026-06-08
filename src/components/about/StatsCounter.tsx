@@ -1,19 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, Coffee, Users, Calendar, Lightbulb, Zap } from "lucide-react";
+import { Code2, Users, Calendar, Layers, Shield, type LucideIcon } from "lucide-react";
 import CountUp from "@/components/effects/CountUp";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
+import { TRUST_METRICS } from "@/data/trust-metrics";
 
-const STATS = [
-  { icon: Code2,     value: 50,     suffix: "+", label: "مشروع منجز",        accent: "#c084fc" },
-  { icon: Calendar,  value: 5,      suffix: "+", label: "سنوات خبرة",        accent: "#67e8f9" },
-  { icon: Users,     value: 30,     suffix: "+", label: "عميل سعيد",         accent: "#a78bfa" },
-  { icon: Lightbulb, value: 1000000,suffix: "+", label: "سطر كود مكتوب",     accent: "#f0abfc", short: "1M" },
-  { icon: Coffee,    value: 9999,   suffix: "+", label: "فنجان قهوة",        accent: "#fbbf24", short: "10K" },
-  { icon: Zap,       value: 99,     suffix: "%", label: "Uptime ضمان",       accent: "#34d399" },
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  projects: Code2,
+  years: Calendar,
+  clients: Users,
+  published_apps: Layers,
+  quality: Shield,
+};
+
+const ACCENT_MAP: Record<string, string> = {
+  projects: "#c084fc",
+  years: "#67e8f9",
+  clients: "#a78bfa",
+  published_apps: "#fbbf24",
+  quality: "#34d399",
+};
+
+const STATS = TRUST_METRICS.map((metric) => ({
+  icon: ICON_MAP[metric.id],
+  value: metric.value,
+  suffix: metric.suffix || "",
+  label: metric.label,
+  accent: ACCENT_MAP[metric.id],
+}));
 
 export default function StatsCounter() {
   return (
@@ -90,14 +106,10 @@ export default function StatsCounter() {
                       letterSpacing: "-0.03em",
                     }}
                   >
-                    {stat.short ? (
-                      <span>{stat.short}{stat.suffix}</span>
-                    ) : (
-                      <>
-                        <CountUp to={stat.value} duration={1.6} />
-                        <span>{stat.suffix}</span>
-                      </>
-                    )}
+                    <>
+                      <CountUp to={stat.value} duration={1.6} />
+                      <span>{stat.suffix}</span>
+                    </>
                   </div>
 
                   <div className="text-[11px] font-medium" style={{ color: "#9090b0" }}>

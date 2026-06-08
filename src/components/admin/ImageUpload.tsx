@@ -14,6 +14,7 @@ export default function ImageUpload({ value, onChange, placeholder = "ارفع �
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [showUrlInput, setShowUrlInput] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = async (file: File) => {
@@ -28,6 +29,7 @@ export default function ImageUpload({ value, onChange, placeholder = "ارفع �
     }
 
     setUploading(true);
+    setImageError(false);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -64,15 +66,40 @@ export default function ImageUpload({ value, onChange, placeholder = "ارفع �
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const url = formData.get("url") as string;
-    if (url) onChange(url);
+    if (url) {
+      onChange(url);
+      setImageError(false);
+    }
     setShowUrlInput(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
   };
 
   return (
     <div className={`space-y-3 ${className}`}>
       {value ? (
         <div className="relative group">
-          <img src={value} alt="Uploaded" className="w-full h-48 object-cover rounded-xl border border-[#1a1a2e]" />
+          {imageError ? (
+            <div className="w-full h-48 rounded-xl border border-red-500/50 bg-red-500/10 flex flex-col items-center justify-center gap-2">
+              <ImageIcon className="w-10 h-10 text-red-400" />
+              <p className="text-sm text-red-400">فشل تحميل الصورة</p>
+              <p className="text-xs text-red-400/70 break-all px-4 text-center" dir="ltr">{value}</p>
+            </div>
+          ) : (
+            <img
+              src={value}
+              alt="Uploaded"
+              className="w-full h-48 object-cover rounded-xl border border-[#1a1a2e]"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+            />
+          )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2">
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -82,7 +109,10 @@ export default function ImageUpload({ value, onChange, placeholder = "ارفع �
               <Upload className="w-4 h-4" />
             </button>
             <button
-              onClick={() => onChange("")}
+              onClick={() => {
+                onChange("");
+                setImageError(false);
+              }}
               className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               title="حذف الصورة"
             >

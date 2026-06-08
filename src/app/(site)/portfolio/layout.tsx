@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { siteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
-  title: "أعمالي — تطبيقات وروابط مباشرة",
+  title: "أعمال ومشاريع ABUD | Portfolio",
   description:
-    "روابط مباشرة لأحدث التطبيقات اللي بنيتها — جرّبها فورًا وشوف النتيجة على أرض الواقع.",
+    "استعرض مشاريع ABUD بتفاصيل Case Study تشمل المشكلة والحل والمزايا والتقنيات وروابط Live/Demo/GitHub.",
   keywords: [
     "portfolio",
     "projects",
@@ -16,9 +16,10 @@ export const metadata: Metadata = {
     "أعمال مطور",
   ],
   openGraph: {
-    title: "Portfolio | ABUD",
-    description: "روابط مباشرة لأحدث التطبيقات اللي بنيتها.",
+    title: "أعمال ومشاريع ABUD | Portfolio",
+    description: "مشاريع وبرمجيات منفذة فعليًا مع تفاصيل تقنية كاملة.",
     url: siteUrl("/portfolio"),
+    type: "website",
   },
   alternates: { canonical: siteUrl("/portfolio") },
 };

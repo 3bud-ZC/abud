@@ -818,7 +818,7 @@ async function main() {
       where: { slug: "freelancing-egypt-guide" },
       update: {},
       create: {
-        title: "دليل الفريلانس في مصر 2024: من الصفر إلى الاحتراف",
+        title: "دليل الفريلانس في مصر: من الصفر إلى أول عميل",
         slug: "freelancing-egypt-guide",
         excerpt: "كيف تبدأ مشوارك كمستقل في مصر وتحقق دخلاً بالدولار",
         content: "<p>الفريلانس أصبح من أكثر المجالات نمواً في مصر والوطن العربي. دليلنا الشامل يوضح كل خطوة.</p>",
@@ -832,6 +832,39 @@ async function main() {
       },
     }),
   ]);
+
+  const suggestedDrafts = [
+    { slug: "how-to-choose-erp-system", title: "إزاي تختار نظام ERP مناسب لمشروعك؟", excerpt: "معايير عملية لاختيار نظام ERP يواكب نشاطك وتوسعك.", categoryId: catBusiness.id },
+    { slug: "company-website-cost-egypt", title: "تكلفة تصميم موقع شركة في مصر", excerpt: "تفصيل الأسعار حسب نوع الموقع والمميزات المطلوبة.", categoryId: catBusiness.id },
+    { slug: "best-telegram-bot-use-cases", title: "أفضل استخدامات بوتات تيليجرام للشركات", excerpt: "أفكار جاهزة لبوتات تزيد الكفاءة وخدمة العملاء.", categoryId: catBusiness.id },
+    { slug: "automation-reduces-ops-time", title: "إزاي الأتمتة تقلل وقت التشغيل في مشروعك؟", excerpt: "خطوات تبدأ بها أتمتة المهام اليومية بدون تعقيد.", categoryId: catBusiness.id },
+    { slug: "website-vs-webapp-difference", title: "الفرق بين موقع تعريفي و Web App", excerpt: "متى تحتاج موقع بسيط ومتى تحتاج تطبيق ويب متكامل.", categoryId: catDev.id },
+    { slug: "why-you-need-internal-dashboard", title: "ليه مشروعك محتاج Dashboard داخلية؟", excerpt: "كيف تساعدك لوحة البيانات في المتابعة واتخاذ القرار.", categoryId: catBusiness.id },
+    { slug: "start-freelancing-egypt-developer", title: "إزاي تبدأ فريلانس كمبرمج في مصر؟", excerpt: "خارطة طريق عملية من بناء البورتفوليو لأول عميل.", categoryId: catBusiness.id },
+    { slug: "best-ai-tools-small-business", title: "أفضل أدوات AI تساعد أصحاب المشاريع الصغيرة", excerpt: "أدوات سهلة التنفيذ لزيادة الإنتاجية وتقليل التكلفة.", categoryId: catBusiness.id },
+    { slug: "deploy-nextjs-on-vps-guide", title: "إزاي تنشر مشروع Next.js على VPS؟", excerpt: "دليل نشر عملي باستخدام Nginx وPM2 وSSL.", categoryId: catDev.id },
+    { slug: "startup-website-common-mistakes", title: "أخطاء شائعة عند بناء موقع لشركة ناشئة", excerpt: "أهم الأخطاء اللي تقلل التحويل وتضيع ميزانية التسويق.", categoryId: catBusiness.id },
+  ];
+
+  await Promise.all(
+    suggestedDrafts.map((post) =>
+      prisma.blogPost.upsert({
+        where: { slug: post.slug },
+        update: {},
+        create: {
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: "<p>مسودة مبدئية - سيتم تحديث المحتوى الكامل قريبًا.</p>",
+          status: "draft",
+          featured: false,
+          tags: JSON.stringify(["draft", "content-plan"]),
+          categoryId: post.categoryId,
+          readTime: 4,
+        },
+      })
+    )
+  );
   console.log("✅ تم إنشاء مقالات المدونة");
 
   // Portfolio projects

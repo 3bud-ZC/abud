@@ -11,14 +11,15 @@ const footerLinks = {
     { href: "/services", label: "الخدمات" },
     { href: "/portfolio", label: "أعمالي" },
     { href: "/blog", label: "المدونة" },
+    { href: "/resources", label: "المصادر" },
     { href: "/contact", label: "تواصل" },
   ],
   services: [
-    { href: "/services#development", label: "تطوير مواقع" },
-    { href: "/services#ai", label: "أدوات الذكاء الاصطناعي" },
-    { href: "/services#automation", label: "الأتمتة والأنظمة" },
-    { href: "/services#bots", label: "بوتات تيليجرام" },
-    { href: "/services#consulting", label: "استشارات تقنية" },
+    { href: "/services#web-development", label: "تطوير مواقع احترافية" },
+    { href: "/services#business-systems", label: "أنظمة ERP / CRM" },
+    { href: "/services#telegram", label: "بوتات تيليجرام و Mini Apps" },
+    { href: "/services#ai-automation", label: "AI وأتمتة الأعمال" },
+    { href: "/services#devops", label: "نشر وإدارة VPS" },
   ],
 };
 
@@ -70,7 +71,7 @@ export default function Footer() {
               <span className="font-black text-xl tracking-widest text-white">ABUD</span>
             </Link>
             <p className="text-[#a0a0b8] text-sm leading-relaxed mb-6 max-w-xs">
-              صانع تقني وباني حلول رقمية بعقلية سيبرانية. أبني الأدوات والمواقع والأنظمة الذكية.
+              ABUD — بناء مواقع، أنظمة، بوتات، وأدوات رقمية تساعد المشاريع تشتغل أسرع وبشكل أذكى.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.filter((l) => l.href).map(({ icon: Icon, href, label }) => (
@@ -124,14 +125,20 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">تواصل معي</h3>
+            <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">ابدأ مشروعك</h3>
             <div className="space-y-3">
-              <p className="text-[#a0a0b8] text-sm">للمشاريع والاستفسارات:</p>
+              <p className="text-[#a0a0b8] text-sm">ابعت فكرة مشروعك وهرد عليك بخطة مبدئية.</p>
               <Link
                 href="/contact"
                 className="btn-primary text-sm py-2.5 w-full justify-center"
               >
-                ابدأ المحادثة
+                اطلب عرض سعر
+              </Link>
+              <Link
+                href="/portfolio"
+                className="btn-outline text-sm py-2.5 w-full justify-center"
+              >
+                شاهد الأعمال
               </Link>
             </div>
           </div>

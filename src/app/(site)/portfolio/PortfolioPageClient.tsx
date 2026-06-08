@@ -16,9 +16,13 @@ export interface AppCard {
   tagline: string;
   desc: string;
   href: string;
+  links: { url: string; label: string; type: "live" | "demo" | "github" | "private" | "other" }[];
   accent: string;
   iconType: string;
   badge: string;
+  problem: string;
+  features: string[];
+  techStack: string[];
 }
 
 const GITHUB_URL = "https://github.com/3bud-ZC";
@@ -39,24 +43,24 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
           <AnimatedSection>
             <span className="section-badge mb-6">
               <ExternalLink className="w-2.5 h-2.5" />
-              Apps Portfolio
+              Portfolio
             </span>
             <h1
               className="font-black text-white mt-5 mb-4"
               style={{ fontSize: "clamp(2.1rem, 5vw, 3.3rem)", letterSpacing: "-0.02em" }}
             >
-              أعمالي — روابط مباشرة للتطبيقات
+              أعمالي ومشاريع قمت بتنفيذها
             </h1>
             <p
               className="text-base md:text-lg max-w-2xl mx-auto mb-8"
               style={{ color: "#a8a8c8", lineHeight: 1.8 }}
             >
-              بدل ما أعرض قائمة GitHub… هنا روابط مباشرة للتطبيقات اللي بنيتها فعلاً — افتح وجرّب فورًا.
+              كل مشروع هنا مع عرض المشكلة والحل والتقنيات المستخدمة، مع روابط Live / Demo / GitHub حسب حالة المشروع.
             </p>
 
             {/* Quick stats */}
             <div className="flex flex-wrap justify-center gap-3">
-              <span className="tag-pill text-xs px-3 py-1.5">✦ {apps.length} Apps Live</span>
+              <span className="tag-pill text-xs px-3 py-1.5">✦ {apps.length} مشاريع منشورة</span>
               <a
                 href={GITHUB_URL}
                 target="_blank"
@@ -127,25 +131,72 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
                         </div>
                       </div>
 
-                      <p className="text-sm leading-relaxed mb-6" style={{ color: "#9090b0" }}>
+                      <p className="text-sm leading-relaxed mb-3" style={{ color: "#9090b0" }}>
                         {app.desc}
                       </p>
 
+                      <div className="mb-3 p-3 rounded-xl border border-white/10 bg-white/5">
+                        <div className="text-[11px] text-[#a8a8c8] mb-1">Problem Solved</div>
+                        <p className="text-xs text-[#c5c5de] leading-relaxed">{app.problem}</p>
+                      </div>
+
+                      {app.features.length > 0 && (
+                        <div className="mb-3">
+                          <div className="text-[11px] text-[#a8a8c8] mb-1">Key Features</div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {app.features.map((feature) => (
+                              <span key={feature} className="text-[10px] px-2 py-1 rounded-full border border-purple-600/30 bg-purple-600/10 text-purple-100">
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {app.techStack.length > 0 && (
+                        <div className="mb-5">
+                          <div className="text-[11px] text-[#a8a8c8] mb-1">Tech Stack</div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {app.techStack.map((tech) => (
+                              <span key={tech} className="text-[10px] px-2 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-100">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="text-[11px] text-[#c7c7df] mb-4">
+                        Status: <span className="font-semibold" style={{ color: app.accent }}>{app.badge || "Private"}</span>
+                      </div>
+
                       <div className="mt-auto flex flex-wrap gap-2">
-                        <a
-                          href={app.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-primary btn-glow gap-2 text-sm py-2.5 px-5 inline-flex items-center"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>فتح التطبيق</span>
-                        </a>
+                        {app.href !== "#" ? (
+                          <a
+                            href={app.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-primary btn-glow gap-2 text-sm py-2.5 px-5 inline-flex items-center"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            <span>View Live</span>
+                          </a>
+                        ) : (
+                          <span className="btn-outline text-sm py-2.5 px-5 inline-flex items-center opacity-60 cursor-not-allowed">
+                            Private Project
+                          </span>
+                        )}
                         <Link
                           href={`/portfolio/${app.slug}`}
                           className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center"
                         >
-                          <span>تفاصيل</span>
+                          <span>View Details</span>
+                        </Link>
+                        <Link
+                          href={`/contact?subject=${encodeURIComponent(`طلب مشروع مشابه: ${app.title}`)}&message=${encodeURIComponent(`مرحبًا، أحتاج مشروع مشابه لـ ${app.title}.\n\nأريد معرفة الخطة والتكلفة المتوقعة.`)}`}
+                          className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center"
+                        >
+                          <span>Request Similar Project</span>
                         </Link>
                       </div>
                     </div>
@@ -246,14 +297,14 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
             <HolographicCard duration={6}>
               <div className="p-8 md:p-10 text-center">
                 <h2 className="text-white font-black text-2xl mb-2" style={{ letterSpacing: "-0.02em" }}>
-                  Want something built?
+                  اطلب مشروع مشابه
                 </h2>
                 <p className="text-sm mb-5" style={{ color: "#9090b0" }}>
-                  I build custom AI tools, automation systems, and web products. Let&#39;s talk.
+                  لو عندك فكرة مشابهة لأي مشروع من الأعمال المعروضة، ابعت التفاصيل وهرد عليك بخطة تنفيذ وتكلفة تقريبية.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <Link href="/contact" className="btn-primary btn-glow gap-2 text-sm py-2.5 px-6">
-                    Start a Project
+                    اطلب مشروع مشابه
                   </Link>
                   <a
                     href={GITHUB_URL}

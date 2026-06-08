@@ -23,12 +23,50 @@ import TechMarquee from "@/components/effects/TechMarquee";
 import HolographicCard from "@/components/effects/HolographicCard";
 import AnimatedBar from "@/components/effects/AnimatedBar";
 import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
+import { TRUST_METRICS } from "@/data/trust-metrics";
 
-const stats = [
-  { value: "+50", label: "مشروع منجز", percent: 92 },
-  { value: "+30", label: "عميل سعيد",  percent: 98 },
-  { value: "+5",  label: "سنوات خبرة", percent: 75 },
-  { value: "∞",   label: "شغف بالتقنية", percent: 100 },
+const stats = TRUST_METRICS.map((metric) => ({
+  value: metric.value,
+  prefix: metric.prefix || "",
+  suffix: metric.suffix || "",
+  label: metric.label,
+  percent:
+    metric.id === "projects"
+      ? 92
+      : metric.id === "clients"
+        ? 96
+        : metric.id === "years"
+          ? 85
+          : metric.id === "published_apps"
+            ? 90
+            : 99,
+}));
+
+const commercialOffers = [
+  {
+    title: "Business Web Systems",
+    description: "مواقع شركات، Landing Pages، متاجر بسيطة، Dashboards، وأنظمة داخلية.",
+    icon: Globe,
+  },
+  {
+    title: "Automation & AI Tools",
+    description: "أتمتة مهام متكررة، أدوات AI، n8n workflows، وربط APIs.",
+    icon: BrainCircuit,
+  },
+  {
+    title: "Telegram Bots & Mini Apps",
+    description: "بوتات إدارة، تنبيهات، طلبات، اشتراكات، ولوحات تحكم داخل تيليجرام.",
+    icon: Bot,
+  },
+];
+
+const whyWorkWithMe = [
+  "تنفيذ عملي وليس كلام نظري",
+  "خبرة في مشاريع حقيقية",
+  "تسليم واضح ومنظم",
+  "قابلية للتوسع والتطوير",
+  "نشر وتشغيل على VPS",
+  "دعم بعد التسليم حسب الاتفاق",
 ];
 
 const processSteps = [
@@ -137,21 +175,21 @@ export default function HomePageClient(props: Props) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [homeServices, setHomeServices] = useState<HomeServiceCard[]>(DEFAULT_HOME_SERVICES);
   const [cms, setCms] = useState({
-    heroBadge: "مطوّر Full-Stack • أدوات AI احترافية • منتجات رقمية جاهزة",
-    heroTitle: "خدمات تطوير وذكاء اصطناعي وأتمتة",
-    heroSubtitle: "أدوات ومنتجات رقمية جاهزة للتحميل الفوري، أو خدمات تطوير مخصصة لمشروعك — كل ما تحتاجه لبناء حضورك الرقمي.",
-    heroPrimaryText: "استعرض خدماتي",
-    heroPrimaryLink: "/services",
-    heroSecondaryText: "طلب خدمة مخصصة",
-    heroSecondaryLink: "/contact",
+    heroBadge: "Abdullah Ragab / ABUD • Full-Stack Developer",
+    heroTitle: "أبني لك أنظمة ومواقع وأدوات رقمية تساعد مشروعك يشتغل أسرع",
+    heroSubtitle: "أنا عبدالله Ragab، مطوّر Full-Stack أساعد الشركات والأفراد في بناء مواقع، أنظمة ERP/CRM، بوتات تيليجرام، أدوات AI، وأتمتة عمليات العمل من الفكرة حتى النشر.",
+    heroPrimaryText: "ابدأ مشروعك الآن",
+    heroPrimaryLink: "/contact",
+    heroSecondaryText: "شاهد أعمالي",
+    heroSecondaryLink: "/portfolio",
     aboutTitle: "أبني الأفكار وأحوّلها لواقع رقمي",
     aboutDesc: "مطور ويب وصانع أدوات رقمية متخصص في بناء الحلول التقنية المتكاملة — من المواقع المتطورة إلى أنظمة الذكاء الاصطناعي والأتمتة.",
-    finalCtaTitle: "جاهز لبناء مشروعك الرقمي؟",
-    finalCtaDesc: "ابدأ بمنتج رقمي جاهز للتحميل الفوري، أو اطلب خدمة تطوير مخصصة لاحتياجاتك.",
-    finalCtaPrimaryText: "تواصل معاي",
+    finalCtaTitle: "جاهز تبدأ مشروعك الرقمي؟",
+    finalCtaDesc: "ابعت فكرة مشروعك وهرد عليك بخطة مبدئية وتكلفة تقريبية حسب أهدافك.",
+    finalCtaPrimaryText: "ابدأ مشروعك الآن",
     finalCtaPrimaryLink: "/contact",
-    finalCtaSecondaryText: "استعرض الخدمات",
-    finalCtaSecondaryLink: "/services",
+    finalCtaSecondaryText: "شاهد أعمالي",
+    finalCtaSecondaryLink: "/portfolio",
   });
 
   useEffect(() => {
@@ -357,11 +395,9 @@ export default function HomePageClient(props: Props) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
           >
-            {stats.map(({ value, label, percent }, i) => {
-              const isInfinity = value === "∞";
-              const num = isInfinity ? 0 : parseInt(value.replace(/[^0-9]/g, ""), 10);
+            {stats.map(({ value, label, percent, prefix, suffix }, i) => {
               return (
                 <m.div key={label} variants={item} className="text-center px-2">
                   <div
@@ -369,9 +405,9 @@ export default function HomePageClient(props: Props) {
                     style={{ backgroundImage: "linear-gradient(135deg, #f0e6ff 0%, #a855f7 100%)", fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.03em" }}
                   >
                     <CountUp
-                      to={num}
-                      prefix={isInfinity ? "" : "+"}
-                      fallback={isInfinity ? "∞" : undefined}
+                      to={value}
+                      prefix={prefix}
+                      suffix={suffix}
                     />
                   </div>
                   <div className="mb-3" style={{ color: "#8080a0", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
@@ -472,6 +508,74 @@ export default function HomePageClient(props: Props) {
           <AnimatedSection className="text-center mt-10">
             <Link href="/services" className="btn-primary btn-glow inline-flex gap-2">
               <span>استكشف كل الخدمات</span>
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <AnimatedSection className="text-center mb-12">
+            <span className="section-badge mb-5 mx-auto">
+              <Layers className="w-2.5 h-2.5" />
+              العروض التجارية
+            </span>
+            <h2 className="section-title mt-4 mb-3">What I can build for you</h2>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {commercialOffers.map((offer, index) => (
+              <AnimatedSection key={offer.title} delay={index * 0.06}>
+                <HolographicCard duration={6 + index}>
+                  <div className="p-6 h-full flex flex-col">
+                    <div className="w-11 h-11 rounded-xl bg-purple-600/15 border border-purple-600/30 flex items-center justify-center mb-4">
+                      <offer.icon className="w-5 h-5 text-purple-200" />
+                    </div>
+                    <h3 className="text-white font-black text-lg mb-2">{offer.title}</h3>
+                    <p className="text-sm text-[#a4a4c4] leading-relaxed flex-1">{offer.description}</p>
+                    <Link href="/contact" className="btn-outline inline-flex items-center justify-center text-xs mt-5">
+                      اطلب عرض سعر
+                    </Link>
+                  </div>
+                </HolographicCard>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          <AnimatedSection className="text-center mt-8">
+            <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2">
+              ابعت فكرة مشروعك
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 relative overflow-hidden">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection className="text-center mb-10">
+            <span className="section-badge mb-5 mx-auto">
+              <CheckCircle2 className="w-2.5 h-2.5" />
+              Why Work With Me?
+            </span>
+            <h2 className="section-title mt-4 mb-3">لماذا تختار العمل معي؟</h2>
+          </AnimatedSection>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {whyWorkWithMe.map((item, index) => (
+              <AnimatedSection key={item} delay={index * 0.04}>
+                <div className="rounded-xl border border-[#2a2342] bg-[#0d0b18] p-4 text-sm text-[#d9d9ee] inline-flex items-center gap-2 w-full min-h-[64px]">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  <span>{item}</span>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+
+          <AnimatedSection className="text-center mt-8">
+            <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2">
+              احجز استشارة مجانية
               <ArrowLeft className="w-4 h-4" />
             </Link>
           </AnimatedSection>
@@ -827,7 +931,7 @@ export default function HomePageClient(props: Props) {
                         </div>
                       ))}
                     </div>
-                    <span style={{ color: "#a0a0c0", fontSize: "0.75rem" }}>+30 عميل سعيد</span>
+                    <span style={{ color: "#a0a0c0", fontSize: "0.75rem" }}>30+ عميل وتجربة عمل</span>
                     <div className="flex gap-0.5">
                       {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                     </div>

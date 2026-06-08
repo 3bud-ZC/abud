@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Github, Linkedin, Twitter, Send, Mail, Download, MapPin, Zap, Instagram } from "lucide-react";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
+import { TRUST_METRIC_BY_ID } from "@/data/trust-metrics";
 
 const DEFAULT_SOCIALS = [
   { icon: Github,   label: "GitHub",   href: "https://github.com/3bud-ZC",      accent: "#c084fc" },
@@ -24,6 +25,10 @@ function isValidObjectPosition(value: string): boolean {
 }
 
 export default function ProfileHero() {
+  const projectsMetric = TRUST_METRIC_BY_ID.projects;
+  const yearsMetric = TRUST_METRIC_BY_ID.years;
+  const clientsMetric = TRUST_METRIC_BY_ID.clients;
+
   const cardRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
   const [profileImage, setProfileImage] = useState("/avatar.jpeg");
@@ -35,7 +40,7 @@ export default function ProfileHero() {
     intro: "مطور Full-Stack وصانع أدوات الذكاء الاصطناعي ─ أبني الحلول التقنية المتكاملة بعقلية سيبرانية وشغف حقيقي بالتقنية.",
     statusBadge: "متاح للمشاريع الجديدة",
     location: "القاهرة، مصر • UTC+3",
-    experience: "5+ سنوات خبرة",
+    experience: `${yearsMetric.value}+ سنوات خبرة عملية`,
     cvUrl: "/cv-abud.pdf",
   });
 
@@ -386,15 +391,15 @@ export default function ProfileHero() {
               {/* Inline stats */}
               <div className="grid grid-cols-3 gap-3 w-full pt-4" style={{ borderTop: "1px solid rgba(168,85,247,0.2)" }}>
                 <div>
-                  <div className="text-white font-black text-base">+50</div>
+                  <div className="text-white font-black text-base">{projectsMetric.value}+</div>
                   <div className="text-[10px]" style={{ color: "#9090b0" }}>مشروع</div>
                 </div>
                 <div style={{ borderInline: "1px solid rgba(168,85,247,0.15)" }}>
-                  <div className="text-white font-black text-base">5+</div>
+                  <div className="text-white font-black text-base">{yearsMetric.value}+</div>
                   <div className="text-[10px]" style={{ color: "#9090b0" }}>سنوات</div>
                 </div>
                 <div>
-                  <div className="text-white font-black text-base">+30</div>
+                  <div className="text-white font-black text-base">{clientsMetric.value}+</div>
                   <div className="text-[10px]" style={{ color: "#9090b0" }}>عميل</div>
                 </div>
               </div>
