@@ -48,13 +48,20 @@ jobs:
             echo ">>> [3/6] تثبيت الـ dependencies..."
             npm ci
 
-            echo ">>> [4/6] توليد Prisma Client..."
+            echo ">>> [4/8] توليد Prisma Client..."
             npx prisma generate
 
-            echo ">>> [5/6] بناء المشروع..."
+            echo ">>> [5/8] تحديث قاعدة البيانات..."
+            npx prisma db push
+
+            echo ">>> [6/8] مزامنة بيانات الخدمات والمعرض..."
+            npm run db:seed-services
+            npm run db:seed-portfolio
+
+            echo ">>> [7/8] بناء المشروع..."
             npm run build
 
-            echo ">>> [6/6] إعادة تشغيل PM2..."
+            echo ">>> [8/8] إعادة تشغيل PM2..."
             pm2 reload abud-platform || pm2 start ecosystem.config.js --env production
             pm2 save
 

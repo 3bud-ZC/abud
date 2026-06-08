@@ -4,6 +4,13 @@ import { PRIMARY_SERVICES } from "../src/data/services";
 const prisma = new PrismaClient();
 
 async function main() {
+  const canonicalSlugs = PRIMARY_SERVICES.map((item) => item.slug);
+
+  await prisma.service.updateMany({
+    where: { slug: { notIn: canonicalSlugs } },
+    data: { isActive: false },
+  });
+
   for (const item of PRIMARY_SERVICES) {
     await prisma.service.upsert({
       where: { slug: item.slug },
