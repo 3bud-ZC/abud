@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Activity, BookOpen, Coffee, Headphones, Zap, Briefcase } from "lucide-react";
+import { Activity, BookOpen, Coffee, Headphones, Briefcase } from "lucide-react";
 import HolographicCard from "@/components/effects/HolographicCard";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
@@ -10,9 +10,9 @@ const ACTIVITIES = [
     icon: Briefcase,
     title: "أعمل حالياً على",
     items: [
-      "ABUD Platform 2.0",
-      "AI Trading Bot للعملات الرقمية",
-      "نظام أتمتة CRM متكامل",
+      "ABUD Platform 2.0 (تحسين تجربة الطلب والتسعير)",
+      "أنظمة CRM/ERP مخصصة للشركات الناشئة",
+      "أدوات AI داخلية لتقليل وقت التشغيل اليومي",
     ],
     accent: "#c084fc",
     label: "Building",
@@ -21,9 +21,9 @@ const ACTIVITIES = [
     icon: BookOpen,
     title: "أتعلم هذا الشهر",
     items: [
-      "Rust + WebAssembly",
-      "Vector Databases (Pinecone, Weaviate)",
-      "Edge Computing مع Cloudflare Workers",
+      "LLM Orchestration + Agent Workflows",
+      "Vector Search Pipelines (RAG في الإنتاج)",
+      "تحسين البنية على Edge/Serverless",
     ],
     accent: "#67e8f9",
     label: "Learning",
@@ -32,9 +32,9 @@ const ACTIVITIES = [
     icon: Headphones,
     title: "أستمع إليه",
     items: [
-      "Lex Fridman Podcast",
-      "Syntax.fm",
-      "Hala Lounge (للتركيز)",
+      "Indie Hackers & SaaS Breakdowns",
+      "Syntax.fm + Latent Space",
+      "Focus Playlists أثناء sprint التنفيذ",
     ],
     accent: "#a78bfa",
     label: "Listening",
@@ -44,12 +44,18 @@ const ACTIVITIES = [
     title: "إحصائيات اليوم",
     items: [
       "☕ 3 فناجين قهوة",
-      "💻 8+ ساعات كود",
-      "🚀 12 commits",
+      "💻 8+ ساعات تنفيذ مركز",
+      "🚀 مراجعات + تسليمات يومية",
     ],
     accent: "#fbbf24",
     label: "Today",
   },
+];
+
+const EXECUTION_CADENCE = [
+  { label: "تحديثات المشروع", value: "1-2 مرات أسبوعياً" },
+  { label: "زمن الرد", value: "خلال نفس اليوم" },
+  { label: "تسليم أولي", value: "سريع وقابل للاختبار" },
 ];
 
 export default function CurrentlyWorking() {
@@ -71,8 +77,30 @@ export default function CurrentlyWorking() {
             </span>
           </h2>
           <p className="section-subtitle text-center max-w-xl mx-auto">
-            نظرة حية على ما أبنيه، أتعلمه، وأقضي فيه يومي
+            نظرة مباشرة على المشاريع الحالية وطريقة التنفيذ اليومية
           </p>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.05} className="mb-8">
+          <div className="grid sm:grid-cols-3 gap-3">
+            {EXECUTION_CADENCE.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl px-4 py-3 text-center"
+                style={{
+                  background: "rgba(103,232,249,0.07)",
+                  border: "1px solid rgba(103,232,249,0.22)",
+                }}
+              >
+                <div className="text-[10px] mb-1" style={{ color: "#8f8fb2" }}>
+                  {item.label}
+                </div>
+                <div className="text-xs font-bold" style={{ color: "#d8f6ff" }}>
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
         </AnimatedSection>
 
         <div className="grid sm:grid-cols-2 gap-4">

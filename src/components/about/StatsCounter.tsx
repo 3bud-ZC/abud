@@ -5,6 +5,7 @@ import { Code2, Users, Calendar, Layers, Shield, type LucideIcon } from "lucide-
 import CountUp from "@/components/effects/CountUp";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
+import AnimatedSection from "@/components/ui/AnimatedSection";
 import { TRUST_METRICS } from "@/data/trust-metrics";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -23,12 +24,21 @@ const ACCENT_MAP: Record<string, string> = {
   quality: "#34d399",
 };
 
+const CONTEXT_MAP: Record<string, string> = {
+  projects: "تنفيذات حقيقية عبر قطاعات مختلفة",
+  years: "خبرة عملية متراكمة وليست نظرية",
+  clients: "تجارب تعاون من فردي إلى شركات",
+  published_apps: "منتجات live وقابلة للاستخدام اليومي",
+  quality: "تركيز دائم على الاستقرار قبل التسليم",
+};
+
 const STATS = TRUST_METRICS.map((metric) => ({
   icon: ICON_MAP[metric.id],
   value: metric.value,
   suffix: metric.suffix || "",
   label: metric.label,
   accent: ACCENT_MAP[metric.id],
+  context: CONTEXT_MAP[metric.id],
 }));
 
 export default function StatsCounter() {
@@ -46,6 +56,13 @@ export default function StatsCounter() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_50%,rgba(147,51,234,0.06)_0%,transparent_70%)]" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
+        <AnimatedSection className="text-center mb-10">
+          <h2 className="section-title mt-0 mb-3">نتائج مبنية على تنفيذ فعلي</h2>
+          <p className="section-subtitle text-center max-w-2xl mx-auto">
+            الأرقام دي مش للعرض، دي خلاصة شغل فعلي وتسليمات حقيقية أثرت على مشاريع العملاء بشكل مباشر.
+          </p>
+        </AnimatedSection>
+
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {STATS.map((stat, i) => {
             const Icon = stat.icon;
@@ -115,11 +132,20 @@ export default function StatsCounter() {
                   <div className="text-[11px] font-medium" style={{ color: "#9090b0" }}>
                     {stat.label}
                   </div>
+                  <div className="text-[10px] mt-1.5 leading-relaxed" style={{ color: "#7f7fa4" }}>
+                    {stat.context}
+                  </div>
                 </div>
               </motion.div>
             );
           })}
         </div>
+
+        <AnimatedSection delay={0.2} className="text-center mt-8">
+          <p className="text-xs" style={{ color: "#8d8dae" }}>
+            الهدف النهائي في كل مشروع: نتيجة تجارية قابلة للقياس، مش مجرد واجهة شكلها حلو.
+          </p>
+        </AnimatedSection>
       </div>
     </section>
   );

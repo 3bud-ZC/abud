@@ -38,6 +38,7 @@ const SKILLS: Skill[] = [
 export default function SkillConstellation() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [size, setSize] = useState(640);
 
   // 3D parallax with mouse
@@ -68,6 +69,7 @@ export default function SkillConstellation() {
 
   const center = size / 2;
   const maxRadius = size * 0.42;
+  const activeSkill = hovered || selectedSkill;
 
   return (
     <section className="py-20 px-4 relative overflow-hidden bg-[#070612]">
@@ -82,7 +84,7 @@ export default function SkillConstellation() {
           </span>
           <h2 className="section-title mt-4 mb-3">كوكبة المهارات</h2>
           <p className="section-subtitle text-center max-w-xl mx-auto">
-            مرّر فوق أي مهارة لتكشف تفاصيلها ─ كل كوكب يمثّل مستوى الإتقان
+            خريطة المهارات التي أبني بها منتجات كاملة: من الواجهة وحتى الأنظمة والذكاء الاصطناعي
           </p>
         </AnimatedSection>
 
@@ -138,9 +140,9 @@ export default function SkillConstellation() {
                     y1={center}
                     x2={x}
                     y2={y}
-                    stroke={hovered === s.name ? s.color : "rgba(168,85,247,0.18)"}
-                    strokeWidth={hovered === s.name ? 1.5 : 0.5}
-                    strokeDasharray={hovered === s.name ? "0" : "3,4"}
+                    stroke={activeSkill === s.name ? s.color : "rgba(168,85,247,0.18)"}
+                    strokeWidth={activeSkill === s.name ? 1.5 : 0.5}
+                    strokeDasharray={activeSkill === s.name ? "0" : "3,4"}
                     initial={{ pathLength: 0, opacity: 0 }}
                     whileInView={{ pathLength: 1, opacity: 1 }}
                     viewport={{ once: true }}
@@ -193,7 +195,7 @@ export default function SkillConstellation() {
               const y = center + Math.sin(rad) * maxRadius * s.distance;
               const planetSize = 20 + (s.level / 100) * 28; // 20-48px based on level
               const Icon = s.icon;
-              const isHov = hovered === s.name;
+              const isHov = activeSkill === s.name;
 
               return (
                 <motion.div
@@ -211,6 +213,7 @@ export default function SkillConstellation() {
                   transition={{ duration: 0.6, delay: 0.4 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
                   onMouseEnter={() => setHovered(s.name)}
                   onMouseLeave={() => setHovered(null)}
+                  onClick={() => setSelectedSkill((prev) => (prev === s.name ? null : s.name))}
                   whileHover={{ scale: 1.25 }}
                 >
                   {/* Glow halo */}
@@ -297,6 +300,12 @@ export default function SkillConstellation() {
             </span>
           ))}
         </div>
+
+        <AnimatedSection delay={0.2} className="text-center mt-7">
+          <p className="text-xs max-w-2xl mx-auto" style={{ color: "#8f8fb2" }}>
+            استخدم hover أو touch على أي مهارة لعرض مستواها. الدمج بين المهارات دي هو اللي يخليني أقدّم حل متكامل بدل أجزاء منفصلة.
+          </p>
+        </AnimatedSection>
       </div>
     </section>
   );

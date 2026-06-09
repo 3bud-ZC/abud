@@ -11,39 +11,42 @@ const PRINCIPLES = [
   {
     num: "01",
     icon: Target,
-    title: "لا حلول ناقصة",
-    desc: "إما المشروع يخرج كامل، نظيف، ومُتقن من الأول للآخر — أو ما يطلعش أصلاً. الـ '90%' كافي ده مش مبدأي.",
+    title: "نتيجة واضحة قبل أي شيء",
+    desc: "كل قرار تقني لازم يخدم هدف المشروع التجاري. بدون أثر واضح على النمو أو التشغيل، القرار بيتراجع.",
     accent: "#c084fc",
   },
   {
     num: "02",
     icon: Zap,
     title: "السرعة جزء من الجودة",
-    desc: "موقع بطيء = موقع ميت. كل millisecond بيفرق. الأداء ليس ميزة إضافية — هو الميزة الأساسية.",
+    desc: "موقع بطيء يعني فرص أقل. الأداء، responsiveness، وتجربة الاستخدام السريعة أساسيين من أول نسخة.",
     accent: "#67e8f9",
   },
   {
     num: "03",
     icon: FileText,
-    title: "وثّق كل شيء",
-    desc: "كود بدون documentation = قنبلة موقوتة. README واضح، تعليقات في الأماكن الحرجة، و architecture diagrams.",
+    title: "نظام قابل للتسليم والصيانة",
+    desc: "تنظيم الكود، توثيق النقاط الحرجة، وإعدادات واضحة عشان فريقك يكمل بسهولة بعد التسليم.",
     accent: "#a78bfa",
   },
   {
     num: "04",
     icon: Users,
-    title: "العميل أولاً",
-    desc: "تواصل واضح، تحديثات منتظمة، شفافية كاملة في الـ progress والـ challenges. الثقة تُبنى بالأفعال.",
+    title: "تواصل مباشر وشفاف",
+    desc: "تحديثات منتظمة، وضوح في التقدم، وتنبيه مبكر لأي تحديات. الثقة تتبني بالمصارحة مش بالمفاجآت.",
     accent: "#f0abfc",
   },
   {
     num: "05",
     icon: GraduationCap,
-    title: "التعلم المستمر",
-    desc: "التقنية بتتغير كل أسبوع. لو وقفت تتعلم ساعة — اتأخرت يوم. كل مشروع فرصة لتعلم شيء جديد.",
+    title: "تطوير مستمر بلا تعقيد زائد",
+    desc: "أطور أسلوبي وأدواتي باستمرار، لكن باختيارات عملية تناسب مشروعك بدل التعقيد غير الضروري.",
     accent: "#34d399",
   },
 ];
+
+const PRINCIPLES_NOTE =
+  "المبادئ دي مش شعارات. دي طريقة التنفيذ اليومية في كل مرحلة من المشروع: من التخطيط لحد الإطلاق.";
 
 export default function PrinciplesSection() {
   return (
@@ -67,7 +70,7 @@ export default function PrinciplesSection() {
           </span>
           <h2 className="section-title mt-4 mb-3">القواعد التي أعمل بها</h2>
           <p className="section-subtitle text-center max-w-xl mx-auto">
-            خمسة مبادئ ثابتة تحكم كل سطر كود أكتبه وكل مشروع أبنيه
+            إطار عمل واضح يضمن تنفيذ أسرع، جودة أعلى، وتجربة تعاون مريحة
           </p>
         </AnimatedSection>
 
@@ -153,6 +156,12 @@ export default function PrinciplesSection() {
             );
           })}
         </div>
+
+        <AnimatedSection delay={0.2} className="text-center mt-8">
+          <p className="text-xs max-w-2xl mx-auto" style={{ color: "#8d8dae" }}>
+            {PRINCIPLES_NOTE}
+          </p>
+        </AnimatedSection>
       </div>
     </section>
   );

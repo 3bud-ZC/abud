@@ -5,16 +5,22 @@ import { Code2, Terminal, Globe, Palette, BrainCircuit, Cloud, Box, GitBranch, M
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
 const DAILY_TOOLS = [
-  { icon: Code2,        name: "Cursor",          tag: "Editor",       color: "#c084fc", desc: "AI-first code editor" },
-  { icon: Terminal,     name: "Win Terminal",    tag: "Terminal",     color: "#67e8f9", desc: "Daily shell driver" },
-  { icon: Globe,        name: "Arc Browser",     tag: "Browser",      color: "#a78bfa", desc: "Workspaces + dev tools" },
-  { icon: Palette,      name: "Figma",           tag: "Design",       color: "#f0abfc", desc: "UI / prototyping" },
-  { icon: BrainCircuit, name: "Claude + GPT-4",  tag: "AI Pair",      color: "#34d399", desc: "Reasoning & code review" },
-  { icon: Cloud,        name: "Vercel",          tag: "Hosting",      color: "#fbbf24", desc: "Frontend deploys" },
-  { icon: Box,          name: "Docker",          tag: "Containers",   color: "#67e8f9", desc: "Local + prod parity" },
-  { icon: GitBranch,    name: "GitHub",          tag: "VCS + CI",     color: "#c084fc", desc: "Source + Actions" },
-  { icon: Headphones,   name: "Spotify",         tag: "Focus Music",  color: "#a78bfa", desc: "Lo-fi + Synthwave" },
-  { icon: Music,        name: "Notion",          tag: "Knowledge",    color: "#f0abfc", desc: "Notes + roadmap" },
+  { icon: Code2,        name: "Cursor",          tag: "Editor",       color: "#c084fc", desc: "تطوير أسرع مع مراجعة لحظية" },
+  { icon: Terminal,     name: "Win Terminal",    tag: "Terminal",     color: "#67e8f9", desc: "تشغيل، فحص، وأتمتة يومية" },
+  { icon: Globe,        name: "Arc Browser",     tag: "Browser",      color: "#a78bfa", desc: "بيئة اختبار وتجربة عميل" },
+  { icon: Palette,      name: "Figma",           tag: "Design",       color: "#f0abfc", desc: "تحويل الفكرة لواجهات واضحة" },
+  { icon: BrainCircuit, name: "Claude + GPT-4",  tag: "AI Pair",      color: "#34d399", desc: "تحليل سريع وحلول أدق" },
+  { icon: Cloud,        name: "Vercel",          tag: "Hosting",      color: "#fbbf24", desc: "نشر سريع ومراقبة الأداء" },
+  { icon: Box,          name: "Docker",          tag: "Containers",   color: "#67e8f9", desc: "بيئة متطابقة بين المحلي والإنتاج" },
+  { icon: GitBranch,    name: "GitHub",          tag: "VCS + CI",     color: "#c084fc", desc: "إدارة إصدارات وتسليم منظم" },
+  { icon: Headphones,   name: "Spotify",         tag: "Focus Music",  color: "#a78bfa", desc: "جلسات deep work بدون مشتتات" },
+  { icon: Music,        name: "Notion",          tag: "Knowledge",    color: "#f0abfc", desc: "توثيق القرارات وخطة التنفيذ" },
+];
+
+const STACK_PROMISES = [
+  "اختيار الأدوات حسب هدف المشروع مش حسب الترند",
+  "تقليل الوقت الضائع بين التصميم، التطوير، والإطلاق",
+  "تسليم قابل للصيانة من أول نسخة",
 ];
 
 export default function DailyStack() {
@@ -30,8 +36,29 @@ export default function DailyStack() {
           </span>
           <h2 className="section-title mt-4 mb-3">الأدوات التي ترافقني يومياً</h2>
           <p className="section-subtitle text-center max-w-xl mx-auto">
-            الـ stack اللي بيخلي شغلي أسرع وأنظف وأسلس
+            Stack عملي مصمم لتسليم أسرع وجودة أعلى من أول Sprint
           </p>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.05} className="mb-8">
+          <div
+            className="rounded-2xl p-4 md:p-5"
+            style={{
+              background: "rgba(12,10,22,0.75)",
+              border: "1px solid rgba(192,132,252,0.24)",
+            }}
+          >
+            <div className="grid md:grid-cols-3 gap-3">
+              {STACK_PROMISES.map((promise) => (
+                <div key={promise} className="flex items-start gap-2.5">
+                  <span className="w-1.5 h-1.5 rounded-full mt-2" style={{ background: "#c084fc" }} />
+                  <p className="text-xs leading-relaxed" style={{ color: "#b4b4cf" }}>
+                    {promise}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </AnimatedSection>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">

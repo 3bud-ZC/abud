@@ -15,6 +15,12 @@ const DEFAULT_SOCIALS = [
   { icon: Mail,     label: "Email",    href: "mailto:hello@abud.fun",            accent: "#f0abfc" },
 ];
 
+const DELIVERY_PILLARS = [
+  { title: "تخطيط واضح", detail: "هدف + نطاق + أولويات" },
+  { title: "تنفيذ سريع", detail: "مراحل قصيرة وتسليم مستمر" },
+  { title: "استقرار حقيقي", detail: "أداء، أمان، وتجربة ثابتة" },
+];
+
 function isValidObjectPosition(value: string): boolean {
   const v = value.trim().toLowerCase();
   const keyword = "(left|center|right|top|bottom)";
@@ -36,8 +42,9 @@ export default function ProfileHero() {
   const [socials, setSocials] = useState(DEFAULT_SOCIALS);
   const [about, setAbout] = useState({
     name: "Abud",
-    role: "Full-Stack Developer • AI Engineer",
-    intro: "مطور Full-Stack وصانع أدوات الذكاء الاصطناعي ─ أبني الحلول التقنية المتكاملة بعقلية سيبرانية وشغف حقيقي بالتقنية.",
+    role: "Full-Stack Developer • AI & Automation Engineer",
+    intro:
+      "أحوّل أفكار المشاريع إلى منتجات رقمية جاهزة للسوق: مواقع سريعة، أنظمة تشغيل داخلية، وأدوات AI مخصصة ترفع الإنتاجية وتقلل الهدر.",
     statusBadge: "متاح للمشاريع الجديدة",
     location: "القاهرة، مصر • UTC+3",
     experience: `${yearsMetric.value}+ سنوات خبرة عملية`,
@@ -144,6 +151,31 @@ export default function ProfileHero() {
           {about.intro}
         </motion.p>
 
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="grid sm:grid-cols-3 gap-2 mb-7 max-w-2xl mx-auto lg:mr-0 lg:ml-auto"
+        >
+          {DELIVERY_PILLARS.map((pillar) => (
+            <div
+              key={pillar.title}
+              className="rounded-xl px-3 py-2 text-center"
+              style={{
+                background: "rgba(192,132,252,0.08)",
+                border: "1px solid rgba(192,132,252,0.2)",
+              }}
+            >
+              <div className="text-[11px] font-bold" style={{ color: "#f4f4ff" }}>
+                {pillar.title}
+              </div>
+              <div className="text-[10px] mt-0.5" style={{ color: "#a0a0c0" }}>
+                {pillar.detail}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
         {/* Meta row */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -168,18 +200,26 @@ export default function ProfileHero() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-end"
         >
-          <a href="/contact" className="btn-primary btn-glow inline-flex gap-2 items-center">
-            <span>تواصل معي</span>
+          <a href="/quote" className="btn-primary btn-glow inline-flex gap-2 items-center">
+            <span>احسب تكلفة مشروعك</span>
           </a>
-          <a
-            href={about.cvUrl}
-            download
-            className="btn-outline inline-flex gap-2 items-center"
-          >
-            <Download className="w-4 h-4" />
-            <span>تحميل CV</span>
+          <a href="/contact" className="btn-outline inline-flex gap-2 items-center">
+            <span>احجز مكالمة البداية</span>
           </a>
         </motion.div>
+
+        <motion.a
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.68 }}
+          href={about.cvUrl}
+          download
+          className="inline-flex items-center gap-2 text-xs font-semibold mb-8"
+          style={{ color: "#c9b4f9" }}
+        >
+          <Download className="w-3.5 h-3.5" />
+          تحميل السيرة الذاتية
+        </motion.a>
 
         {/* Social row */}
         <motion.div
