@@ -297,25 +297,29 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
             <HolographicCard duration={6}>
               <div className="p-8 md:p-10 text-center">
                 <h2 className="text-white font-black text-2xl mb-2" style={{ letterSpacing: "-0.02em" }}>
-                  اطلب مشروع مشابه
+                  عايز مشروع مشابه؟
                 </h2>
                 <p className="text-sm mb-5" style={{ color: "#9090b0" }}>
-                  لو عندك فكرة مشابهة لأي مشروع من الأعمال المعروضة، ابعت التفاصيل وهرد عليك بخطة تنفيذ وتكلفة تقريبية.
+                  أقدر أبني لك موقع، نظام، بوت، أو أداة AI حسب احتياج مشروعك وميزانيتك.
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  <Link href="/contact" className="btn-primary btn-glow gap-2 text-sm py-2.5 px-6">
-                    اطلب مشروع مشابه
+                  <Link href="/quote" className="btn-primary btn-glow gap-2 text-sm py-2.5 px-6 inline-flex items-center">
+                    احسب سعر مشروعك
                   </Link>
-                  <a
-                    href={GITHUB_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center"
-                  >
-                    <Github className="w-4 h-4" />
-                    Follow on GitHub
-                  </a>
+                  <Link href="/contact" className="btn-outline gap-2 text-sm py-2.5 px-6 inline-flex items-center">
+                    تواصل مباشر
+                  </Link>
                 </div>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs mt-4"
+                  style={{ color: "#8b8bab" }}
+                >
+                  <Github className="w-3.5 h-3.5" />
+                  GitHub (اختياري)
+                </a>
               </div>
             </HolographicCard>
           </AnimatedSection>

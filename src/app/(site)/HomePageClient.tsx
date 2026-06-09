@@ -13,12 +13,10 @@ import {
 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingCodeSnippets from "@/components/effects/FloatingCodeSnippets";
-import TypewriterText from "@/components/effects/TypewriterText";
 import HolographicWordmark from "@/components/effects/HolographicWordmark";
 import HeroFloatingCards from "@/components/effects/HeroFloatingCards";
 import TechStackSection from "@/components/sections/TechStackSection";
 import LiveTerminal from "@/components/effects/LiveTerminal";
-import CountUp from "@/components/effects/CountUp";
 import TechMarquee from "@/components/effects/TechMarquee";
 import HolographicCard from "@/components/effects/HolographicCard";
 import AnimatedBar from "@/components/effects/AnimatedBar";
@@ -202,12 +200,6 @@ export default function HomePageClient(props: Props) {
         setCms((prev) => ({
           ...prev,
           heroBadge: s.home_hero_badge || prev.heroBadge,
-          heroTitle: s.home_hero_title || prev.heroTitle,
-          heroSubtitle: s.home_hero_subtitle || prev.heroSubtitle,
-          heroPrimaryText: s.home_hero_primary_text || prev.heroPrimaryText,
-          heroPrimaryLink: s.home_hero_primary_link || prev.heroPrimaryLink,
-          heroSecondaryText: s.home_hero_secondary_text || prev.heroSecondaryText,
-          heroSecondaryLink: s.home_hero_secondary_link || prev.heroSecondaryLink,
           aboutTitle: s.home_about_title || prev.aboutTitle,
           aboutDesc: s.home_about_desc || prev.aboutDesc,
           finalCtaTitle: s.home_final_cta_title || prev.finalCtaTitle,
@@ -313,11 +305,7 @@ export default function HomePageClient(props: Props) {
                 lineHeight: 1.35,
               }}
             >
-              <TypewriterText
-                text={cms.heroTitle}
-                speed={70}
-                startDelay={400}
-              />
+              {cms.heroTitle}
             </h2>
           </m.div>
 
@@ -404,11 +392,7 @@ export default function HomePageClient(props: Props) {
                     className="font-black mb-2 text-transparent bg-clip-text neon-text"
                     style={{ backgroundImage: "linear-gradient(135deg, #f0e6ff 0%, #a855f7 100%)", fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.03em" }}
                   >
-                    <CountUp
-                      to={value}
-                      prefix={prefix}
-                      suffix={suffix}
-                    />
+                    {`${prefix}${value}${suffix}`}
                   </div>
                   <div className="mb-3" style={{ color: "#8080a0", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>{label}</div>
                   <AnimatedBar to={percent} delay={0.1 + i * 0.12} duration={1.6} />

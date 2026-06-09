@@ -88,6 +88,15 @@ const DEFAULT_DAYS_BY_SLUG: Record<string, number> = {
   "ecommerce-digital-platforms": 14,
 };
 
+const MARKET_RANGE_BY_SLUG: Record<string, { min: number; max: number }> = {
+  "web-development": { min: 3000, max: 15000 },
+  "erp-crm-systems": { min: 10000, max: 60000 },
+  "telegram-bots-mini-apps": { min: 2500, max: 12000 },
+  "ai-automation-tools": { min: 2000, max: 20000 },
+  "vps-deployment-maintenance": { min: 1500, max: 7000 },
+  "ecommerce-digital-platforms": { min: 5000, max: 25000 },
+};
+
 /* ── Add-ons (multipliers + flat) ── */
 const ADDONS: AddonOption[] = [
   { id: "design", label: "تصميم UI/UX مخصص", icon: Sparkles, type: "mult", value: 0.2, desc: "تصميم بصري احترافي + Figma" },
@@ -141,8 +150,7 @@ function getStartingPrice(slug: string, price?: number | null): number {
 
 export default function QuotePage() {
   const [services, setServices] = useState<QuoteService[]>(FALLBACK_SERVICES);
-  const [servicesLoading, setServicesLoading] = useState(true);
-  const [projectType, setProjectType] = useState<string | null>(null);
+  const [projectType, setProjectType] = useState<string | null>(FALLBACK_SERVICES[0]?.slug ?? null);
   const [pages, setPages] = useState(5);
   const [addons, setAddons] = useState<string[]>([]);
   const [timeline, setTimeline] = useState("normal");
@@ -151,7 +159,6 @@ export default function QuotePage() {
     let cancelled = false;
 
     async function loadServices() {
-      setServicesLoading(true);
       try {
         const res = await fetch("/api/services", { cache: "no-store" });
         const data = await res.json();
@@ -163,10 +170,6 @@ export default function QuotePage() {
       } catch {
         if (!cancelled) {
           setServices(FALLBACK_SERVICES);
-        }
-      } finally {
-        if (!cancelled) {
-          setServicesLoading(false);
         }
       }
     }
@@ -286,8 +289,27 @@ export default function QuotePage() {
     const pageLoadFactor = selectedProject.supportsPages ? Math.max(0, pages - 5) * 0.03 : 0;
     const days = Math.max(2, Math.round(selectedProject.baseDays * tl.daysMult * (1 + addons.length * 0.05 + pageLoadFactor)));
 
-    const min = Math.round(total * 0.9);
-    const max = Math.round(total * 1.15);
+    const marketRange = MARKET_RANGE_BY_SLUG[selectedProject.slug];
+
+    let min = Math.round(total * 0.9);
+    let max = Math.round(total * 1.15);
+
+    if (marketRange) {
+      const pageComplexity = selectedProject.supportsPages ? Math.max(0, pages - 5) * 0.05 : 0;
+      const addonComplexity = addons.length * 0.08;
+      const timelineComplexity = tl.id === "rush" ? 0.06 : tl.id === "flex" ? -0.03 : 0;
+      const complexityScore = Math.max(0, pageComplexity + addonComplexity + timelineComplexity);
+      const marketSpread = marketRange.max - marketRange.min;
+      const complexityBoost = Math.round(marketSpread * Math.min(0.9, complexityScore));
+
+      min = Math.max(marketRange.min, min);
+      max = Math.max(max, min + 800, marketRange.min + complexityBoost);
+      max = Math.min(marketRange.max, max);
+
+      if (max < min) {
+        max = min;
+      }
+    }
 
     return { total, min, max, days, breakdown };
   }, [selectedProject, pages, addons, timeline]);
@@ -392,11 +414,6 @@ export default function QuotePage() {
                     );
                   })}
                 </div>
-                {servicesLoading ? (
-                  <div className="mt-3 text-[11px]" style={{ color: "#7f7fa5" }}>
-                    جاري مزامنة الخدمات من لوحة الأدمن...
-                  </div>
-                ) : null}
               </div>
             </HolographicCard>
 

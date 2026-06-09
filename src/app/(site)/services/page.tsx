@@ -12,6 +12,7 @@ import { SERVICE_CATEGORIES, SERVICE_CATEGORY_MAP, normalizeServiceCategory } fr
 import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
 import { siteUrl } from "@/lib/site-url";
 import { TRUST_METRICS, formatTrustMetricValue } from "@/data/trust-metrics";
+import { PRIMARY_SERVICES } from "@/data/services";
 
 interface ServiceRow {
   id: string;
@@ -28,6 +29,22 @@ interface ServiceRow {
   isActive: boolean;
   order: number;
 }
+
+const FALLBACK_SERVICES: ServiceRow[] = PRIMARY_SERVICES.map((service) => ({
+  id: `seed-${service.slug}`,
+  title: service.title,
+  slug: service.slug,
+  description: service.description,
+  longDesc: `${service.longDesc}\n\nمدة التسليم: ${service.deliveryTime}`,
+  useCase: service.category,
+  icon: service.icon,
+  priceType: service.priceType,
+  price: service.price,
+  ctaLabel: service.ctaLabel,
+  featured: service.featured,
+  isActive: true,
+  order: service.order,
+}));
 
 function extractPoints(longDesc?: string | null): string[] {
   if (!longDesc) return [];
@@ -60,24 +77,33 @@ function buildContactLink(service: ServiceRow): string {
 }
 
 export default function ServicesPage() {
-  const [loading, setLoading] = useState(true);
-  const [services, setServices] = useState<ServiceRow[]>([]);
+  const [services, setServices] = useState<ServiceRow[]>(FALLBACK_SERVICES);
   const [activeCategory, setActiveCategory] = useState<(typeof SERVICE_CATEGORIES)[number]["id"]>("all");
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadServices() {
       try {
         const res = await fetch("/api/services", { cache: "no-store" });
+        if (!res.ok) return;
+
         const data = await res.json();
-        const rows = Array.isArray(data.services) ? data.services : [];
-        setServices(rows);
+        const rows = Array.isArray(data?.services) ? (data.services as ServiceRow[]) : [];
+
+        if (!cancelled && rows.length > 0) {
+          setServices(rows);
+        }
       } catch {
-        setServices([]);
-      } finally {
-        setLoading(false);
+        // keep fallback
       }
     }
+
     void loadServices();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -128,7 +154,7 @@ export default function ServicesPage() {
             url: siteUrl("/about"),
           },
           areaServed: "Worldwide",
-          url: siteUrl(`/services#${normalizeServiceCategory(service.useCase)}`),
+          url: siteUrl(`/services/${service.slug}`),
         },
       })),
     };
@@ -139,7 +165,7 @@ export default function ServicesPage() {
     return services.filter((s) => normalizeServiceCategory(s.useCase) === activeCategory);
   }, [services, activeCategory]);
 
-  const totalLabel = services.length > 0 ? `${services.length}+` : "0";
+  const totalLabel = `${services.length}`;
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -230,53 +256,45 @@ export default function ServicesPage() {
             })}
           </div>
 
-          {loading ? (
-            <div className="py-12 text-center">
-              <div className="w-7 h-7 rounded-full border-2 border-purple-500 border-t-transparent animate-spin mx-auto" />
+          {featuredServices.length > 0 && activeCategory === "all" && (
+            <div className="mb-10">
+              <h2 className="text-white font-bold text-lg mb-4">الأكثر طلبًا</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {featuredServices.map((service, i) => (
+                  <AnimatedSection key={service.id} delay={i * 0.05}>
+                    <FeaturedServiceCard service={service} />
+                  </AnimatedSection>
+                ))}
+              </div>
             </div>
-          ) : (
-            <>
-              {featuredServices.length > 0 && activeCategory === "all" && (
-                <div className="mb-10">
-                  <h2 className="text-white font-bold text-lg mb-4">الأكثر طلبًا</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {featuredServices.map((service, i) => (
-                      <AnimatedSection key={service.id} delay={i * 0.05}>
-                        <FeaturedServiceCard service={service} />
-                      </AnimatedSection>
-                    ))}
-                  </div>
-                </div>
-              )}
+          )}
 
-              <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.24 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {filteredServices.map((service, i) => (
                 <motion.div
-                  key={activeCategory}
-                  initial={{ opacity: 0, y: 10 }}
+                  key={service.id}
+                  initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.24 }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                  transition={{ delay: i * 0.03, duration: 0.25 }}
                 >
-                  {filteredServices.map((service, i) => (
-                    <motion.div
-                      key={service.id}
-                      initial={{ opacity: 0, y: 14 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.03, duration: 0.25 }}
-                    >
-                      <ServiceCard service={service} />
-                    </motion.div>
-                  ))}
+                  <ServiceCard service={service} />
                 </motion.div>
-              </AnimatePresence>
+              ))}
+            </motion.div>
+          </AnimatePresence>
 
-              {filteredServices.length === 0 && (
-                <div className="text-center py-14 text-[#8f8faa]">
-                  لا توجد خدمات في هذه الفئة حاليًا.
-                </div>
-              )}
-            </>
+          {filteredServices.length === 0 && (
+            <div className="text-center py-14 text-[#8f8faa]">
+              لا توجد خدمات في هذه الفئة حاليًا.
+            </div>
           )}
         </div>
       </section>

@@ -15,11 +15,12 @@ const footerLinks = {
     { href: "/contact", label: "تواصل" },
   ],
   services: [
-    { href: "/services#web-development", label: "تطوير مواقع احترافية" },
-    { href: "/services#business-systems", label: "أنظمة ERP / CRM" },
-    { href: "/services#telegram", label: "بوتات تيليجرام و Mini Apps" },
-    { href: "/services#ai-automation", label: "AI وأتمتة الأعمال" },
-    { href: "/services#devops", label: "نشر وإدارة VPS" },
+    { href: "/services/web-development", label: "تطوير مواقع احترافية" },
+    { href: "/services/erp-crm-systems", label: "أنظمة ERP / CRM" },
+    { href: "/services/telegram-bots-mini-apps", label: "بوتات تيليجرام و Mini Apps" },
+    { href: "/services/ai-automation-tools", label: "AI وأتمتة الأعمال" },
+    { href: "/services/vps-deployment-maintenance", label: "نشر وإدارة VPS" },
+    { href: "/services/ecommerce-digital-platforms", label: "متاجر ومنصات رقمية" },
   ],
 };
 
