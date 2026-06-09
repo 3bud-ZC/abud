@@ -384,7 +384,7 @@ export default function AdminServicesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm text-[#a0a0b8] mb-1">السعر</label>
+                  <label className="block text-sm text-[#a0a0b8] mb-1">السعر المبدئي (ج.م)</label>
                   <input
                     type="number"
                     dir="ltr"
@@ -393,6 +393,9 @@ export default function AdminServicesPage() {
                     placeholder="0.00"
                     className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm outline-none"
                   />
+                  <p className="text-[11px] mt-1" style={{ color: "#7070a0" }}>
+                    هذا الرقم يُستخدم كسعر بداية في صفحة الخدمات وقسم "احسب سعر مشروعك".
+                  </p>
                 </div>
               </div>
 

@@ -1,119 +1,326 @@
 ﻿"use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Calculator, Globe, BrainCircuit, Bot, Shield, Layers,
+  Calculator, Globe, BrainCircuit, Shield, Layers,
   Zap, Clock, Plus, Check, MessageSquare, Sparkles, ArrowLeft, Code2,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
+import { PRIMARY_SERVICES } from "@/data/services";
+import { getThemedIconPreset, resolveServiceIconKey } from "@/lib/themed-icons";
 
-/* ── Project types ── */
-const PROJECT_TYPES = [
-  { id: "landing", label: "صفحة هبوط", icon: Globe, base: 1500, days: 3, desc: "صفحة واحدة احترافية للتسويق" },
-  { id: "website", label: "موقع كامل", icon: Globe, base: 4500, days: 10, desc: "موقع متعدد الصفحات + SEO" },
-  { id: "webapp", label: "ويب آب", icon: Code2, base: 9000, days: 21, desc: "تطبيق ويب كامل + قاعدة بيانات" },
-  { id: "ai-tool", label: "أداة AI", icon: BrainCircuit, base: 6500, days: 14, desc: "أداة مدعومة بـ AI + API" },
-  { id: "telegram-bot", label: "بوت تيليجرام", icon: Bot, base: 2500, days: 5, desc: "بوت تفاعلي + Database" },
-  { id: "automation", label: "أتمتة سير العمل", icon: Layers, base: 3500, days: 7, desc: "n8n / Make.com workflows" },
-  { id: "cybersec", label: "أمن سيبراني", icon: Shield, base: 2000, days: 4, desc: "اختبار اختراق + تقرير" },
-];
+interface QuoteService {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  longDesc?: string | null;
+  useCase?: string | null;
+  icon?: string | null;
+  price?: number | null;
+}
+
+interface ProjectTypeOption {
+  id: string;
+  slug: string;
+  label: string;
+  description: string;
+  iconKey: string;
+  basePrice: number;
+  baseDays: number;
+  supportsPages: boolean;
+  extraPagePrice: number;
+}
+
+interface AddonOption {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  type: "mult" | "flat";
+  value: number;
+  desc: string;
+}
+
+interface TimelineOption {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  mult: number;
+  daysMult: number;
+  desc: string;
+}
+
+interface PriceBreakdownLine {
+  label: string;
+  value: number;
+}
+
+const FALLBACK_SERVICES: QuoteService[] = PRIMARY_SERVICES.map((service) => ({
+  id: `seed-${service.slug}`,
+  title: service.title,
+  slug: service.slug,
+  description: service.description,
+  longDesc: `${service.longDesc}\n\nمدة التسليم: ${service.deliveryTime}`,
+  useCase: service.category,
+  icon: service.icon,
+  price: service.price,
+}));
+
+const FALLBACK_PRICE_BY_SLUG = PRIMARY_SERVICES.reduce<Record<string, number>>((acc, service) => {
+  acc[service.slug] = service.price;
+  return acc;
+}, {});
+
+const PAGE_BASED_SERVICE_SLUGS = new Set(["web-development", "ecommerce-digital-platforms"]);
+
+const DEFAULT_DAYS_BY_SLUG: Record<string, number> = {
+  "web-development": 10,
+  "erp-crm-systems": 24,
+  "telegram-bots-mini-apps": 7,
+  "ai-automation-tools": 12,
+  "vps-deployment-maintenance": 3,
+  "ecommerce-digital-platforms": 14,
+};
 
 /* ── Add-ons (multipliers + flat) ── */
-const ADDONS = [
-  { id: "design", label: "تصميم UI/UX مخصص", icon: Sparkles, type: "mult", value: 0.35, desc: "تصميم بصري احترافي + Figma" },
-  { id: "auth", label: "نظام مستخدمين / Auth", icon: Shield, type: "flat", value: 1200, desc: "تسجيل + Login + JWT" },
-  { id: "payments", label: "بوابات دفع", icon: Zap, type: "flat", value: 1500, desc: "Stripe / PayPal / VF Cash" },
-  { id: "dashboard", label: "لوحة تحكم Admin", icon: Layers, type: "flat", value: 2000, desc: "إدارة محتوى + إحصائيات" },
-  { id: "ai-int", label: "تكامل AI متقدم", icon: BrainCircuit, type: "flat", value: 1800, desc: "GPT-4 / Claude / Gemini" },
-  { id: "api", label: "REST API كامل", icon: Code2, type: "flat", value: 1500, desc: "API موثقة + Rate limit" },
-  { id: "rtl-ar", label: "دعم RTL عربي + EN", icon: Globe, type: "mult", value: 0.15, desc: "موقع ثنائي اللغة كامل" },
-  { id: "seo", label: "SEO تقني متقدم", icon: Sparkles, type: "flat", value: 800, desc: "Schema + Sitemap + AMP" },
+const ADDONS: AddonOption[] = [
+  { id: "design", label: "تصميم UI/UX مخصص", icon: Sparkles, type: "mult", value: 0.2, desc: "تصميم بصري احترافي + Figma" },
+  { id: "auth", label: "نظام مستخدمين / Auth", icon: Shield, type: "flat", value: 3000, desc: "تسجيل + Login + إدارة صلاحيات" },
+  { id: "payments", label: "بوابات دفع", icon: Zap, type: "flat", value: 3500, desc: "بطاقات/محافظ إلكترونية + تكامل كامل" },
+  { id: "dashboard", label: "لوحة تحكم Admin", icon: Layers, type: "flat", value: 4500, desc: "إدارة محتوى + تقارير + صلاحيات" },
+  { id: "ai-int", label: "تكامل AI متقدم", icon: BrainCircuit, type: "flat", value: 3000, desc: "تكامل GPT/Claude/Gemini حسب المطلوب" },
+  { id: "api", label: "REST API كامل", icon: Code2, type: "flat", value: 2500, desc: "API موثقة + حماية + Rate limit" },
+  { id: "rtl-ar", label: "دعم RTL عربي + EN", icon: Globe, type: "mult", value: 0.1, desc: "نسخة عربية/إنجليزية كاملة" },
+  { id: "seo", label: "SEO تقني متقدم", icon: Sparkles, type: "flat", value: 1500, desc: "Schema + Sitemap + Technical SEO" },
 ];
 
 /* ── Timeline modes ── */
-const TIMELINES = [
-  { id: "rush", label: "عاجل", icon: Zap, mult: 1.4, daysMult: 0.6, desc: "أسرع وقت ممكن" },
+const TIMELINES: TimelineOption[] = [
+  { id: "rush", label: "عاجل", icon: Zap, mult: 1.25, daysMult: 0.75, desc: "أولوية تنفيذ وتسليم أسرع" },
   { id: "normal", label: "عادي", icon: Clock, mult: 1.0, daysMult: 1.0, desc: "الوضع الطبيعي" },
-  { id: "flex", label: "مرن", icon: Layers, mult: 0.85, daysMult: 1.3, desc: "خصم على الميزانية مقابل وقت أطول" },
+  { id: "flex", label: "مرن", icon: Layers, mult: 0.9, daysMult: 1.25, desc: "خصم بسيط مقابل وقت أطول" },
 ];
 
+const EGP_FORMATTER = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+
+function formatEgp(amount: number): string {
+  return `${EGP_FORMATTER.format(Math.max(0, Math.round(amount)))} ج.م`;
+}
+
+function parseDeliveryDays(longDesc: string | null | undefined, fallbackDays: number): number {
+  if (!longDesc) return fallbackDays;
+
+  const rangeMatch = longDesc.match(/مدة التسليم\s*[:：]\s*(\d+)\s*[–-]\s*(\d+)\s*(?:يوم|أيام)/);
+  if (rangeMatch) {
+    const minDays = Number(rangeMatch[1]);
+    const maxDays = Number(rangeMatch[2]);
+    if (Number.isFinite(minDays) && Number.isFinite(maxDays)) {
+      return Math.max(2, Math.round((minDays + maxDays) / 2));
+    }
+  }
+
+  const singleMatch = longDesc.match(/مدة التسليم\s*[:：]\s*(\d+)\s*(?:يوم|أيام)/);
+  if (singleMatch) {
+    const days = Number(singleMatch[1]);
+    if (Number.isFinite(days)) return Math.max(2, days);
+  }
+
+  return fallbackDays;
+}
+
+function getStartingPrice(slug: string, price?: number | null): number {
+  if (typeof price === "number" && Number.isFinite(price) && price > 0) return Math.round(price);
+  return FALLBACK_PRICE_BY_SLUG[slug] || 3000;
+}
+
 export default function QuotePage() {
+  const [services, setServices] = useState<QuoteService[]>(FALLBACK_SERVICES);
+  const [servicesLoading, setServicesLoading] = useState(true);
   const [projectType, setProjectType] = useState<string | null>(null);
   const [pages, setPages] = useState(5);
   const [addons, setAddons] = useState<string[]>([]);
   const [timeline, setTimeline] = useState("normal");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadServices() {
+      setServicesLoading(true);
+      try {
+        const res = await fetch("/api/services", { cache: "no-store" });
+        const data = await res.json();
+        const apiServices = Array.isArray(data?.services) ? (data.services as QuoteService[]) : [];
+
+        if (!cancelled) {
+          setServices(apiServices.length > 0 ? apiServices : FALLBACK_SERVICES);
+        }
+      } catch {
+        if (!cancelled) {
+          setServices(FALLBACK_SERVICES);
+        }
+      } finally {
+        if (!cancelled) {
+          setServicesLoading(false);
+        }
+      }
+    }
+
+    void loadServices();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const projectTypes = useMemo<ProjectTypeOption[]>(() => {
+    return services.map((service) => {
+      const basePrice = getStartingPrice(service.slug, service.price);
+      const fallbackDays = DEFAULT_DAYS_BY_SLUG[service.slug] || 10;
+      const baseDays = parseDeliveryDays(service.longDesc, fallbackDays);
+      const supportsPages = PAGE_BASED_SERVICE_SLUGS.has(service.slug);
+      const extraPagePrice = supportsPages
+        ? Math.max(service.slug === "ecommerce-digital-platforms" ? 900 : 600, Math.round(basePrice * 0.08))
+        : 0;
+
+      return {
+        id: service.slug,
+        slug: service.slug,
+        label: service.title,
+        description: service.description,
+        iconKey: resolveServiceIconKey(service.icon, service.useCase),
+        basePrice,
+        baseDays,
+        supportsPages,
+        extraPagePrice,
+      };
+    });
+  }, [services]);
+
+  useEffect(() => {
+    if (projectTypes.length === 0) {
+      setProjectType(null);
+      return;
+    }
+
+    setProjectType((current) => {
+      if (current && projectTypes.some((project) => project.id === current)) {
+        return current;
+      }
+      return projectTypes[0].id;
+    });
+  }, [projectTypes]);
+
+  const selectedProject = useMemo(
+    () => projectTypes.find((project) => project.id === projectType) || null,
+    [projectTypes, projectType],
+  );
 
   const toggleAddon = (id: string) => {
     setAddons((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   const calc = useMemo(() => {
-    const project = PROJECT_TYPES.find((p) => p.id === projectType);
-    if (!project) return { total: 0, days: 0, breakdown: [] as { label: string; value: number }[] };
-
-    let total = project.base;
-    const breakdown: { label: string; value: number }[] = [{ label: project.label + " (base)", value: project.base }];
-
-    // Pages multiplier (only for website/webapp/landing)
-    if (["website", "webapp"].includes(project.id) && pages > 5) {
-      const extra = (pages - 5) * 250;
-      total += extra;
-      breakdown.push({ label: `صفحات إضافية (${pages - 5})`, value: extra });
+    if (!selectedProject) {
+      return {
+        total: 0,
+        min: 0,
+        max: 0,
+        days: 0,
+        breakdown: [] as PriceBreakdownLine[],
+      };
     }
 
-    // Add-ons
-    let multiplierAcc = 0;
-    addons.forEach((id) => {
-      const a = ADDONS.find((x) => x.id === id);
-      if (!a) return;
-      if (a.type === "flat") {
-        total += a.value;
-        breakdown.push({ label: a.label, value: a.value });
-      } else {
-        multiplierAcc += a.value;
-        breakdown.push({ label: `${a.label} (+${Math.round(a.value * 100)}%)`, value: Math.round(project.base * a.value) });
-      }
-    });
-    if (multiplierAcc > 0) total = Math.round(total * (1 + multiplierAcc * 0.25)); // soften compound
+    let total = selectedProject.basePrice;
+    const breakdown: PriceBreakdownLine[] = [
+      { label: `${selectedProject.label} (سعر البداية)`, value: selectedProject.basePrice },
+    ];
 
-    // Timeline multiplier
+    if (selectedProject.supportsPages && pages > 5) {
+      const extraPages = pages - 5;
+      const extra = extraPages * selectedProject.extraPagePrice;
+      total += extra;
+      breakdown.push({ label: `صفحات إضافية (${extraPages})`, value: extra });
+    }
+
+    const selectedAddons = addons
+      .map((id) => ADDONS.find((item) => item.id === id))
+      .filter((item): item is AddonOption => Boolean(item));
+
+    selectedAddons
+      .filter((addon) => addon.type === "flat")
+      .forEach((addon) => {
+        total += addon.value;
+        breakdown.push({ label: addon.label, value: addon.value });
+      });
+
+    const multiplierAddons = selectedAddons.filter((addon) => addon.type === "mult");
+    if (multiplierAddons.length > 0) {
+      const beforeMultiplier = total;
+      let multiplierIncrease = 0;
+
+      multiplierAddons.forEach((addon) => {
+        const addonValue = Math.round(beforeMultiplier * addon.value);
+        multiplierIncrease += addonValue;
+        breakdown.push({ label: `${addon.label} (+${Math.round(addon.value * 100)}%)`, value: addonValue });
+      });
+
+      total += multiplierIncrease;
+    }
+
     const tl = TIMELINES.find((t) => t.id === timeline) ?? TIMELINES[1];
-    const beforeTl = total;
+    const beforeTimeline = total;
     total = Math.round(total * tl.mult);
     if (tl.mult !== 1) {
       breakdown.push({
         label: `${tl.label} (${tl.mult > 1 ? "+" : ""}${Math.round((tl.mult - 1) * 100)}%)`,
-        value: total - beforeTl,
+        value: total - beforeTimeline,
       });
     }
 
-    const days = Math.max(2, Math.round(project.days * tl.daysMult * (1 + addons.length * 0.08)));
+    const pageLoadFactor = selectedProject.supportsPages ? Math.max(0, pages - 5) * 0.03 : 0;
+    const days = Math.max(2, Math.round(selectedProject.baseDays * tl.daysMult * (1 + addons.length * 0.05 + pageLoadFactor)));
 
-    return { total, days, breakdown };
-  }, [projectType, pages, addons, timeline]);
+    const min = Math.round(total * 0.9);
+    const max = Math.round(total * 1.15);
+
+    return { total, min, max, days, breakdown };
+  }, [selectedProject, pages, addons, timeline]);
 
   const buildContactPrefill = () => {
-    const project = PROJECT_TYPES.find((p) => p.id === projectType);
-    if (!project) return "/contact";
+    if (!selectedProject) return "/contact";
+
     const tl = TIMELINES.find((t) => t.id === timeline) ?? TIMELINES[1];
-    const addonLabels = addons.map((id) => ADDONS.find((a) => a.id === id)?.label).filter(Boolean).join("، ");
+    const addonLabels = addons
+      .map((id) => ADDONS.find((a) => a.id === id)?.label)
+      .filter(Boolean)
+      .join("، ");
+
     const msg = encodeURIComponent(
       `أهلاً، عندي مشروع وحبيت أرسل التفاصيل بناءً على الحاسبة:\n\n` +
-      `• نوع المشروع: ${project.label}\n` +
-      (project.id === "website" || project.id === "webapp" ? `• عدد الصفحات: ${pages}\n` : "") +
+      `• نوع المشروع: ${selectedProject.label}\n` +
+      (selectedProject.supportsPages ? `• عدد الصفحات: ${pages}\n` : "") +
       (addonLabels ? `• إضافات: ${addonLabels}\n` : "") +
       `• الجدول الزمني: ${tl.label}\n` +
-      `• الميزانية التقديرية: ~$${calc.total.toLocaleString()}\n` +
+      `• الميزانية التقديرية: ${formatEgp(calc.total)}\n` +
+      `• النطاق المتوقع: من ${formatEgp(calc.min)} إلى ${formatEgp(calc.max)}\n` +
       `• المدة المتوقعة: ${calc.days} يوم\n\n` +
       `حابب نتفق على التفاصيل النهائية.`
     );
+
     return `/contact?subject=${encodeURIComponent("عرض سعر مشروع")}&message=${msg}`;
   };
+
+  const selectedTimeline = TIMELINES.find((item) => item.id === timeline) ?? TIMELINES[1];
+
+  const pagesInfoText = selectedProject?.supportsPages
+    ? `كل صفحة إضافية بعد أول 5 صفحات ≈ ${formatEgp(selectedProject.extraPagePrice)}`
+    : "";
 
   return (
     <div className="pt-20">
@@ -154,8 +361,11 @@ export default function QuotePage() {
                   <h2 className="text-white font-bold">نوع المشروع</h2>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-2.5">
-                  {PROJECT_TYPES.map(({ id, label, icon: Icon, desc }) => {
+                  {projectTypes.map(({ id, label, description, iconKey, basePrice }) => {
                     const active = projectType === id;
+                    const iconPreset = getThemedIconPreset(iconKey, "sparkles");
+                    const Icon = iconPreset.icon;
+
                     return (
                       <button
                         key={id}
@@ -172,19 +382,27 @@ export default function QuotePage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-white font-semibold text-sm mb-0.5">{label}</div>
-                          <div className="text-[10px] leading-snug" style={{ color: "#9090b0" }}>{desc}</div>
+                          <div className="text-[10px] leading-snug" style={{ color: "#9090b0" }}>{description}</div>
+                          <div className="text-[10px] mt-1" style={{ color: "#67e8f9" }}>
+                            يبدأ من {formatEgp(basePrice)}
+                          </div>
                         </div>
                         {active && <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: "#c084fc" }} />}
                       </button>
                     );
                   })}
                 </div>
+                {servicesLoading ? (
+                  <div className="mt-3 text-[11px]" style={{ color: "#7f7fa5" }}>
+                    جاري مزامنة الخدمات من لوحة الأدمن...
+                  </div>
+                ) : null}
               </div>
             </HolographicCard>
 
             {/* Step 2: Pages (only for website/webapp) */}
             <AnimatePresence>
-              {projectType && ["website", "webapp"].includes(projectType) && (
+              {selectedProject?.supportsPages ? (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -214,10 +432,13 @@ export default function QuotePage() {
                         <span>5 (افتراضي)</span>
                         <span>30 صفحة</span>
                       </div>
+                      <div className="text-[10px] mt-2" style={{ color: "#67e8f9" }}>
+                        {pagesInfoText}
+                      </div>
                     </div>
                   </HolographicCard>
                 </motion.div>
-              )}
+              ) : null}
             </AnimatePresence>
 
             {/* Step 3: Add-ons */}
@@ -257,7 +478,7 @@ export default function QuotePage() {
                                 <div className="text-[10px] truncate" style={{ color: "#9090b0" }}>{desc}</div>
                               </div>
                               <span className="text-[10px] font-mono flex-shrink-0" style={{ color: active ? "#67e8f9" : "#7070a0" }}>
-                                {type === "flat" ? `+$${value}` : `+${Math.round(value * 100)}%`}
+                                {type === "flat" ? `+${formatEgp(value)}` : `+${Math.round(value * 100)}%`}
                               </span>
                             </button>
                           );
@@ -331,7 +552,7 @@ export default function QuotePage() {
                     <h2 className="text-white font-bold">الميزانية التقديرية</h2>
                   </div>
 
-                  {!projectType ? (
+                  {!selectedProject ? (
                     <div className="text-center py-10">
                       <Sparkles className="w-10 h-10 text-purple-600/40 mx-auto mb-3" />
                       <p className="text-sm" style={{ color: "#9090b0" }}>اختر نوع المشروع من اليمين لعرض السعر</p>
@@ -348,15 +569,18 @@ export default function QuotePage() {
                           className="text-4xl font-black"
                           style={{ color: "#e9d5ff", letterSpacing: "-0.03em" }}
                         >
-                          ${calc.total.toLocaleString()}
+                          {formatEgp(calc.total)}
                         </motion.div>
-                        <div className="text-[10px] mt-1" style={{ color: "#a78bfa" }}>USD • تقدير مبدئي</div>
+                        <div className="text-[10px] mt-1" style={{ color: "#a78bfa" }}>EGP • تقدير مبدئي لسوق مصر</div>
+                        <div className="text-[10px] mt-1" style={{ color: "#67e8f9" }}>
+                          النطاق المتوقع: {formatEgp(calc.min)} — {formatEgp(calc.max)}
+                        </div>
                       </div>
 
                       <div className="flex items-center justify-center gap-2 mb-4 text-xs" style={{ color: "#a0a0c0" }}>
                         <Clock className="w-3.5 h-3.5" style={{ color: "#fbbf24" }} />
                         <span>المدة المتوقعة:</span>
-                        <span className="font-bold" style={{ color: "#fbbf24" }}>{calc.days} يوم</span>
+                        <span className="font-bold" style={{ color: "#fbbf24" }}>{calc.days} يوم ({selectedTimeline.label})</span>
                       </div>
 
                       {/* Breakdown */}
@@ -365,7 +589,7 @@ export default function QuotePage() {
                           <div key={i} className="flex items-center justify-between text-[11px]">
                             <span className="truncate ml-2" style={{ color: "#9090b0" }}>{b.label}</span>
                             <span className="font-mono flex-shrink-0" style={{ color: b.value < 0 ? "#34d399" : "#d0d0e8" }}>
-                              {b.value < 0 ? "−" : "+"}${Math.abs(b.value).toLocaleString()}
+                              {b.value < 0 ? "−" : "+"}{formatEgp(Math.abs(b.value))}
                             </span>
                           </div>
                         ))}
