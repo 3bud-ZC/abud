@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { ArrowLeft, BookOpen, Code2, Sparkles } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
@@ -55,7 +56,40 @@ const timeline = [
   },
 ];
 
+const PROJECT_INTENTS = [
+  {
+    id: "website",
+    label: "موقع / متجر",
+    description: "تحتاج حضور رقمي قوي يقدّم خدماتك بوضوح ويحوّل الزائر إلى عميل بشكل أسرع.",
+    quoteHref: "/quote?service=website",
+    quoteLabel: "احسب تكلفة الموقع",
+    contactHref: "/contact?topic=website",
+    contactLabel: "مكالمة تخطيط الموقع",
+  },
+  {
+    id: "system",
+    label: "ERP / CRM",
+    description: "تحتاج نظام داخلي ينظم العمليات، يقلل الأخطاء، ويوفر رؤية أوضح لاتخاذ القرار.",
+    quoteHref: "/quote?service=system",
+    quoteLabel: "احسب تكلفة النظام",
+    contactHref: "/contact?topic=system",
+    contactLabel: "مكالمة تحليل النظام",
+  },
+  {
+    id: "ai",
+    label: "أداة AI",
+    description: "تحتاج أداة ذكاء اصطناعي مخصصة تسرّع فريقك وتخفض الوقت المهدور في المهام المتكررة.",
+    quoteHref: "/quote?service=ai",
+    quoteLabel: "احسب تكلفة أداة AI",
+    contactHref: "/contact?topic=ai",
+    contactLabel: "مكالمة اكتشاف AI",
+  },
+] as const;
+
 export default function AboutPage() {
+  const [selectedIntentId, setSelectedIntentId] = useState<(typeof PROJECT_INTENTS)[number]["id"]>("website");
+  const selectedIntent = PROJECT_INTENTS.find((intent) => intent.id === selectedIntentId) ?? PROJECT_INTENTS[0];
+
   return (
     <div className="pt-20">
       {/* ─────────── HERO ─────────── */}
@@ -203,17 +237,53 @@ export default function AboutPage() {
                   >
                     جاهز نبدأ مشروعك بشكل احترافي؟
                   </h2>
-                  <p className="mb-8 max-w-lg mx-auto" style={{ color: "#a0a0c0", fontSize: "0.95rem", lineHeight: 1.7 }}>
-                    سواء محتاج موقع، نظام ERP/CRM، أو أداة AI مخصصة — نقدر نبدأ بخطوة واضحة اليوم.
+                  <p className="mb-5 max-w-lg mx-auto" style={{ color: "#a0a0c0", fontSize: "0.95rem", lineHeight: 1.7 }}>
+                    اختار نوع مشروعك، وخد أقصر طريق لبداية واضحة بخطة تنفيذ واقعية.
                   </p>
+
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2 justify-center mb-3">
+                      {PROJECT_INTENTS.map((intent) => {
+                        const isActive = selectedIntent.id === intent.id;
+                        return (
+                          <button
+                            key={intent.id}
+                            type="button"
+                            onClick={() => setSelectedIntentId(intent.id)}
+                            className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                            style={
+                              isActive
+                                ? {
+                                    color: "#ffffff",
+                                    border: "1px solid rgba(192,132,252,0.45)",
+                                    background: "linear-gradient(135deg, rgba(192,132,252,0.25), rgba(167,139,250,0.16))",
+                                    boxShadow: "0 0 12px rgba(192,132,252,0.2)",
+                                  }
+                                : {
+                                    color: "#cfcfe6",
+                                    border: "1px solid rgba(168,85,247,0.25)",
+                                    background: "rgba(168,85,247,0.08)",
+                                  }
+                            }
+                          >
+                            {intent.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="text-xs max-w-xl mx-auto" style={{ color: "#9e9ebe", lineHeight: 1.8 }}>
+                      {selectedIntent.description}
+                    </p>
+                  </div>
+
                   <div className="flex flex-wrap gap-3 justify-center">
-                    <Link href="/quote" className="btn-primary btn-glow gap-2 inline-flex items-center">
+                    <Link href={selectedIntent.quoteHref} className="btn-primary btn-glow gap-2 inline-flex items-center">
                       <Sparkles className="w-4 h-4" />
-                      احسب تكلفة مشروعك
+                      {selectedIntent.quoteLabel}
                     </Link>
-                    <Link href="/contact" className="btn-outline gap-2 inline-flex items-center">
+                    <Link href={selectedIntent.contactHref} className="btn-outline gap-2 inline-flex items-center">
                       <ArrowLeft className="w-4 h-4" />
-                      احجز مكالمة البداية
+                      {selectedIntent.contactLabel}
                     </Link>
                     <Link href="/portfolio" className="btn-outline gap-2 inline-flex items-center">
                       <Code2 className="w-4 h-4" />

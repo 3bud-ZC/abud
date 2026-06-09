@@ -14,6 +14,7 @@ const ACTIVITIES = [
       "أنظمة CRM/ERP مخصصة للشركات الناشئة",
       "أدوات AI داخلية لتقليل وقت التشغيل اليومي",
     ],
+    impact: "التركيز هنا على رفع كفاءة التشغيل وزيادة وضوح القرار داخل المشروع.",
     accent: "#c084fc",
     label: "Building",
   },
@@ -25,6 +26,7 @@ const ACTIVITIES = [
       "Vector Search Pipelines (RAG في الإنتاج)",
       "تحسين البنية على Edge/Serverless",
     ],
+    impact: "بناء قدرات جديدة تساعدني أقدّم حلول أسرع وأذكى بدون تعقيد زائد.",
     accent: "#67e8f9",
     label: "Learning",
   },
@@ -36,6 +38,7 @@ const ACTIVITIES = [
       "Syntax.fm + Latent Space",
       "Focus Playlists أثناء sprint التنفيذ",
     ],
+    impact: "متابعة مستمرة لخبرات السوق عشان الحلول تكون عملية ومواكبة للواقع.",
     accent: "#a78bfa",
     label: "Listening",
   },
@@ -47,6 +50,7 @@ const ACTIVITIES = [
       "💻 8+ ساعات تنفيذ مركز",
       "🚀 مراجعات + تسليمات يومية",
     ],
+    impact: "نظام يومي واضح يحافظ على سرعة التنفيذ بدون التأثير على الجودة.",
     accent: "#fbbf24",
     label: "Today",
   },
@@ -56,6 +60,12 @@ const EXECUTION_CADENCE = [
   { label: "تحديثات المشروع", value: "1-2 مرات أسبوعياً" },
   { label: "زمن الرد", value: "خلال نفس اليوم" },
   { label: "تسليم أولي", value: "سريع وقابل للاختبار" },
+];
+
+const EXECUTION_PROMISES = [
+  "كل مرحلة لها مخرجات واضحة يمكن تقييمها",
+  "تعديلات مبكرة تقلل التكلفة لاحقًا",
+  "الهدف دايمًا إطلاق عملي وليس عرض تجريبي",
 ];
 
 export default function CurrentlyWorking() {
@@ -103,8 +113,26 @@ export default function CurrentlyWorking() {
           </div>
         </AnimatedSection>
 
+        <AnimatedSection delay={0.08} className="mb-8">
+          <div
+            className="rounded-2xl p-4"
+            style={{
+              background: "rgba(10,8,18,0.72)",
+              border: "1px solid rgba(168,85,247,0.24)",
+            }}
+          >
+            <div className="grid md:grid-cols-3 gap-3">
+              {EXECUTION_PROMISES.map((promise) => (
+                <p key={promise} className="text-xs leading-relaxed" style={{ color: "#b4b4cf" }}>
+                  • {promise}
+                </p>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+
         <div className="grid sm:grid-cols-2 gap-4">
-          {ACTIVITIES.map(({ icon: Icon, title, items, accent, label }, i) => (
+          {ACTIVITIES.map(({ icon: Icon, title, items, impact, accent, label }, i) => (
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 20 }}
@@ -165,6 +193,13 @@ export default function CurrentlyWorking() {
                       </motion.li>
                     ))}
                   </ul>
+
+                  <div
+                    className="mt-4 pt-4 text-xs leading-relaxed"
+                    style={{ color: "#d5d5ef", borderTop: `1px solid ${accent}33` }}
+                  >
+                    {impact}
+                  </div>
                 </div>
               </HolographicCard>
             </motion.div>

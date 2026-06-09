@@ -16,9 +16,15 @@ const DEFAULT_SOCIALS = [
 ];
 
 const DELIVERY_PILLARS = [
-  { title: "تخطيط واضح", detail: "هدف + نطاق + أولويات" },
-  { title: "تنفيذ سريع", detail: "مراحل قصيرة وتسليم مستمر" },
-  { title: "استقرار حقيقي", detail: "أداء، أمان، وتجربة ثابتة" },
+  { title: "تشخيص سريع", detail: "تحليل الهدف والمشكلة قبل أي كود" },
+  { title: "تنفيذ مرحلي", detail: "نسخ قابلة للاختبار بدل انتظار طويل" },
+  { title: "تسليم قابل للصيانة", detail: "بنية واضحة وسهلة التطوير لاحقاً" },
+];
+
+const CLIENT_FIT = [
+  "إطلاق MVP احترافي بسرعة",
+  "أتمتة العمليات اليومية وتقليل الهدر",
+  "بناء نظام مستقر قابل للتوسع",
 ];
 
 function isValidObjectPosition(value: string): boolean {
@@ -154,6 +160,32 @@ export default function ProfileHero() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.43 }}
+          className="mb-6"
+        >
+          <p className="text-xs mb-2.5 font-semibold" style={{ color: "#d8d8ef" }}>
+            أقدر أساعدك لو هدفك:
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
+            {CLIENT_FIT.map((item) => (
+              <span
+                key={item}
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                style={{
+                  color: "#d7f7ff",
+                  background: "rgba(103,232,249,0.1)",
+                  border: "1px solid rgba(103,232,249,0.28)",
+                }}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
           className="grid sm:grid-cols-3 gap-2 mb-7 max-w-2xl mx-auto lg:mr-0 lg:ml-auto"
         >
@@ -193,6 +225,47 @@ export default function ProfileHero() {
           </span>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.56 }}
+          className="grid grid-cols-3 gap-2 mb-7 max-w-md mx-auto lg:mr-0 lg:ml-auto"
+        >
+          <div
+            className="rounded-lg px-2.5 py-2 text-center"
+            style={{ background: "rgba(192,132,252,0.1)", border: "1px solid rgba(192,132,252,0.25)" }}
+          >
+            <div className="text-sm font-black" style={{ color: "#f7f3ff" }}>
+              {projectsMetric.value}+
+            </div>
+            <div className="text-[10px]" style={{ color: "#b4a8cc" }}>
+              مشروع منفّذ
+            </div>
+          </div>
+          <div
+            className="rounded-lg px-2.5 py-2 text-center"
+            style={{ background: "rgba(103,232,249,0.1)", border: "1px solid rgba(103,232,249,0.25)" }}
+          >
+            <div className="text-sm font-black" style={{ color: "#effcff" }}>
+              {clientsMetric.value}+
+            </div>
+            <div className="text-[10px]" style={{ color: "#9cb7c0" }}>
+              تجربة عميل
+            </div>
+          </div>
+          <div
+            className="rounded-lg px-2.5 py-2 text-center"
+            style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.25)" }}
+          >
+            <div className="text-sm font-black" style={{ color: "#fff9e7" }}>
+              {yearsMetric.value}+
+            </div>
+            <div className="text-[10px]" style={{ color: "#c6bca0" }}>
+              سنوات عملية
+            </div>
+          </div>
+        </motion.div>
+
         {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -201,10 +274,10 @@ export default function ProfileHero() {
           className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-end"
         >
           <a href="/quote" className="btn-primary btn-glow inline-flex gap-2 items-center">
-            <span>احسب تكلفة مشروعك</span>
+            <span>ابدأ بتكلفة مبدئية واضحة</span>
           </a>
           <a href="/contact" className="btn-outline inline-flex gap-2 items-center">
-            <span>احجز مكالمة البداية</span>
+            <span>احجز مكالمة تشخيص</span>
           </a>
         </motion.div>
 

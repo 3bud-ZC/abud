@@ -35,6 +35,15 @@ const SKILLS: Skill[] = [
   { name: "Git / CI",   level: 90, icon: GitBranch,    category: "devops",     color: "#34d399", angle: 285, distance: 0.85 },
 ];
 
+const CATEGORY_OUTCOME: Record<Skill["category"], string> = {
+  frontend: "تجربة مستخدم أسرع ومعدل تفاعل أعلى",
+  backend: "منطق أعمال مستقر وقابل للتوسع",
+  ai: "أتمتة أذكى وقرارات أسرع",
+  devops: "إطلاق أسرع ومخاطر أقل",
+  automation: "تشغيل يومي بكلفة وجهد أقل",
+  security: "ثقة أعلى وحماية أفضل للبيانات",
+};
+
 export default function SkillConstellation() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -70,6 +79,7 @@ export default function SkillConstellation() {
   const center = size / 2;
   const maxRadius = size * 0.42;
   const activeSkill = hovered || selectedSkill;
+  const activeSkillData = SKILLS.find((skill) => skill.name === activeSkill) || null;
 
   return (
     <section className="py-20 px-4 relative overflow-hidden bg-[#070612]">
@@ -86,6 +96,28 @@ export default function SkillConstellation() {
           <p className="section-subtitle text-center max-w-xl mx-auto">
             خريطة المهارات التي أبني بها منتجات كاملة: من الواجهة وحتى الأنظمة والذكاء الاصطناعي
           </p>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.06} className="mb-7">
+          <div
+            className="rounded-2xl p-4 md:p-5"
+            style={{
+              background: "rgba(10,8,18,0.72)",
+              border: "1px solid rgba(168,85,247,0.24)",
+            }}
+          >
+            {activeSkillData ? (
+              <p className="text-sm text-center" style={{ color: "#d5d5ef", lineHeight: 1.8 }}>
+                <span style={{ color: activeSkillData.color, fontWeight: 700 }}>{activeSkillData.name}</span>
+                {" — "}
+                {CATEGORY_OUTCOME[activeSkillData.category]}
+              </p>
+            ) : (
+              <p className="text-sm text-center" style={{ color: "#b1b1cb", lineHeight: 1.8 }}>
+                اختر أي مهارة لمعرفة أثرها العملي على نتائج المشروع.
+              </p>
+            )}
+          </div>
         </AnimatedSection>
 
         <div

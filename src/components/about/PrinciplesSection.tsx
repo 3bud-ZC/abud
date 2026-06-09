@@ -13,6 +13,7 @@ const PRINCIPLES = [
     icon: Target,
     title: "نتيجة واضحة قبل أي شيء",
     desc: "كل قرار تقني لازم يخدم هدف المشروع التجاري. بدون أثر واضح على النمو أو التشغيل، القرار بيتراجع.",
+    avoid: "مافيش Features للزينة فقط",
     accent: "#c084fc",
   },
   {
@@ -20,6 +21,7 @@ const PRINCIPLES = [
     icon: Zap,
     title: "السرعة جزء من الجودة",
     desc: "موقع بطيء يعني فرص أقل. الأداء، responsiveness، وتجربة الاستخدام السريعة أساسيين من أول نسخة.",
+    avoid: "مافيش إطلاق بطيء بحجة التطوير لاحقاً",
     accent: "#67e8f9",
   },
   {
@@ -27,6 +29,7 @@ const PRINCIPLES = [
     icon: FileText,
     title: "نظام قابل للتسليم والصيانة",
     desc: "تنظيم الكود، توثيق النقاط الحرجة، وإعدادات واضحة عشان فريقك يكمل بسهولة بعد التسليم.",
+    avoid: "مافيش كود معقّد بدون وثائق",
     accent: "#a78bfa",
   },
   {
@@ -34,6 +37,7 @@ const PRINCIPLES = [
     icon: Users,
     title: "تواصل مباشر وشفاف",
     desc: "تحديثات منتظمة، وضوح في التقدم، وتنبيه مبكر لأي تحديات. الثقة تتبني بالمصارحة مش بالمفاجآت.",
+    avoid: "مافيش وعود غير واقعية أو صمت أثناء التنفيذ",
     accent: "#f0abfc",
   },
   {
@@ -41,6 +45,7 @@ const PRINCIPLES = [
     icon: GraduationCap,
     title: "تطوير مستمر بلا تعقيد زائد",
     desc: "أطور أسلوبي وأدواتي باستمرار، لكن باختيارات عملية تناسب مشروعك بدل التعقيد غير الضروري.",
+    avoid: "مافيش Stack مبالغ فيه خارج احتياج المشروع",
     accent: "#34d399",
   },
 ];
@@ -70,7 +75,7 @@ export default function PrinciplesSection() {
           </span>
           <h2 className="section-title mt-4 mb-3">القواعد التي أعمل بها</h2>
           <p className="section-subtitle text-center max-w-xl mx-auto">
-            إطار عمل واضح يضمن تنفيذ أسرع، جودة أعلى، وتجربة تعاون مريحة
+            مبادئ تنفيذ عملية تمنع الأخطاء الشائعة وتخلّي المشروع أقرب للنتيجة المطلوبة
           </p>
         </AnimatedSection>
 
@@ -148,6 +153,12 @@ export default function PrinciplesSection() {
                       </h3>
                       <p className="text-sm leading-relaxed" style={{ color: "#a0a0c0" }}>
                         {p.desc}
+                      </p>
+                      <p
+                        className="text-[11px] mt-3 pt-3"
+                        style={{ color: `${p.accent}dd`, borderTop: `1px solid ${p.accent}33` }}
+                      >
+                        {p.avoid}
                       </p>
                     </div>
                   </div>

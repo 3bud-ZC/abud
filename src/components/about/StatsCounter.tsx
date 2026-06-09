@@ -32,6 +32,14 @@ const CONTEXT_MAP: Record<string, string> = {
   quality: "تركيز دائم على الاستقرار قبل التسليم",
 };
 
+const OUTCOME_MAP: Record<string, string> = {
+  projects: "تنوع التنفيذ = قدرة أعلى على اختيار الحل الأنسب لمشروعك",
+  years: "خبرة متراكمة = قرارات أسرع وأخطاء أقل أثناء التنفيذ",
+  clients: "تجارب متعددة = فهم أدق للاحتياج التجاري قبل البناء",
+  published_apps: "منتجات منشورة = قدرة فعلية على تحويل الفكرة لشيء usable",
+  quality: "استقرار أعلى = تقليل الأعطال وتكلفة الصيانة بعد الإطلاق",
+};
+
 const STATS = TRUST_METRICS.map((metric) => ({
   icon: ICON_MAP[metric.id],
   value: metric.value,
@@ -39,6 +47,7 @@ const STATS = TRUST_METRICS.map((metric) => ({
   label: metric.label,
   accent: ACCENT_MAP[metric.id],
   context: CONTEXT_MAP[metric.id],
+  outcome: OUTCOME_MAP[metric.id],
 }));
 
 export default function StatsCounter() {
@@ -59,7 +68,7 @@ export default function StatsCounter() {
         <AnimatedSection className="text-center mb-10">
           <h2 className="section-title mt-0 mb-3">نتائج مبنية على تنفيذ فعلي</h2>
           <p className="section-subtitle text-center max-w-2xl mx-auto">
-            الأرقام دي مش للعرض، دي خلاصة شغل فعلي وتسليمات حقيقية أثرت على مشاريع العملاء بشكل مباشر.
+            الأرقام هنا مش vanity metrics. كل رقم مرتبط بأثر واضح على سرعة التنفيذ، جودة الإطلاق، واستمرارية المشروع.
           </p>
         </AnimatedSection>
 
@@ -135,6 +144,16 @@ export default function StatsCounter() {
                   <div className="text-[10px] mt-1.5 leading-relaxed" style={{ color: "#7f7fa4" }}>
                     {stat.context}
                   </div>
+                  <div
+                    className="text-[10px] mt-2.5 leading-relaxed px-2.5 py-2 rounded-lg"
+                    style={{
+                      color: "#cbcbe6",
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.07)",
+                    }}
+                  >
+                    {stat.outcome}
+                  </div>
                 </div>
               </motion.div>
             );
@@ -143,7 +162,7 @@ export default function StatsCounter() {
 
         <AnimatedSection delay={0.2} className="text-center mt-8">
           <p className="text-xs" style={{ color: "#8d8dae" }}>
-            الهدف النهائي في كل مشروع: نتيجة تجارية قابلة للقياس، مش مجرد واجهة شكلها حلو.
+            لو هدفك مجرد شكل، فيه حلول كثيرة. لو هدفك أثر حقيقي على التشغيل والمبيعات، هنا تبدأ القيمة.
           </p>
         </AnimatedSection>
       </div>

@@ -23,6 +23,12 @@ const STACK_PROMISES = [
   "تسليم قابل للصيانة من أول نسخة",
 ];
 
+const CAPABILITY_FLOW = [
+  { stage: "Discovery", value: "فهم المشكلة + تحديد الأولويات" },
+  { stage: "Build", value: "تطوير منظم بمخرجات واضحة" },
+  { stage: "Launch", value: "إطلاق مستقر ومراقبة مستمرة" },
+];
+
 export default function DailyStack() {
   return (
     <section className="py-20 px-4 relative overflow-hidden">
@@ -58,6 +64,28 @@ export default function DailyStack() {
                 </div>
               ))}
             </div>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.08} className="mb-8">
+          <div className="grid md:grid-cols-3 gap-3">
+            {CAPABILITY_FLOW.map((item) => (
+              <div
+                key={item.stage}
+                className="rounded-xl px-4 py-3"
+                style={{
+                  background: "rgba(10,8,18,0.72)",
+                  border: "1px solid rgba(103,232,249,0.2)",
+                }}
+              >
+                <div className="text-[10px] font-black tracking-wider mb-1" style={{ color: "#82e9ff" }}>
+                  {item.stage}
+                </div>
+                <p className="text-xs leading-relaxed" style={{ color: "#c6d4dd" }}>
+                  {item.value}
+                </p>
+              </div>
+            ))}
           </div>
         </AnimatedSection>
 
