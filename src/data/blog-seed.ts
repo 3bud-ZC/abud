@@ -907,4 +907,148 @@ Action: جاري مراجعة الـ logs...</code></pre>
 <blockquote><p>أحسن أداة إنتاجية هي اللي بتكون في مكانك الأساسي — تيليجرام.</p></blockquote>
 `,
   },
+
+  {
+    id: "seed-17",
+    slug: "mohamy-platform-case-study",
+    title: "بناء منصة قانونية عربية ─ كيف نقلت خدمة المحاماة للرقمية",
+    excerpt:
+      "Case study لمنصة Mohamy: تحويل الخدمات القانونية لوجود رقمي موثوق. التحديات، التصميم، والتقنية من وراء الكواليس.",
+    coverImage: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&auto=format&fit=crop&q=80",
+    readTime: 10,
+    publishedAt: "2026-03-28T08:00:00Z",
+    featured: false,
+    tags: ["Legal Tech", "Next.js", "RTL", "UX", "Case Study"],
+    category: { name: "تطوير الويب", slug: "web-dev" },
+    content: `
+<h2>المشكلة: العميل بيدور على محامي على Google بس بيلاقي بطاقات بيزنس فاضية</h2>
+<p>القطاع القانوني في المنطقة العربية من أكتر القطاعات اللي بتفتقر لوجود رقمي فعّال. العميل لما بيحتاج استشارة قانونية، بيتصل بصديق يسأله عن "محامي كويس" بدل ما يلاقي خدمة واضحة اونلاين.</p>
+
+<h2>التحليل: إيه اللي بيخلي العميل يختار محامي؟</h2>
+<p>قعدت أدرس سلوك 20 عميل طلبوا خدمات قانونية:</p>
+<ul>
+  <li><strong>الثقة</strong> — العميل مش بيدفع فلوس، بيدفع لمؤسسة قانونية</li>
+  <li><strong>الوضوح</strong> — محتاج يعرف بالظبط إيه الخدمة وكام سعرها</li>
+  <li><strong>السرعة</strong> — مش هينتظر 3 أيام رد على إيميل</li>
+  <li><strong>اللغة</strong> — العربي أسهل من الإنجليزي في السياق القانوني</li>
+</ul>
+
+<h2>الحل: منصة Mohamy</h2>
+<p>منصة بسيطة بس مركّزة على <strong>3 حاجات فقط</strong>:</p>
+<ol>
+  <li><strong>عرض الخدمات</strong> — كل خدمة واضحة، بسعرها، وبمدة تنفيذها</li>
+  <li><strong>طلب استشارة</strong> — نموذج مباشر بدون تعقيد</li>
+  <li><strong>توثيق المحتوى</strong> — مقالات قانونية تبني الثقة</li>
+</ol>
+
+<h2>تصميم الثقة (Trust by Design)</h2>
+<p>المنصة القانونية مش زي متجر ملابس. العميل هنا بيدفع مقابل وعد. عشان كده التصميم ركز على:</p>
+<ul>
+  <li>Colors محايدة ومهنية — بعيد عن التدرجات الصارخة</li>
+  <li>Typography واضحة — خطوط عربية ثقيلة تعكس الجدية</li>
+  <li>Whitespace كتير — كل element بيتنفس، مفيش ازدحام</li>
+  <li>Testimonials حقيقية — بأسماء حقيقية (بموافقتهم)</li>
+  <li>خطوات واضحة — العميل يعرف واقف فين في رحلته</li>
+</ul>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Next.js 14</strong> — SSR لـ SEO (العملاء بيدوروا على Google)</li>
+  <li><strong>TypeScript</strong> — type safety للبيانات القانونية</li>
+  <li><strong>Prisma + PostgreSQL</strong> — تخزين الخدمات والطلبات</li>
+  <li><strong>Tailwind CSS</strong> — تصميم RTL سريع ومرن</li>
+  <li><strong>NextAuth.js</strong> — auth للعملاء وللوحة الإدارة</li>
+</ul>
+
+<h2>التحدي الأكبر</h2>
+<p>التصنيف القانوني. القانون مش مقسم لـ "أحوال شخصية" و"تجاري" بس. فيه sub-categories كتير. الحل:</p>
+<ul>
+  <li>Tree structure للخدمات — parent + child categories</li>
+  <li>Search بـ autocomplete مع synonyms</li>
+  <li>FAQ page مرتبطة بكل خدمة</li>
+</ul>
+
+<h2>النتائج</h2>
+<ul>
+  <li>قاعدة تقنية جاهزة للتوسع (ممكن تضيف مدن، مكاتب، محامين)</li>
+  <li>تجربة استخدام مهنية تبني الثقة من أول visit</li>
+  <li>SEO-optimized للبحث المحلي ("محامي في القاهرة")</li>
+</ul>
+
+<blockquote><p>العميل القانوني مش بيدور على "موقع حلو" ─ بيدور على "مؤسسة موثوقة".</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-18",
+    slug: "iqtida-platform-case-study",
+    title: "Iqtida ─ بناء منصة للاقتداء والنماذج الملهمة في بيئة رقمية",
+    excerpt:
+      "Case study لمنصة Iqtida: إزاي جمعنا نماذج القدوات من فيديوهات متفرقة لمكتبة رقمية منظمة تساعد الناس على التعلم الموجّه.",
+    coverImage: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?w=1600&auto=format&fit=crop&q=80",
+    readTime: 9,
+    publishedAt: "2026-03-20T10:00:00Z",
+    featured: false,
+    tags: ["Education", "Content Platform", "Next.js", "Community", "Case Study"],
+    category: { name: "تطوير الويب", slug: "web-dev" },
+    content: `
+<h2>المشكلة: النماذج الملهمة موجودة بس مش منظمة</h2>
+<p>فيديوهات يوتيوب ملهمة، مقالات على Medium، بودكاستس على Spotify، وتويتر threads. المحتوى موجود بس <strong>مبعثر</strong>. لو حد عايز يتعلم من قدوة في مجال معين، بيضيع وقت في البحث بدل التعلم.</p>
+
+<h2>التحليل</h2>
+<p>سألت 15 شخص: "لو عايز تتعلم حاجة جديدة، إزاي بتختار قدوتك؟"</p>
+<ul>
+  <li>60% بيعتمد على "فلان قالي عن فلان"</li>
+  <li>25% بيدوروا على YouTube بس بيضيعوا في noise</li>
+  <li>15% بيقروا كتب — بس الكتب مش كلها practical</li>
+</ul>
+<p>الاحتياج واضح: <strong>مكتبة منظمة لنماذج حقيقية</strong>، مش نظريات.</p>
+
+<h2>الفكرة: Iqtida</h2>
+<p>منصة بسيطة بتجمع نماذج ملهمة (قدوات) في مجالات مختلفة:</p>
+<ul>
+  <li>كل قدوة ليها profile واضح: مجاله، إنجازاته، مصادر التعلم</li>
+  <li>تصنيفات حسب المجال: تقنية، ريادة أعمال، فنون، علوم، إلخ</li>
+  <li>محتوى عربي موجّه — لأن معظم المحتوى الملهم إنجليزي</li>
+  <li>Community-driven: أي حد يقدر يقترح قدوة جديدة</li>
+</ul>
+
+<h2>بناء Taxonomy واضح</h2>
+<p>التحدي الأكبر: إزاي نصنّف القدوات؟ حد ممكن يكون "مبرمج" و"كاتب" و"رائد أعمال" في نفس الوقت. الحل:</p>
+<ol>
+  <li><strong>Primary category</strong> — المجال الرئيسي (واحد)</li>
+  <li><strong>Tags</strong> — المهارات الفرعية (متعدد)</li>
+  <li><strong>Era/Context</strong> — القرن أو البيئة (عشان القدوات التاريخية)</li>
+  <li><strong>Resources</strong> — كتب، فيديوهات، مقالات مرتبطة</li>
+</ol>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Next.js 14</strong> — App Router مع ISR لـ content-heavy pages</li>
+  <li><strong>TypeScript</strong> — strict types للـ taxonomy</li>
+  <li><strong>Tailwind CSS</strong> — تصميم بسيط يركز على المحتوى</li>
+  <li><strong>Node.js</strong> — API lightweight لإضافة القدوات</li>
+  <li><strong>Prisma</strong> — relational data للتصنيفات والقدوات</li>
+</ul>
+
+<h2>تجربة المستخدم</h2>
+<p>الـ landing page مش "hero section ضخم" — ده directory واضح:</p>
+<ul>
+  <li>بحث سريع في أول الصفحة</li>
+  <li>فلتر حسب المجال</li>
+  <li>بطاقة لكل قدوة: صورة، اسم، مجال، 3 إنجازات</li>
+  <li>صفحة detail: سيرة، مصادر، اقتباسات</li>
+</ul>
+
+<h2>النتائج</h2>
+<ul>
+  <li>مكتبة منظمة لـ 50+ قدوة في مجالات مختلفة</li>
+  <li>محتوى عربي موجّه — ملأ فجوة في المحتوى التعليمي</li>
+  <li>قاعدة تقنية تسمح بإضافة مجالات وقدوات جديدة بسهولة</li>
+  <li>Architecture جاهز لـ user-generated content مستقبلًا</li>
+</ul>
+
+<blockquote><p>التعلم من القدوات أسرع من التعلم من الكتب ─ بس لازم القدوة تكون واضحة ومنظمة.</p></blockquote>
+`,
+  },
 ];
