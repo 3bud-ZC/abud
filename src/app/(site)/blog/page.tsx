@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { SEED_POSTS, SEED_CATEGORIES } from "@/data/blog-seed";
 import BlogPageClient from "./BlogPageClient";
 import { siteUrl } from "@/lib/site-url";
 import JsonLd from "@/components/JsonLd";
@@ -99,8 +100,29 @@ async function loadFromDb(): Promise<{ posts: ClientPost[]; categories: ClientCa
     return { posts, categories: dbCategories };
   } catch (e) {
     console.error("[blog] DB fetch failed:", (e as Error).message);
-    return { posts: [], categories: [] };
   }
+
+  // Fallback: serve from seed data if DB is empty or unreachable
+  const seedPosts: ClientPost[] = SEED_POSTS.map((s) => ({
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    excerpt: s.excerpt,
+    coverImage: s.coverImage,
+    readTime: s.readTime,
+    publishedAt: s.publishedAt,
+    featured: s.featured,
+    tags: s.tags,
+    category: s.category,
+  }));
+
+  const seedCategories: ClientCategory[] = SEED_CATEGORIES.map((c) => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+  }));
+
+  return { posts: seedPosts, categories: seedCategories };
 }
 
 export default async function BlogPage() {

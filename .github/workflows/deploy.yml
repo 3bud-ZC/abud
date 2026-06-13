@@ -71,9 +71,10 @@ jobs:
             echo ">>> [5/8] تحديث قاعدة البيانات..."
             npx prisma db push
 
-            echo ">>> [6/8] مزامنة بيانات الخدمات والمعرض..."
+            echo ">>> [6/8] مزامنة بيانات الخدمات والمعرض والمدونة..."
             npm run db:seed-services
             npm run db:seed-portfolio
+            npm run db:seed-blog-from-data
 
             echo ">>> [7/8] بناء المشروع..."
             npm run build
