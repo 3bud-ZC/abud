@@ -7,26 +7,70 @@ import { Settings, Save, KeyRound, User } from "lucide-react";
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from "@/lib/password-policy";
 import ImageCropUploader from "@/components/admin/ImageCropUploader";
 
-const settingFields = [
+const SITE_FIELDS = [
   { key: "site_title", label: "عنوان الموقع", placeholder: "ABUD Platform" },
   { key: "site_description", label: "وصف الموقع", placeholder: "متجر رقمي..." },
+];
+
+const CONTACT_FIELDS = [
   { key: "site_email", label: "البريد الإلكتروني", placeholder: "contact@abud.com", dir: "ltr" },
   { key: "site_phone", label: "رقم الهاتف", placeholder: "+20 1xx xxx xxxx", dir: "ltr" },
   { key: "whatsapp_number", label: "رقم واتساب", placeholder: "+20 1xx xxx xxxx", dir: "ltr" },
+];
+
+const SOCIAL_FIELDS = [
   { key: "social_twitter", label: "تويتر (X)", placeholder: "https://x.com/...", dir: "ltr" },
   { key: "social_github", label: "GitHub", placeholder: "https://github.com/...", dir: "ltr" },
   { key: "social_linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/...", dir: "ltr" },
   { key: "social_instagram", label: "Instagram", placeholder: "https://instagram.com/...", dir: "ltr" },
-  { key: "about_name", label: "اسم صفحة من أنا", placeholder: "Abud" },
-  { key: "about_role", label: "الوظيفة / الدور", placeholder: "Full-Stack Developer • AI & Automation Engineer" },
+];
+
+const ABOUT_FIELDS = [
+  { key: "about_name", label: "الاسم", placeholder: "Abud" },
+  { key: "about_role", label: "الوظيفة / الدور", placeholder: "Full-Stack Developer · AI & Automation Engineer" },
   { key: "about_intro", label: "نبذة تعريفية", placeholder: "أحوّل أفكار المشاريع إلى منتجات رقمية..." },
   { key: "about_status_badge", label: "شارة الحالة", placeholder: "متاح للمشاريع الجديدة" },
-  { key: "about_location", label: "الموقع", placeholder: "القاهرة، مصر • UTC+3" },
+  { key: "about_location", label: "الموقع", placeholder: "القاهرة، مصر · UTC+3" },
   { key: "about_experience", label: "الخبرة", placeholder: "6+ سنوات خبرة عملية" },
   { key: "about_cv_url", label: "رابط السيرة الذاتية", placeholder: "/cv-abud.pdf", dir: "ltr" },
-  { key: "about_profile_image", label: "صورة صفحة من أنا (URL)", placeholder: "/uploads/your-image.jpg", dir: "ltr" },
+  { key: "about_profile_image", label: "رابط صورة البروفايل", placeholder: "/uploads/your-image.jpg", dir: "ltr" },
   { key: "about_profile_image_position", label: "مكان الصورة (object-position)", placeholder: "58% 65%", dir: "ltr" },
 ];
+
+interface FieldDef {
+  key: string;
+  label: string;
+  placeholder: string;
+  dir?: string;
+}
+
+function FieldGroup({ title, fields, values, onChange }: {
+  title: string;
+  fields: FieldDef[];
+  values: Record<string, string>;
+  onChange: (key: string, value: string) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <h3 className="text-white font-bold text-sm">{title}</h3>
+      <div className="space-y-3">
+        {fields.map(({ key, label, placeholder, dir }) => (
+          <div key={key}>
+            <label className="block text-sm text-[#a0a0b8] mb-1">{label}</label>
+            <input
+              type="text"
+              placeholder={placeholder}
+              dir={dir}
+              value={values[key] || ""}
+              onChange={(e) => onChange(key, e.target.value)}
+              className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm placeholder-[#606080] outline-none transition-colors"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface AdminInfo {
   id: string;
@@ -131,7 +175,7 @@ export default function AdminSettingsPage() {
           </button>
         </div>
 
-        <div className="card-base p-5 space-y-4">
+        <div className="card-base p-5 space-y-6">
           <div>
             <label className="block text-sm text-[#a0a0b8] mb-2">رفع وقص صورة صفحة من أنا</label>
             <ImageCropUploader
@@ -139,23 +183,14 @@ export default function AdminSettingsPage() {
               onUploaded={(url) => setValues((v) => ({ ...v, about_profile_image: url }))}
             />
             <p className="text-[#606080] text-xs mt-2">
-              يمكنك بعدها تعديل مكان ظهورها من الحقل `about_profile_image_position` (مثال: `58% 65%`).
+              يمكنك بعدها تعديل مكان ظهورها من حقل "مكان الصورة" (مثال: 58% 65%).
             </p>
           </div>
 
-          {settingFields.map(({ key, label, placeholder, dir }) => (
-            <div key={key}>
-              <label className="block text-sm text-[#a0a0b8] mb-1">{label}</label>
-              <input
-                type="text"
-                placeholder={placeholder}
-                dir={dir}
-                value={values[key] || ""}
-                onChange={e => setValues(v => ({ ...v, [key]: e.target.value }))}
-                className="w-full bg-[#0d0d14] border border-[#1a1a2e] focus:border-purple-600/50 rounded-xl px-4 py-2.5 text-white text-sm placeholder-[#606080] outline-none transition-colors"
-              />
-            </div>
-          ))}
+          <FieldGroup title="معلومات الموقع" fields={SITE_FIELDS} values={values} onChange={(k, v) => setValues((prev) => ({ ...prev, [k]: v }))} />
+          <FieldGroup title="بيانات التواصل" fields={CONTACT_FIELDS} values={values} onChange={(k, v) => setValues((prev) => ({ ...prev, [k]: v }))} />
+          <FieldGroup title="روابط السوشيال ميديا" fields={SOCIAL_FIELDS} values={values} onChange={(k, v) => setValues((prev) => ({ ...prev, [k]: v }))} />
+          <FieldGroup title="صفحة من أنا" fields={ABOUT_FIELDS} values={values} onChange={(k, v) => setValues((prev) => ({ ...prev, [k]: v }))} />
         </div>
       </div>
 
