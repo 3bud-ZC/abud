@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { BookOpen, Layers, MessageSquare, Briefcase, Clock, ArrowUpRight, Mail } from "lucide-react";
+import { BookOpen, Layers, MessageSquare, Briefcase, Clock, ArrowUpRight, Mail, Settings } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -51,6 +51,7 @@ export default function AdminDashboard() {
     { label: "الخدمات",      value: stats?.services,                                icon: Briefcase,      href: "/admin/services",  accent: "text-purple-400 bg-purple-600/15 border-purple-600/20" },
     { label: "الرسائل",     value: stats?.messages, badge: stats?.unreadMessages,  icon: MessageSquare,  href: "/admin/messages",  accent: "text-pink-400 bg-pink-600/15 border-pink-600/20" },
     { label: "المشتركون",   value: stats?.subscribers,                             icon: Mail,           href: "/admin/newsletter",accent: "text-amber-400 bg-amber-600/15 border-amber-600/20" },
+    { label: "الإعدادات",   value: undefined,                                      icon: Settings,       href: "/admin/settings",  accent: "text-cyan-400 bg-cyan-600/15 border-cyan-600/20" },
   ];
 
   const now = new Date();
@@ -69,7 +70,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
         <Link href="/admin/blog" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
           + مقال جديد
         </Link>
@@ -79,11 +80,14 @@ export default function AdminDashboard() {
         <Link href="/admin/services" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
           + خدمة جديدة
         </Link>
+        <Link href="/admin/settings" className="card-base p-3 text-sm text-[#b8b8d8] hover:text-white transition-colors">
+          ⚙️ الإعدادات
+        </Link>
       </div>
 
       {loading ? (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div key={i} className="card-base p-5 animate-pulse">
               <div className="h-4 bg-[#1a1a2e] rounded w-1/2 mb-3" />
               <div className="h-8 bg-[#1a1a2e] rounded w-1/3" />

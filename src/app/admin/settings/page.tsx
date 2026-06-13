@@ -17,6 +17,13 @@ const settingFields = [
   { key: "social_github", label: "GitHub", placeholder: "https://github.com/...", dir: "ltr" },
   { key: "social_linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/...", dir: "ltr" },
   { key: "social_instagram", label: "Instagram", placeholder: "https://instagram.com/...", dir: "ltr" },
+  { key: "about_name", label: "اسم صفحة من أنا", placeholder: "Abud" },
+  { key: "about_role", label: "الوظيفة / الدور", placeholder: "Full-Stack Developer • AI & Automation Engineer" },
+  { key: "about_intro", label: "نبذة تعريفية", placeholder: "أحوّل أفكار المشاريع إلى منتجات رقمية..." },
+  { key: "about_status_badge", label: "شارة الحالة", placeholder: "متاح للمشاريع الجديدة" },
+  { key: "about_location", label: "الموقع", placeholder: "القاهرة، مصر • UTC+3" },
+  { key: "about_experience", label: "الخبرة", placeholder: "6+ سنوات خبرة عملية" },
+  { key: "about_cv_url", label: "رابط السيرة الذاتية", placeholder: "/cv-abud.pdf", dir: "ltr" },
   { key: "about_profile_image", label: "صورة صفحة من أنا (URL)", placeholder: "/uploads/your-image.jpg", dir: "ltr" },
   { key: "about_profile_image_position", label: "مكان الصورة (object-position)", placeholder: "58% 65%", dir: "ltr" },
 ];
