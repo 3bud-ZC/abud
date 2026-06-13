@@ -136,13 +136,13 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
                       </p>
 
                       <div className="mb-3 p-3 rounded-xl border border-white/10 bg-white/5">
-                        <div className="text-[11px] text-[#a8a8c8] mb-1">Problem Solved</div>
+                        <div className="text-[11px] text-[#a8a8c8] mb-1">المشكلة اللي اتحلت</div>
                         <p className="text-xs text-[#c5c5de] leading-relaxed">{app.problem}</p>
                       </div>
 
                       {app.features.length > 0 && (
                         <div className="mb-3">
-                          <div className="text-[11px] text-[#a8a8c8] mb-1">Key Features</div>
+                          <div className="text-[11px] text-[#a8a8c8] mb-1">أهم الميزات</div>
                           <div className="flex flex-wrap gap-1.5">
                             {app.features.map((feature) => (
                               <span key={feature} className="text-[10px] px-2 py-1 rounded-full border border-purple-600/30 bg-purple-600/10 text-purple-100">
@@ -155,7 +155,7 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
 
                       {app.techStack.length > 0 && (
                         <div className="mb-5">
-                          <div className="text-[11px] text-[#a8a8c8] mb-1">Tech Stack</div>
+                          <div className="text-[11px] text-[#a8a8c8] mb-1">التقنيات المستخدمة</div>
                           <div className="flex flex-wrap gap-1.5">
                             {app.techStack.map((tech) => (
                               <span key={tech} className="text-[10px] px-2 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-100">
@@ -167,7 +167,7 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
                       )}
 
                       <div className="text-[11px] text-[#c7c7df] mb-4">
-                        Status: <span className="font-semibold" style={{ color: app.accent }}>{app.badge || "Private"}</span>
+                        الحالة: <span className="font-semibold" style={{ color: app.accent }}>{app.badge || "مشروع خاص"}</span>
                       </div>
 
                       <div className="mt-auto flex flex-wrap gap-2">
@@ -179,24 +179,24 @@ export default function PortfolioPageClient({ apps }: { apps: AppCard[] }) {
                             className="btn-primary btn-glow gap-2 text-sm py-2.5 px-5 inline-flex items-center"
                           >
                             <ExternalLink className="w-4 h-4" />
-                            <span>View Live</span>
+                            <span>شغّل الموقع</span>
                           </a>
                         ) : (
                           <span className="btn-outline text-sm py-2.5 px-5 inline-flex items-center opacity-60 cursor-not-allowed">
-                            Private Project
+                            مشروع خاص
                           </span>
                         )}
                         <Link
                           href={`/portfolio/${app.slug}`}
                           className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center"
                         >
-                          <span>View Details</span>
+                          <span>التفاصيل الكاملة</span>
                         </Link>
                         <Link
                           href={`/contact?subject=${encodeURIComponent(`طلب مشروع مشابه: ${app.title}`)}&message=${encodeURIComponent(`مرحبًا، أحتاج مشروع مشابه لـ ${app.title}.\n\nأريد معرفة الخطة والتكلفة المتوقعة.`)}`}
                           className="btn-outline gap-2 text-sm py-2.5 px-5 inline-flex items-center"
                         >
-                          <span>Request Similar Project</span>
+                          <span>اطلب مشروع مشابه</span>
                         </Link>
                       </div>
                     </div>
