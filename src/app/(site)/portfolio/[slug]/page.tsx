@@ -79,9 +79,9 @@ function normalizeProjectLinks(raw: unknown): NormalizedProjectLink[] {
       if (!url) return acc;
 
       if (/github\.com/i.test(url)) {
-        acc.push({ url, label: "GitHub", type: "github" });
+        acc.push({ url, label: "جيتهاب", type: "github" });
       } else {
-        acc.push({ url, label: "زيارة المشروع", type: "live" });
+        acc.push({ url, label: "شغّل الموقع", type: "live" });
       }
       return acc;
     }
@@ -110,10 +110,10 @@ function normalizeProjectLinks(raw: unknown): NormalizedProjectLink[] {
           typeof link.label === "string" && link.label.trim()
             ? link.label.trim()
             : type === "github"
-              ? "GitHub"
+              ? "جيتهاب"
               : type === "demo"
-                ? "Demo"
-                : "زيارة المشروع",
+                ? "عرض تجريبي"
+                : "شغّل الموقع",
         type,
       });
     }

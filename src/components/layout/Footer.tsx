@@ -27,11 +27,11 @@ const footerLinks = {
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [socialLinks, setSocialLinks] = useState([
-    { icon: Github, href: "https://github.com/3bud-ZC", label: "GitHub" },
-    { icon: Twitter, href: "", label: "تويتر / X" },
+    { icon: Send, href: "", label: "واتساب" },
+    { icon: Twitter, href: "", label: "اكس" },
     { icon: Instagram, href: "", label: "إنستغرام" },
-    { icon: Linkedin, href: "", label: "LinkedIn" },
-    { icon: Send, href: "", label: "تيليجرام" },
+    { icon: Linkedin, href: "", label: "لينكد إن" },
+    { icon: Github, href: "https://github.com/3bud-ZC", label: "جيتهاب" },
   ]);
 
   useEffect(() => {
@@ -42,11 +42,11 @@ export default function Footer() {
         const data = await res.json();
         const s = data.settings || {};
         setSocialLinks([
-          { icon: Github, href: s.social_github || "https://github.com/3bud-ZC", label: "GitHub" },
-          { icon: Twitter, href: s.social_twitter || "", label: "تويتر / X" },
-          { icon: Instagram, href: s.social_instagram || "", label: "إنستغرام" },
-          { icon: Linkedin, href: s.social_linkedin || "", label: "LinkedIn" },
           { icon: Send, href: s.whatsapp_number ? `https://wa.me/${String(s.whatsapp_number).replace(/\D/g, "")}` : "", label: "واتساب" },
+          { icon: Twitter, href: s.social_twitter || "", label: "اكس" },
+          { icon: Instagram, href: s.social_instagram || "", label: "إنستغرام" },
+          { icon: Linkedin, href: s.social_linkedin || "", label: "لينكد إن" },
+          { icon: Github, href: s.social_github || "https://github.com/3bud-ZC", label: "جيتهاب" },
         ]);
       } catch {
         // keep defaults

@@ -42,17 +42,17 @@ const stats = TRUST_METRICS.map((metric) => ({
 
 const commercialOffers = [
   {
-    title: "Business Web Systems",
+    title: "مواقع وأنظمة أعمال",
     description: "مواقع شركات، Landing Pages، متاجر بسيطة، Dashboards، وأنظمة داخلية.",
     icon: Globe,
   },
   {
-    title: "Automation & AI Tools",
+    title: "أتمتة وأدوات ذكاء اصطناعي",
     description: "أتمتة مهام متكررة، أدوات AI، n8n workflows، وربط APIs.",
     icon: BrainCircuit,
   },
   {
-    title: "Telegram Bots & Mini Apps",
+    title: "بوتات تيليجرام وميني أبلكيشنز",
     description: "بوتات إدارة، تنبيهات، طلبات، اشتراكات، ولوحات تحكم داخل تيليجرام.",
     icon: Bot,
   },

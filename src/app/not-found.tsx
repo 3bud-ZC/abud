@@ -18,8 +18,8 @@ export default function NotFound() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1a1a2e] border border-[#2a2a3e] font-mono text-sm text-[#a0a0b8] mb-8">
             <Terminal className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-400">ERROR</span>
-            <span>404: page_not_found</span>
+            <span className="text-purple-400">خطأ</span>
+            <span>404: الصفحة_غير_موجودة</span>
           </div>
 
           <h1 className="text-8xl font-black text-transparent bg-clip-text mb-4"

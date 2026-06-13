@@ -48,7 +48,7 @@ function normalizeLinks(raw: unknown): PortfolioLink[] {
 
         return {
           url,
-          label: String(row.label || "").trim() || (type === "github" ? "GitHub" : type === "demo" ? "Demo" : "View Live"),
+          label: String(row.label || "").trim() || (type === "github" ? "جيتهاب" : type === "demo" ? "عرض تجريبي" : "شغّل الموقع"),
           type,
         };
       }
@@ -92,12 +92,12 @@ export default async function PortfolioPage() {
       const primaryStatus =
         ld.badge ||
         (links.some((link) => link.type === "live")
-          ? "Live"
+          ? "مباشر"
           : links.some((link) => link.type === "demo")
-            ? "Demo"
+            ? "تجريبي"
             : links.some((link) => link.type === "github")
-              ? "GitHub"
-              : "Private");
+              ? "مفتوح المصدر"
+              : "مشروع خاص");
 
       const firstLiveLink = links.find((link) => link.type === "live" || link.type === "demo");
 
@@ -131,7 +131,7 @@ export default async function PortfolioPage() {
         "@type": "SoftwareApplication",
         name: app.title,
         description: app.desc,
-        applicationCategory: app.tagline || "Web Application",
+        applicationCategory: app.tagline || "موقع إلكتروني",
         url: siteUrl(`/portfolio/${app.slug}`),
       },
     })),
