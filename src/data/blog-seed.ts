@@ -519,4 +519,392 @@ export const SEED_POSTS: SeedPost[] = [
 <blockquote><p>التعقيد المبكّر هو سبب موت أكتر من 50% من الـ side projects.</p></blockquote>
 `,
   },
+
+  {
+    id: "seed-11",
+    slug: "abud-platform-case-study",
+    title: "كيف بنيت منصة ABUD الكاملة ─ من الفكرة للنشر على VPS",
+    excerpt:
+      "Case study عملي لبناء منصة شخصية متكاملة: Next.js 15 + Prisma + PostgreSQL + لوحة إدارة + SEO. كل خطوة من التخطيط لحد الـ deployment.",
+    coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&auto=format&fit=crop&q=80",
+    readTime: 14,
+    publishedAt: "2026-05-10T10:00:00Z",
+    featured: true,
+    tags: ["Next.js", "Case Study", "Full-Stack", "VPS", "Prisma"],
+    category: { name: "تطوير الويب", slug: "web-dev" },
+    content: `
+<h2>ليه بنيت المنصة دي من الصفر؟</h2>
+<p>كل مرة كنت بفتح portfolio أو بعمل update لموقعي، كنت بضيع وقت في تعديلات صغيرة. المحتوى مبعثر، البيانات يدوية، ولوحة الإدارة غير موجودة. <strong>الحل</strong>: منصة واحدة تجمع كل حاجة — بورتفوليو، مدونة، خدمات، متجر، ولوحة إدارة كاملة.</p>
+
+<h2>1. التخطيط المعماري</h2>
+<p>اخترت <strong>Next.js 15 App Router</strong> لأنها بتديني:</p>
+<ul>
+  <li>Server Components افتراضيًا — سرعة وSEO أحسن</li>
+  <li>Server Actions — خلاص على API routes</li>
+  <li>Streaming + Suspense — تجربة مستخدم سلسة</li>
+  <li>Route Groups — فصل الـ Admin عن الـ Site بسهولة</li>
+</ul>
+
+<h2>2. قاعدة البيانات والـ ORM</h2>
+<p><strong>PostgreSQL + Prisma</strong> — Prisma بتوفر type safety وmigration سهلة. الجداول الأساسية:</p>
+<ul>
+  <li><code>PortfolioProject</code> — بيانات المشاريع مع JSON fields للتفاصيل</li>
+  <li><code>BlogPost</code> — مقالات مع tags وcategories</li>
+  <li><code>Service</code> — الخدمات التجارية</li>
+  <li><code>Settings</code> — إعدادات الموقع القابلة للتعديل</li>
+</ul>
+
+<h2>3. لوحة الإدارة</h2>
+<p>بنيت لوحة Admin داخلية مش منفصلة:</p>
+<ul>
+  <li>Auth بـ NextAuth.js (Credentials Provider)</li>
+  <li>Dashboard cards بـ stats حقيقية</li>
+  <li>CRUD كامل لكل المحتوى</li>
+  <li>Seed scripts للبيانات الافتراضية</li>
+</ul>
+
+<h2>4. SEO والأداء</h2>
+<ul>
+  <li>generateMetadata ديناميكي لكل صفحة</li>
+  <li>Structured Data (BlogPosting, BreadcrumbList, FAQPage)</li>
+  <li>Dynamic Open Graph images لكل مقال</li>
+  <li>Sitemap.ts + robots.ts</li>
+  <li>Framer Motion للـ animations بدون تأثير على LCP</li>
+</ul>
+
+<h2>5. Deployment على VPS</h2>
+<p>مستخدمش Vercel عشين:</p>
+<ul>
+  <li><strong>Full control</strong> على السيرفر والـ environment</li>
+  <li><strong>Cost</strong> — VPS بـ 5$ شهريًا بيكفيني</li>
+  <li><strong>CI/CD</strong> — GitHub Actions → VPS عبر SSH</li>
+</ul>
+<p>الـ Stack: Ubuntu + Nginx + PM2 + PostgreSQL + Node.js 22.</p>
+
+<h2>النتائج</h2>
+<ul>
+  <li>100% TypeScript — zero runtime errors</li>
+  <li>Core Web Vitals Green على كل الصفحات</li>
+  <li>إدارة محتوى كاملة من لوحة واحدة</li>
+  <li>مشروع مفتوح المصدر قابل لإعادة الاستخدام</li>
+</ul>
+
+<blockquote><p>المنصة الجيدة مش اللي بتظهر بس ─ ده اللي بتقدر تدير محتواك منها بسهولة.</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-12",
+    slug: "3bud-erp-system-case-study",
+    title: "بناء ERP عربي من الصفر ─ تجربة 3BUD ERP",
+    excerpt:
+      "Case study لنظام ERP متكامل لإدارة المتاجر: المبيعات، المخزون، العملاء، والفواتير. إزاي حلّينا مشكلة التشتت في الأدوات المنفصلة.",
+    coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&auto=format&fit=crop&q=80",
+    readTime: 11,
+    publishedAt: "2026-05-05T08:00:00Z",
+    featured: false,
+    tags: ["ERP", "Business", "Next.js", "PostgreSQL", "Dashboard"],
+    category: { name: "تطوير الويب", slug: "web-dev" },
+    content: `
+<h2>المشكلة: كل حاجة في مكان</h2>
+<p>أصحاب المتاجر الصغيرة بيستخدموا Excel للمخزون، WhatsApp للطلبات، ودفتر للفواتير. <strong>النتيجة</strong>: أخطاء يومية، طلبات بتضيع، ومفيش رؤية واضحة للأداء.</p>
+
+<h2>التحليل</h2>
+<p>قعدت 3 أيام أتابع عملية يومية كاملة لمتجر إلكتروني صغير. اكتشفت إن 60% من الوقت بيروح في:</p>
+<ol>
+  <li>التحويل بين التطبيقات المختلفة</li>
+  <li>إعادة إدخال نفس البيانات</li>
+  <li>البحث عن معلومة قديمة</li>
+</ol>
+
+<h2>الحل: نظام واحد بـ 5 وحدات</h2>
+<ul>
+  <li><strong>Orders</strong> — استلام وتتبع الطلبات من الاستلام للتسليم</li>
+  <li><strong>Inventory</strong> — مخزون فعلي مع تنبيهات عند النقص</li>
+  <li><strong>Customers</strong> — سجل عملاء شامل بتاريخ المشتريات</li>
+  <li><strong>Invoices</strong> — فواتير تلقائية مع PDF export</li>
+  <li><strong>Reports</strong> — تقارير يومية وأسبوعية وشهرية</li>
+</ul>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Frontend</strong>: Next.js 15 + Tailwind + shadcn/ui</li>
+  <li><strong>Backend</strong>: Server Actions + Prisma + PostgreSQL</li>
+  <li><strong>Auth</strong>: NextAuth.js (role-based)</li>
+  <li><strong>Charts</strong>: Recharts للتقارير المرئية</li>
+  <li><strong>PDF</strong>: jsPDF للفواتير</li>
+</ul>
+
+<h2>التحدي الأكبر</h2>
+<p>تصميم الـ data model. كل منتج بيتأثر بالمخزون، كل طلب بيأثر بالمخزون، كل عميل بيتأثر بتاريخ الطلبات. الحل كان <strong>Prisma relations</strong> دقيقة مع <code>onDelete</code> و <code>onUpdate</code> rules واضحة.</p>
+
+<h2>النتائج</h2>
+<ul>
+  <li>تقليل وقت المتابعة اليومية بنسبة 70%</li>
+  <li>صفر أخطاء في الفواتير (قبل كانت 2-3 يوميًا)</li>
+  <li>رؤية فورية للأداء والمخزون</li>
+</ul>
+
+<blockquote><p>الـ ERP الناجح مش اللي فيه ميزات كتير ─ ده اللي بيختصر خطوات يومية حقيقية.</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-13",
+    slug: "promptforge-ai-case-study",
+    title: "PromptForge AI ─ إزاي ساعدت الناس يصيّغوا Prompts أحسن",
+    excerpt:
+      "Case study لمنصة هندسة الـ Prompts بالعربي. إزاي حوّلنا مشكلة صعوبة التعامل مع LLMs لمنتج عملي ومفيد.",
+    coverImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1600&auto=format&fit=crop&q=80",
+    readTime: 9,
+    publishedAt: "2026-04-28T12:00:00Z",
+    featured: false,
+    tags: ["AI", "LLM", "Prompt Engineering", "Next.js", "Case Study"],
+    category: { name: "ذكاء اصطناعي", slug: "ai" },
+    content: `
+<h2>المشكلة: LLMs بـتفهمش العربي كويس؟</h2>
+<p>الناس بتقول "ChatGPT مش بيفهم العربي". الحقيقة: <strong>المشكلة في الـ Prompt مش في النموذج</strong>. جملة غير دقيقة بالعربي بتدي نتيجة ضعيفة — نفس الجملة مترجمة للإنجليزي بتدي نتيجة أحسن. ليه؟ لأن الناس بيعرفوا يصيّغوا بالإنجليزي أحسن.</p>
+
+<h2>الفكرة</h2>
+<p>أعمل منصة تساعد المستخدم العربي في:</p>
+<ul>
+  <li>صياغة Prompts دقيقة بالعربي</li>
+  <li>تحويل Prompts للإنجليزي بجودة عالية</li>
+  <li>تخزين وإعادة استخدام القوالب</li>
+  <li>تعلم Pattern Engineering بالتدريج</li>
+</ul>
+
+<h2>التصميم التقني</h2>
+<ul>
+  <li><strong>UI</strong>: واجهة بسيطة — input للموضوع، واختيار الغرض (كتابة، ترجمة، شرح، إلخ)</li>
+  <li><strong>Backend</strong>: Server Action بتبعت للـ LLM prompt محسّن مسبقًا</li>
+  <li><strong>Optimization</strong>: chain-of-thought prompting مدمج في الـ system prompt</li>
+  <li><strong>Storage</strong>: localStorage للقوالب (نسخة MVP)</li>
+</ul>
+
+<h2>الـ Prompt Engineering اللي استخدمته</h2>
+<ol>
+  <li><strong>Role Prompting</strong>: "أنت خبير في [المجال]"</li>
+  <li><strong>Few-shot</strong>: أمثلة على الـ output المطلوب</li>
+  <li><strong>Chain-of-Thought</strong>: "فكّر خطوة بخطوة"</li>
+  <li><strong>Output Formatting</strong>: JSON أو Markdown حسب الاستخدام</li>
+</ol>
+
+<h2>النتائج</h2>
+<ul>
+  <li>تحسين جودة الـ responses بنسبة 40% (مقارنة بـ prompts عشوائية)</li>
+  <li>توفير 50% من وقت التجربة والتعديل</li>
+  <li>قاعدة بيانات 200+ prompt template</li>
+</ul>
+
+<blockquote><p>LLM بيفهم العربي كويس — بس محتاج يتكلم معاه بشكل صحيح.</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-14",
+    slug: "telegram-mini-app-store-case-study",
+    title: "Telegram Mini App لمتجر إلكتروني ─ لماذا اخترنا تيليجرام بدل التطبيقات العادية",
+    excerpt:
+      "Case study لتطبيق متجر مصغّر داخل تيليجرام. إزاي حلّينا مشكلة التسرب في رحلة الشراء باستخدام Mini Apps API.",
+    coverImage: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1600&auto=format&fit=crop&q=80",
+    readTime: 10,
+    publishedAt: "2026-04-20T09:00:00Z",
+    featured: false,
+    tags: ["Telegram", "Mini App", "E-commerce", "Mobile UX", "Case Study"],
+    category: { name: "أتمتة", slug: "automation" },
+    content: `
+<h2>المشكلة: كل خطوة زيادة = عميل أقل</h2>
+<p>إحصائيات التجارة الإلكترونية بتقول إن <strong>كل خطوة إضافية في checkout بتفقدك 20-30% من العملاء</strong>. العميل بيشوف منتج على Instagram، يدوس link، يستنى التطبيق يفتح (أو ينزل)، يسجل، يدفع. 5 خطوات = 80% تسرب.</p>
+
+<h2>لماذا Telegram Mini App؟</h2>
+<ul>
+  <li><strong>لا تحميل</strong> — التطبيق موجود جوا تيليجرام نفسه</li>
+  <li><strong>لا تسجيل</strong> — الـ user معروف بالفعل من Telegram</li>
+  <li><strong>Speed</strong> — WebView سريع، لا store approval</li>
+  <li><strong>Distribution</strong> — Bot يبعت الكاتالوج، Mini App يخلّي الشراء</li>
+  <li><strong>Payments</strong> — Telegram Payments API مدعومة</li>
+</ul>
+
+<h2>تجربة المستخدم</h2>
+<p>رحلة الشراء بقت 3 خطوات:</p>
+<ol>
+  <li>العميل يفتح البوت ويشوف الكاتالوج</li>
+  <li>يدوس على منتج → يفتح Mini App</li>
+  <li>يضيف للسلة ويدفع — كله داخل تيليجرام</li>
+</ol>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Framework</strong>: Next.js 15 (Static Export للـ Mini App)</li>
+  <li><strong>Styling</strong>: Tailwind CSS — lightweight وresponsive</li>
+  <li><strong>Telegram SDK</strong>: <code>@telegram-apps/sdk</code> للـ theme وUser data</li>
+  <li><strong>State</strong>: React Context (المتجر صغير، مش محتاج Redux)</li>
+  <li><strong>Payment</strong>: Telegram Payments API + webhook confirmation</li>
+</ul>
+
+<h2>التحدي: الـ WebView</h2>
+<p>Telegram WebView فيه قيود:</p>
+<ul>
+  <li>no external links (مفتوحة في browser خارجي)</li>
+  <li>restricted access للـ localStorage</li>
+  <li>theme بيتغير حسب إعدادات المستخدم</li>
+</ul>
+<p>الحل: استخدمنا <code>Telegram SDK</code> لقراءة الـ theme variables وعملنا fallback للـ colors.</p>
+
+<h2>النتائج</h2>
+<ul>
+  <li>تقليل خطوات الشراء من 5 لـ 3</li>
+  <li>تحسين معدل التحويل بنسبة 35% (مقارنة بمتجر خارجي)</li>
+  <li>وقت التطوير: 10 أيام فقط (MVP)</li>
+</ul>
+
+<blockquote><p>العميل مش بيدور على "تطبيق" ─ بيدور على "سهولة".</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-15",
+    slug: "vps-monitor-bot-case-study",
+    title: "بوت مراقبة VPS على تيليجرام ─ DevOps للمبتدئين",
+    excerpt:
+      "Case study لبوت بسيط يراقب موارد السيرفر ويبعت تنبيهات فورية. إزاي بنيت أداة DevOps عملية بـ Python في يوم واحد.",
+    coverImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&auto=format&fit=crop&q=80",
+    readTime: 8,
+    publishedAt: "2026-04-12T14:00:00Z",
+    featured: false,
+    tags: ["DevOps", "Telegram Bot", "Python", "Monitoring", "VPS"],
+    category: { name: "أدوات وإنتاجية", slug: "tools" },
+    content: `
+<h2>المشكلة: السيرفر بيقع وأنا نايم</h2>
+<p>بعد ما نشرت مشروع على VPS، كنت بفتح SSH كل ساعتين أتأكد إن السيرفر شغال. <strong>ده مش DevOps ─ ده paranoia</strong>. محتاج أداة تراقب لوحدها وتنبّهني.</p>
+
+<h2>المتطلبات</h2>
+<ul>
+  <li>مراقبة CPU و RAM و Disk Usage</li>
+  <li>تنبيه فوري لو الاستهلاك تجاوز 80%</li>
+  <li>تقرير دوري يومي (صباحًا)</li>
+  <li>أوامر بسيطة: /status، /alert، /logs</li>
+  <li>تشغيل 24/7 بدون تعقيد</li>
+</ul>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Language</strong>: Python 3.11</li>
+  <li><strong>Bot Framework</strong>: <code>python-telegram-bot</code> (v20+ async)</li>
+  <li><strong>System Metrics</strong>: <code>psutil</code> — cross-platform وموثوق</li>
+  <li><strong>Scheduling</strong>: <code>APScheduler</code> للتقارير الدورية</li>
+  <li><strong>Deployment</strong>: Docker + systemd على Ubuntu VPS</li>
+</ul>
+
+<h2>الهيكل</h2>
+<pre><code>/vps_bot
+├── bot.py           # التشغيل الرئيسي
+├── monitor.py       # قراءة الموارد
+├── alerts.py        # منطق التنبيهات
+├── commands.py      # أوامر التيليجرام
+├── config.py        # الإعدادات
+└── Dockerfile       # containerization</code></pre>
+
+<h2>منطق التنبيهات</h2>
+<p>مش بس "لو CPU > 80%". بنتظر <strong>5 دقائق متتالية</strong> عشان نتجنب الـ false positives. التنبيه بيجي بصيغة:</p>
+<pre><code>⚠️ تنبيه: CPU Usage 87%
+Server: abud-vps-01
+Time: 2026-04-12 02:15 UTC
+Action: جاري مراجعة الـ logs...</code></pre>
+
+<h2>Deployment سريع</h2>
+<ol>
+  <li>Build Docker image</li>
+  <li>Push لـ VPS</li>
+  <li>systemd service مع auto-restart</li>
+  <li>GitHub Actions للـ CI/CD</li>
+</ol>
+
+<h2>النتائج</h2>
+<ul>
+  <li>اكتشاف مشكلة Disk 95% قبل ما السيرفر يعلق</li>
+  <li>تقرير يومي بيخليني أعرف لو في traffic spike</li>
+  <li>وقت التطوير: يوم واحد</li>
+  <li>تشغيل مستمر من 3 شهور بدون restart</li>
+</ul>
+
+<blockquote><p>DevOps مش بس Kubernetes ─ DevOps هو إنك تعرف حالة سيرفرك في أي وقت.</p></blockquote>
+`,
+  },
+
+  {
+    id: "seed-16",
+    slug: "task-manager-bot-case-study",
+    title: "بوت إدارة المهام الشخصي ─ لماذا استخدمت SQLite بدل PostgreSQL",
+    excerpt:
+      "Case study لبوت تيليجرام لإدارة المهام اليومية. تحليل لماذا اخترت SQLite لبيانات شخصية وكيف بنيت نظام تذكيرات ذكي.",
+    coverImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1600&auto=format&fit=crop&q=80",
+    readTime: 9,
+    publishedAt: "2026-04-05T11:00:00Z",
+    featured: false,
+    tags: ["Telegram Bot", "Productivity", "Python", "SQLite", "Case Study"],
+    category: { name: "أدوات وإنتاجية", slug: "tools" },
+    content: `
+<h2>المشكلة: أدوات كتيرة = مهام ضايعة</h2>
+<p>كنت باستخدم Notion للمشاريع الكبيرة، Reminders للتذكيرات، وWhatsApp notes للحاجات السريعة. <strong>النتيجة</strong>: مهام بتتكرر، deadlines بتتعدى، وشعور دائم إني ناسي حاجة.</p>
+
+<h2>القرار: بوت داخل تيليجرام</h2>
+<p>ليه تيليجرام؟</p>
+<ul>
+  <li>مفتوح 24/7 على الموبايل</li>
+  <li>سريع — أضيف مهمة في 3 ثواني</li>
+  <li>ما فيش switching cost — مش محتاج أفتح app تاني</li>
+  <li>أوامر نصية سهلة: <code>/add اجتماع مع العميل الساعة 3</code></li>
+</ul>
+
+<h2>لماذا SQLite؟</h2>
+<p>أغلب الناس هيقول "PostgreSQL أحسن". فعلاً، بس للبيانات <strong>الشخصية والمحلية</strong>:</p>
+<ul>
+  <li>✅ Zero setup — ملف واحد</li>
+  <li>✅ No server process — أخف بكتير</li>
+  <li>✅ Backups سهلة — نسخ الملف كفاية</li>
+  <li>✅ Single user — مفيش concurrency issues</li>
+  <li>❌ لو 1000+ user في نفس الوقت → PostgreSQL</li>
+</ul>
+<p>الـ Bot ده شخصي (وأصدقائي). SQLite كافي ومثالي.</p>
+
+<h2>التقنية</h2>
+<ul>
+  <li><strong>Language</strong>: Python 3.11</li>
+  <li><strong>Bot</strong>: <code>python-telegram-bot</code> (async)</li>
+  <li><strong>Database</strong>: SQLite + <code>sqlite3</code> (stdlib)</li>
+  <li><strong>Scheduling</strong>: <code>APScheduler</code> (background thread)</li>
+  <li><strong>NLP</strong>: regex-based parsing للتواريخ والأولويات</li>
+  <li><strong>Deploy</strong>: Docker + VPS</li>
+</ul>
+
+<h2>الأوامر</h2>
+<ul>
+  <li><code>/add [مهمة]</code> — إضافة مهمة</li>
+  <li><code>/today</code> — المهام اليوم</li>
+  <li><code>/week</code> — ملخص الأسبوع</li>
+  <li><code>/done [id]</code> — إكمال مهمة</li>
+  <li><code>/remind [مهمة] [وقت]</code> — تذكير مخصص</li>
+</ul>
+
+<h2>نظام التذكيرات</h2>
+<p>التذكيرات مش مجرد alarm. البوت بيحلّل:</p>
+<ol>
+  <li>لو مهمة عاجلة (priority: high) → تذكير قبلها بـ 30 دقيقة وقبلها بـ 5 دقائق</li>
+  <li>لو مهمة عادية → تذكير واحد قبلها بـ 15 دقيقة</li>
+  <li>ملخص يومي الساعة 8 صباحًا بكل المهام المتبقية</li>
+</ol>
+
+<h2>النتائج</h2>
+<ul>
+  <li>تقليل نسيان المهام بنسبة 90%</li>
+  <li>تحسين الالتزام بالمواعيد</li>
+  <li>أخف من أي تطبيق إدارة مهام</li>
+  <li>مفتوح المصدر — قابل للتخصيص لأي حد</li>
+</ul>
+
+<blockquote><p>أحسن أداة إنتاجية هي اللي بتكون في مكانك الأساسي — تيليجرام.</p></blockquote>
+`,
+  },
 ];
