@@ -1,7 +1,34 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import BlogPageClient from "./BlogPageClient";
+import { siteUrl } from "@/lib/site-url";
+import JsonLd from "@/components/JsonLd";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: "المدونة | ABUD",
+  description:
+    "مقالات عملية في تطوير الويب، الذكاء الاصطناعي، الأتمتة، الأمن السيبراني، والفريلانس — مبنية على تجربة تنفيذ حقيقية.",
+  alternates: { canonical: siteUrl("/blog") },
+  openGraph: {
+    type: "website",
+    locale: "ar_EG",
+    url: siteUrl("/blog"),
+    siteName: "ABUD",
+    title: "المدونة | ABUD",
+    description:
+      "مقالات عملية في تطوير الويب، الذكاء الاصطناعي، الأتمتة، الأمن السيبراني، والفريلانس — مبنية على تجربة تنفيذ حقيقية.",
+    images: [{ url: siteUrl("/opengraph-image"), width: 1200, height: 630, alt: "مدونة ABUD" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "المدونة | ABUD",
+    description:
+      "مقالات عملية في تطوير الويب، الذكاء الاصطناعي، الأتمتة، الأمن السيبراني، والفريلانس.",
+    images: [siteUrl("/opengraph-image")],
+  },
+};
 
 interface ClientPost {
   id: string;
@@ -78,5 +105,29 @@ async function loadFromDb(): Promise<{ posts: ClientPost[]; categories: ClientCa
 
 export default async function BlogPage() {
   const { posts, categories } = await loadFromDb();
-  return <BlogPageClient initialPosts={posts} initialCategories={categories} />;
+
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "مدونة ABUD",
+    description:
+      "مقالات عملية في تطوير الويب، الذكاء الاصطناعي، الأتمتة، الأمن السيبراني، والفريلانس.",
+    url: siteUrl("/blog"),
+    inLanguage: "ar",
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      url: siteUrl(`/blog/${p.slug}`),
+      image: p.coverImage ?? undefined,
+      datePublished: p.publishedAt ? new Date(p.publishedAt).toISOString() : undefined,
+      articleSection: p.category?.name ?? undefined,
+    })),
+  };
+
+  return (
+    <>
+      <JsonLd data={blogSchema} />
+      <BlogPageClient initialPosts={posts} initialCategories={categories} />
+    </>
+  );
 }

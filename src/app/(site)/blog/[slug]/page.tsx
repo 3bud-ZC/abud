@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Clock, Calendar, Tag, BookOpen } from "lucide-react";
@@ -14,10 +15,60 @@ import HolographicCard from "@/components/effects/HolographicCard";
 import SocialShare from "@/components/blog/SocialShare";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import { siteUrl } from "@/lib/site-url";
+import { getPostBySlug } from "@/lib/blog";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
-export const fetchCache = 'force-no-store';
+export const fetchCache = "force-no-store";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug);
+  if (!post) {
+    return {
+      title: { absolute: "المدونة | ABUD" },
+    };
+  }
+
+  const postUrl = siteUrl(`/blog/${post.slug}`);
+  const cover = post.coverImage || siteUrl("/opengraph-image");
+
+  return {
+    title: post.title,
+    description: post.excerpt || `مقال: ${post.title}`,
+    keywords: post.tags,
+    authors: [{ name: "ABUD", url: siteUrl("/about") }],
+    alternates: { canonical: postUrl },
+    openGraph: {
+      type: "article",
+      locale: "ar_EG",
+      url: postUrl,
+      siteName: "ABUD",
+      title: post.title,
+      description: post.excerpt || post.title,
+      images: [{ url: cover, width: 1200, height: 630, alt: post.title }],
+      publishedTime: new Date(post.publishedAt ?? post.createdAt).toISOString(),
+      modifiedTime: new Date(post.updatedAt).toISOString(),
+      authors: [siteUrl("/about")],
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || post.title,
+      images: [cover],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  };
+}
 
 interface RenderablePost {
   title: string;
@@ -45,56 +96,7 @@ interface RelatedItem {
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  let post: RenderablePost | null = null;
-
-  try {
-    const dbPost = await prisma.blogPost.findUnique({
-      where: { slug: params.slug, status: "published" },
-      include: { category: true },
-    });
-    if (dbPost) {
-      const dbTags: string[] = Array.isArray(dbPost.tags)
-        ? (dbPost.tags as unknown as string[])
-        : (() => { try { return JSON.parse(dbPost.tags as string); } catch { return []; } })();
-      post = {
-        title: dbPost.title,
-        slug: dbPost.slug,
-        excerpt: dbPost.excerpt,
-        content: dbPost.content,
-        coverImage: dbPost.coverImage,
-        readTime: dbPost.readTime,
-        publishedAt: dbPost.publishedAt,
-        createdAt: dbPost.createdAt,
-        updatedAt: dbPost.updatedAt,
-        tags: dbTags,
-        category: dbPost.category ? { name: dbPost.category.name, slug: dbPost.category.slug } : null,
-        categoryId: dbPost.categoryId,
-      };
-    }
-  } catch (e) {
-    console.error("[blog/[slug]] DB miss, trying seed:", (e as Error).message);
-  }
-
-  // Fall back to seed posts (curated content)
-  if (!post) {
-    const seed = SEED_POSTS.find((p) => p.slug === params.slug);
-    if (seed) {
-      post = {
-        title: seed.title,
-        slug: seed.slug,
-        excerpt: seed.excerpt,
-        content: seed.content,
-        coverImage: seed.coverImage,
-        readTime: seed.readTime,
-        publishedAt: seed.publishedAt,
-        createdAt: seed.publishedAt,
-        updatedAt: seed.publishedAt,
-        tags: seed.tags,
-        category: seed.category,
-        categoryId: seed.category.slug,
-      };
-    }
-  }
+  const post = await getPostBySlug(params.slug) as RenderablePost | null;
 
   if (!post) notFound();
 
@@ -170,16 +172,28 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt ?? "",
-    image: post.coverImage ?? siteUrl("/opengraph-image"),
+    image: post.coverImage
+      ? [post.coverImage, siteUrl("/opengraph-image")]
+      : [siteUrl("/opengraph-image")],
     datePublished: new Date(post.publishedAt ?? post.createdAt).toISOString(),
     dateModified: new Date(post.updatedAt).toISOString(),
     author: { "@type": "Person", name: "ABUD", url: siteUrl("/about") },
-    publisher: { "@type": "Organization", name: "ABUD", url: siteUrl() },
+    publisher: {
+      "@type": "Organization",
+      name: "ABUD",
+      url: siteUrl(),
+      logo: { "@type": "ImageObject", url: siteUrl("/icon") },
+    },
     url: siteUrl(`/blog/${post.slug}`),
     keywords: tags.join(", "),
     articleSection: post.category?.name ?? "تقنية",
     wordCount: post.content.split(/\s+/).length,
     timeRequired: `PT${readTime}M`,
+    inLanguage: "ar",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": siteUrl(`/blog/${post.slug}`),
+    },
   };
 
   const breadcrumbSchema = {

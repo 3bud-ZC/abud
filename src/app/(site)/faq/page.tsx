@@ -1,18 +1,34 @@
-﻿"use client";
-
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, ShoppingBag, MessageSquare, Zap } from "lucide-react";
+import { HelpCircle, MessageSquare } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
 import HolographicCard from "@/components/effects/HolographicCard";
+import JsonLd from "@/components/JsonLd";
+import { siteUrl } from "@/lib/site-url";
+import FAQAccordion from "./FAQAccordion";
 
-const faqs = [
+export const metadata: Metadata = {
+  title: "الأسئلة الشائعة | ABUD",
+  description:
+    "إجابات على أكثر الأسئلة شيوعًا حول المنتجات الرقمية، الخدمات، طرق الدفع، وضمان الاسترداد.",
+  alternates: { canonical: siteUrl("/faq") },
+  openGraph: {
+    type: "website",
+    locale: "ar_EG",
+    url: siteUrl("/faq"),
+    siteName: "ABUD",
+    title: "الأسئلة الشائعة | ABUD",
+    description:
+      "إجابات على أكثر الأسئلة شيوعًا حول المنتجات الرقمية، الخدمات، طرق الدفع، وضمان الاسترداد.",
+    images: [{ url: siteUrl("/opengraph-image"), width: 1200, height: 630, alt: "الأسئلة الشائعة | ABUD" }],
+  },
+};
+
+const faqGroups = [
   {
     category: "الشراء والمنتجات",
-    icon: ShoppingBag,
     color: "#c084fc",
     items: [
       {
@@ -35,7 +51,6 @@ const faqs = [
   },
   {
     category: "الدفع",
-    icon: Zap,
     color: "#67e8f9",
     items: [
       {
@@ -54,7 +69,6 @@ const faqs = [
   },
   {
     category: "الخدمات",
-    icon: MessageSquare,
     color: "#a3e635",
     items: [
       {
@@ -77,148 +91,87 @@ const faqs = [
   },
 ];
 
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div
-      className="overflow-hidden rounded-xl transition-all duration-200"
-      style={{
-        background: open
-          ? "linear-gradient(160deg, rgba(18,10,30,0.9), rgba(10,10,18,0.8))"
-          : "rgba(10,10,18,0.6)",
-        border: open ? "1px solid rgba(147,51,234,0.3)" : "1px solid rgba(28,28,48,0.8)",
-      }}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between gap-4 p-5 text-right"
-      >
-        <span
-          className="font-semibold text-sm leading-snug transition-colors duration-200"
-          style={{ color: open ? "#e2d4f8" : "#c0c0d8" }}
-        >
-          {q}
-        </span>
-        <motion.div
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="flex-shrink-0"
-        >
-          <ChevronDown
-            className="w-4 h-4 transition-colors duration-200"
-            style={{ color: open ? "#c084fc" : "#505070" }}
-          />
-        </motion.div>
-      </button>
+const mainEntity = faqGroups.flatMap((g) =>
+  g.items.map((item) => ({
+    "@type": "Question" as const,
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer" as const,
+      text: item.a,
+    },
+  }))
+);
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-          >
-            <div
-              className="px-5 pb-5 text-sm leading-relaxed"
-              style={{ color: "#707090", borderTop: "1px solid rgba(28,28,48,0.6)" }}
-            >
-              <div className="pt-4">{a}</div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity,
+};
 
 export default function FAQPage() {
   return (
-    <div className="pt-20">
-      {/* Hero */}
-      <section className="relative py-24 px-4 overflow-hidden">
-        <FloatingOrbs count={5} />
-        <ScanLine duration={11} />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <AnimatedSection>
-            <span className="section-badge mb-6">
-              <HelpCircle className="w-2.5 h-2.5" />
-              الأسئلة الشائعة
-            </span>
-            <h1
-              className="font-black text-white mt-5 mb-4"
-              style={{ fontSize: "clamp(2rem,6vw,3.5rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
-            >
-              كيف يمكننا مساعدتك؟
-            </h1>
-            <p style={{ color: "#606070", fontSize: "1rem", maxWidth: "32rem", margin: "0 auto", lineHeight: 1.7 }}>
-              إجابات لأكثر الأسئلة شيوعًا حول المنتجات والخدمات وطرق الدفع.
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* FAQ Categories */}
-      <section className="py-16 px-4 pb-24 relative overflow-hidden">
-        <FloatingOrbs count={4} />
-        <div className="relative z-10 max-w-3xl mx-auto space-y-12">
-          {faqs.map(({ category, icon: Icon, color, items }, ci) => (
-            <AnimatedSection key={ci} delay={ci * 0.05}>
-              <div className="flex items-center gap-3 mb-5">
-                <motion.div
-                  animate={{ boxShadow: [`0 0 12px ${color}40`, `0 0 24px ${color}80`, `0 0 12px ${color}40`] }}
-                  transition={{ duration: 2.6, repeat: Infinity, delay: ci * 0.3 }}
-                  className="w-9 h-9 rounded-lg flex items-center justify-center"
-                  style={{ background: `${color}25`, border: `1px solid ${color}55` }}
-                >
-                  <Icon className="w-4 h-4" style={{ color }} />
-                </motion.div>
-                <h2 className="text-white font-bold text-lg" style={{ letterSpacing: "-0.02em" }}>
-                  {category}
-                </h2>
-              </div>
-              <div className="space-y-2">
-                {items.map((item, i) => (
-                  <FAQItem key={i} q={item.q} a={item.a} />
-                ))}
-              </div>
+    <>
+      <JsonLd data={faqSchema} />
+      <div className="pt-20">
+        {/* Hero */}
+        <section className="relative py-24 px-4 overflow-hidden">
+          <FloatingOrbs count={5} />
+          <ScanLine duration={11} />
+          <div className="relative z-10 max-w-3xl mx-auto text-center">
+            <AnimatedSection>
+              <span className="section-badge mb-6">
+                <HelpCircle className="w-2.5 h-2.5" />
+                الأسئلة الشائعة
+              </span>
+              <h1
+                className="font-black text-white mt-5 mb-4"
+                style={{ fontSize: "clamp(2rem,6vw,3.5rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
+              >
+                كيف يمكننا مساعدتك؟
+              </h1>
+              <p style={{ color: "#606070", fontSize: "1rem", maxWidth: "32rem", margin: "0 auto", lineHeight: 1.7 }}>
+                إجابات لأكثر الأسئلة شيوعًا حول المنتجات والخدمات وطرق الدفع.
+              </p>
             </AnimatedSection>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Still have questions CTA */}
-      <section
-        className="py-20 px-4 relative overflow-hidden"
-        style={{ borderTop: "1px solid rgba(28,28,48,0.8)", background: "linear-gradient(to bottom, rgba(8,8,14,1), rgba(5,5,8,1))" }}
-      >
-        <FloatingOrbs count={4} />
-        <ScanLine duration={12} />
-        <div className="relative z-10 max-w-2xl mx-auto">
-          <AnimatedSection>
-            <HolographicCard duration={6}>
-              <div className="p-8 md:p-10 text-center">
-                <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <MessageSquare className="w-9 h-9 mx-auto mb-4" style={{ color: "#c084fc", filter: "drop-shadow(0 0 12px rgba(168,85,247,0.7))" }} />
-                </motion.div>
-                <h3 className="text-white font-bold text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
-                  لم تجد إجابتك؟
-                </h3>
-                <p className="text-sm mb-6" style={{ color: "#9090b0" }}>
-                  أنا جاهز للمساعدة — تواصل معي مباشرة وسأرد في أقرب وقت.
-                </p>
-                <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2">
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  تواصل معي
-                </Link>
-              </div>
-            </HolographicCard>
-          </AnimatedSection>
-        </div>
-      </section>
-    </div>
+        {/* FAQ Categories */}
+        <section className="py-16 px-4 pb-24 relative overflow-hidden">
+          <FloatingOrbs count={4} />
+          <FAQAccordion groups={faqGroups} />
+        </section>
+
+        {/* Still have questions CTA */}
+        <section
+          className="py-20 px-4 relative overflow-hidden"
+          style={{ borderTop: "1px solid rgba(28,28,48,0.8)", background: "linear-gradient(to bottom, rgba(8,8,14,1), rgba(5,5,8,1))" }}
+        >
+          <FloatingOrbs count={4} />
+          <ScanLine duration={12} />
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <AnimatedSection>
+              <HolographicCard duration={6}>
+                <div className="p-8 md:p-10 text-center">
+                  <div>
+                    <MessageSquare className="w-9 h-9 mx-auto mb-4" style={{ color: "#c084fc", filter: "drop-shadow(0 0 12px rgba(168,85,247,0.7))" }} />
+                  </div>
+                  <h3 className="text-white font-bold text-xl mb-2" style={{ letterSpacing: "-0.02em" }}>
+                    لم تجد إجابتك؟
+                  </h3>
+                  <p className="text-sm mb-6" style={{ color: "#9090b0" }}>
+                    أنا جاهز للمساعدة — تواصل معي مباشرة وسأرد في أقرب وقت.
+                  </p>
+                  <Link href="/contact" className="btn-primary btn-glow inline-flex gap-2">
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    تواصل معي
+                  </Link>
+                </div>
+              </HolographicCard>
+            </AnimatedSection>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
