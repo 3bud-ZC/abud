@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Briefcase, Github, ExternalLink } from "lucide-react";
+import { ArrowLeft, Briefcase, Github, ExternalLink, Globe, Bot, Database, Zap, ShoppingCart, Shield } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import HolographicCard from "@/components/effects/HolographicCard";
 
@@ -14,7 +15,7 @@ interface Project {
   accent: string;
   href?: string;
   github?: string;
-  emoji: string;
+  icon: LucideIcon;
 }
 
 // Curated showcase ─ hand-picked projects that represent the breadth of work.
@@ -26,7 +27,7 @@ const PROJECTS: Project[] = [
     tags: ["Next.js", "TypeScript", "Prisma", "AI"],
     accent: "#c084fc",
     href: "/portfolio",
-    emoji: "✦",
+    icon: Globe,
   },
   {
     title: "AI Telegram Agents",
@@ -35,7 +36,7 @@ const PROJECTS: Project[] = [
     tags: ["Python", "OpenAI", "aiogram", "PostgreSQL"],
     accent: "#67e8f9",
     href: "/services?category=bots",
-    emoji: "✦",
+    icon: Bot,
   },
   {
     title: "RAG Knowledge Systems",
@@ -44,7 +45,7 @@ const PROJECTS: Project[] = [
     tags: ["RAG", "Qdrant", "Embeddings", "Cohere"],
     accent: "#a78bfa",
     href: "/services?category=ai",
-    emoji: "✦",
+    icon: Database,
   },
   {
     title: "n8n Automation Stacks",
@@ -53,7 +54,7 @@ const PROJECTS: Project[] = [
     tags: ["n8n", "Make", "VPS", "Webhooks"],
     accent: "#34d399",
     href: "/services?category=automation",
-    emoji: "✦",
+    icon: Zap,
   },
   {
     title: "E-commerce Platforms",
@@ -62,7 +63,7 @@ const PROJECTS: Project[] = [
     tags: ["Next.js", "Stripe", "Tailwind"],
     accent: "#f0abfc",
     href: "/services?category=ecommerce",
-    emoji: "✦",
+    icon: ShoppingCart,
   },
   {
     title: "Security Audits",
@@ -71,7 +72,7 @@ const PROJECTS: Project[] = [
     tags: ["Pentesting", "Burp Suite", "OWASP"],
     accent: "#f87171",
     href: "/services?category=security",
-    emoji: "✦",
+    icon: Shield,
   },
 ];
 
@@ -91,7 +92,9 @@ export default function FeaturedWork() {
         </AnimatedSection>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {PROJECTS.map((p, idx) => (
+          {PROJECTS.map((p, idx) => {
+            const Icon = p.icon;
+            return (
             <AnimatedSection key={p.title} delay={idx * 0.06}>
               <HolographicCard duration={6 + (idx % 3)} delay={(idx % 4) * 0.3}>
                 <Link
@@ -109,7 +112,7 @@ export default function FeaturedWork() {
                   <div className="relative">
                     <div className="flex items-center gap-3 mb-3">
                       <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg font-black"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                         style={{
                           background: `${p.accent}1a`,
                           border: `1px solid ${p.accent}40`,
@@ -117,7 +120,7 @@ export default function FeaturedWork() {
                           boxShadow: `0 0 14px ${p.accent}25`,
                         }}
                       >
-                        {p.emoji}
+                        <Icon className="w-5 h-5" />
                       </div>
                       <div className="min-w-0">
                         <h3
@@ -163,7 +166,8 @@ export default function FeaturedWork() {
                 </Link>
               </HolographicCard>
             </AnimatedSection>
-          ))}
+          );
+        })}
         </div>
 
         {/* Bottom CTA — link to full portfolio */}

@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 
 const SECTIONS = [
   { id: "hero", label: "البداية" },
-  { id: "stats", label: "الأرقام" },
-  { id: "current", label: "الآن" },
   { id: "work", label: "أعمال" },
+  { id: "stats", label: "الأرقام" },
   { id: "skills", label: "المهارات" },
   { id: "stack", label: "الأدوات" },
+  { id: "current", label: "الآن" },
   { id: "principles", label: "المبادئ" },
   { id: "timeline", label: "المسيرة" },
   { id: "faq", label: "الأسئلة" },

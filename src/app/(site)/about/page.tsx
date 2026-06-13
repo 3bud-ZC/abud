@@ -27,23 +27,16 @@ export default function AboutPage() {
 
       <SectionDivider variant="line" />
 
-      {/* ─────────── STATS ─────────── */}
-      <div id="stats" className="scroll-mt-32">
-        <StatsCounter />
-      </div>
-
-      <SectionDivider variant="gradient" height={40} />
-
-      {/* ─────────── CURRENTLY WORKING ─────────── */}
-      <div id="current" className="scroll-mt-32">
-        <CurrentlyWorking />
+      {/* ─────────── FEATURED WORK ─────────── */}
+      <div id="work" className="scroll-mt-32">
+        <FeaturedWork />
       </div>
 
       <SectionDivider variant="line" />
 
-      {/* ─────────── FEATURED WORK ─────────── */}
-      <div id="work" className="scroll-mt-32">
-        <FeaturedWork />
+      {/* ─────────── STATS ─────────── */}
+      <div id="stats" className="scroll-mt-32">
+        <StatsCounter />
       </div>
 
       <SectionDivider variant="gradient" height={40} />
@@ -61,6 +54,13 @@ export default function AboutPage() {
       </div>
 
       <SectionDivider variant="gradient" height={40} />
+
+      {/* ─────────── CURRENTLY WORKING ─────────── */}
+      <div id="current" className="scroll-mt-32">
+        <CurrentlyWorking />
+      </div>
+
+      <SectionDivider variant="line" />
 
       {/* ─────────── PRINCIPLES ─────────── */}
       <div id="principles" className="scroll-mt-32">
