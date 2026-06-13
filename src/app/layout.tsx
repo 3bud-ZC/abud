@@ -60,7 +60,12 @@ export const metadata: Metadata = {
   creator: "ABUD",
   publisher: "ABUD",
   metadataBase: new URL(getSiteBaseUrl()),
-  alternates: { canonical: getSiteBaseUrl() },
+  alternates: {
+    canonical: getSiteBaseUrl(),
+    types: {
+      "application/rss+xml": `${getSiteBaseUrl()}/feed.xml`,
+    },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico",       sizes: "any",      type: "image/x-icon" },
@@ -126,6 +131,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="alternate" type="application/rss+xml" title="مدونة ABUD" href={`${getSiteBaseUrl()}/feed.xml`} />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
