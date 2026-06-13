@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code2, Users, Calendar, Layers, Shield, type LucideIcon } from "lucide-react";
+import { Code2, Users, Calendar, Layers, Shield, BarChart3, type LucideIcon } from "lucide-react";
 import CountUp from "@/components/effects/CountUp";
 import FloatingOrbs from "@/components/effects/FloatingOrbs";
 import ScanLine from "@/components/effects/ScanLine";
@@ -25,19 +25,19 @@ const ACCENT_MAP: Record<string, string> = {
 };
 
 const CONTEXT_MAP: Record<string, string> = {
-  projects: "تنفيذات حقيقية عبر قطاعات مختلفة",
-  years: "خبرة عملية متراكمة وليست نظرية",
-  clients: "تجارب تعاون من فردي إلى شركات",
-  published_apps: "منتجات live وقابلة للاستخدام اليومي",
-  quality: "تركيز دائم على الاستقرار قبل التسليم",
+  projects: "مشاريع متنوعة عبر قطاعات مختلفة",
+  years: "خبرة متراكمة من تنفيذ حقيقي",
+  clients: "من أفراد لشركات ومنصات ناشئة",
+  published_apps: "منصات live مستخدمة يوميًا",
+  quality: "اختبار شامل قبل كل تسليم",
 };
 
 const OUTCOME_MAP: Record<string, string> = {
-  projects: "تنوع التنفيذ = قدرة أعلى على اختيار الحل الأنسب لمشروعك",
-  years: "خبرة متراكمة = قرارات أسرع وأخطاء أقل أثناء التنفيذ",
-  clients: "تجارب متعددة = فهم أدق للاحتياج التجاري قبل البناء",
-  published_apps: "منتجات منشورة = قدرة فعلية على تحويل الفكرة لشيء usable",
-  quality: "استقرار أعلى = تقليل الأعطال وتكلفة الصيانة بعد الإطلاق",
+  projects: "قدرة أعلى على اختيار الحل الأنسب",
+  years: "قرارات أسرع وأخطاء أقل",
+  clients: "فهم أدق للاحتياج التجاري",
+  published_apps: "تحويل الفكرة لمنتج فعلي",
+  quality: "استقرار وتقليل صيانة مستقبلية",
 };
 
 const STATS = TRUST_METRICS.map((metric) => ({
@@ -64,15 +64,19 @@ export default function StatsCounter() {
       <ScanLine duration={11} />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_50%,rgba(147,51,234,0.06)_0%,transparent_70%)]" />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <AnimatedSection className="text-center mb-10">
-          <h2 className="section-title mt-0 mb-3">نتائج مبنية على تنفيذ فعلي</h2>
+      <div className="relative z-10 max-w-5xl mx-auto">
+        <AnimatedSection className="text-center mb-12">
+          <span className="section-badge mb-5 mx-auto">
+            <BarChart3 className="w-2.5 h-2.5" />
+            الأرقام بتتكلم
+          </span>
+          <h2 className="section-title mt-4 mb-3">نتائج مبنية على تنفيذ فعلي</h2>
           <p className="section-subtitle text-center max-w-2xl mx-auto">
-            الأرقام هنا مش vanity metrics. كل رقم مرتبط بأثر واضح على سرعة التنفيذ، جودة الإطلاق، واستمرارية المشروع.
+            كل رقم هنا مرتبط بأثر واضح على سرعة التنفيذ وجودة الإطلاق.
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
           {STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
@@ -82,48 +86,48 @@ export default function StatsCounter() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -3, scale: 1.02 }}
-                className="relative rounded-2xl p-4 text-center group overflow-hidden"
+                whileHover={{ y: -4, scale: 1.03 }}
+                className="relative rounded-2xl p-5 text-center group overflow-hidden"
                 style={{
-                  background: "rgba(10,8,18,0.7)",
-                  backdropFilter: "blur(8px)",
-                  border: `1px solid ${stat.accent}25`,
-                  boxShadow: `0 4px 20px rgba(0,0,0,0.3)`,
+                  background: "linear-gradient(180deg, rgba(14,12,24,0.85), rgba(10,8,18,0.7))",
+                  backdropFilter: "blur(10px)",
+                  border: `1px solid ${stat.accent}30`,
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)`,
                 }}
               >
-                {/* Top holographic bar */}
+                {/* Top accent line */}
                 <motion.div
-                  className="absolute top-0 left-0 right-0 h-px"
-                  animate={{ opacity: [0.3, 0.9, 0.3] }}
+                  className="absolute top-0 left-4 right-4 h-[2px] rounded-full"
+                  animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 3, repeat: Infinity, delay: i * 0.3 }}
                   style={{
                     background: `linear-gradient(90deg, transparent 0%, ${stat.accent} 50%, transparent 100%)`,
                   }}
                 />
 
-                {/* Glow on hover */}
+                {/* Hover glow */}
                 <div
-                  className="absolute -top-10 -right-10 w-24 h-24 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  className="absolute -top-8 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(circle, ${stat.accent}40 0%, transparent 70%)`,
-                    filter: "blur(16px)",
+                    background: `radial-gradient(circle, ${stat.accent}35 0%, transparent 60%)`,
+                    filter: "blur(20px)",
                   }}
                 />
 
                 <div className="relative">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-3"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mx-auto mb-3"
                     style={{
-                      background: `linear-gradient(135deg, ${stat.accent}25, ${stat.accent}05)`,
-                      border: `1px solid ${stat.accent}40`,
-                      boxShadow: `inset 0 0 12px ${stat.accent}15`,
+                      background: `linear-gradient(135deg, ${stat.accent}22, ${stat.accent}08)`,
+                      border: `1px solid ${stat.accent}45`,
+                      boxShadow: `inset 0 0 14px ${stat.accent}18, 0 0 16px ${stat.accent}15`,
                     }}
                   >
-                    <Icon className="w-4 h-4" style={{ color: stat.accent }} />
+                    <Icon className="w-5 h-5" style={{ color: stat.accent }} />
                   </div>
 
                   <div
-                    className="font-black text-2xl md:text-3xl mb-1"
+                    className="font-black text-2xl md:text-[1.75rem] mb-1.5"
                     style={{
                       background: `linear-gradient(135deg, #ffffff, ${stat.accent})`,
                       WebkitBackgroundClip: "text",
@@ -132,24 +136,22 @@ export default function StatsCounter() {
                       letterSpacing: "-0.03em",
                     }}
                   >
-                    <>
-                      <CountUp to={stat.value} duration={1.6} />
-                      <span>{stat.suffix}</span>
-                    </>
+                    <CountUp to={stat.value} duration={1.6} />
+                    <span>{stat.suffix}</span>
                   </div>
 
-                  <div className="text-[11px] font-medium" style={{ color: "#9090b0" }}>
+                  <div className="text-xs font-semibold mb-1" style={{ color: "#c0c0dc" }}>
                     {stat.label}
                   </div>
-                  <div className="text-[10px] mt-1.5 leading-relaxed" style={{ color: "#7f7fa4" }}>
+                  <div className="text-[11px] leading-relaxed mb-3" style={{ color: "#7a7a9e" }}>
                     {stat.context}
                   </div>
                   <div
-                    className="text-[10px] mt-2.5 leading-relaxed px-2.5 py-2 rounded-lg"
+                    className="text-[11px] leading-relaxed px-3 py-2.5 rounded-xl"
                     style={{
-                      color: "#cbcbe6",
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.07)",
+                      color: "#d8d8ec",
+                      background: `linear-gradient(135deg, ${stat.accent}0d, ${stat.accent}05)`,
+                      border: `1px solid ${stat.accent}20`,
                     }}
                   >
                     {stat.outcome}
@@ -160,9 +162,9 @@ export default function StatsCounter() {
           })}
         </div>
 
-        <AnimatedSection delay={0.2} className="text-center mt-8">
-          <p className="text-xs" style={{ color: "#8d8dae" }}>
-            لو هدفك مجرد شكل، فيه حلول كثيرة. لو هدفك أثر حقيقي على التشغيل والمبيعات، هنا تبدأ القيمة.
+        <AnimatedSection delay={0.2} className="text-center mt-10">
+          <p className="text-xs" style={{ color: "#7a7a9e" }}>
+            الأرقام دي مش للعرض — كل رقم وراه مشروع فعلي وعميل اشتغلت معاه.
           </p>
         </AnimatedSection>
       </div>
