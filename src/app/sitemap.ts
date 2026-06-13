@@ -1,11 +1,9 @@
-import { MetadataRoute } from "next";
-import { prisma } from "@/lib/prisma";
+import type { MetadataRoute } from "next";
 import { SEED_POSTS } from "@/data/blog-seed";
 import { PRIMARY_SERVICES } from "@/data/services";
 import { siteUrl } from "@/lib/site-url";
 
-export const dynamic = "force-static";
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -22,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: siteUrl("/terms"),      lastModified: new Date(), changeFrequency: "yearly", priority: 0.35 },
   ];
 
-  // Robust fallbacks: seed data is always included so the sitemap never errors out
+  // Seed data is always included so the sitemap never errors out
   const seedBlogRoutes: MetadataRoute.Sitemap = SEED_POSTS.map((s) => ({
     url: siteUrl(`/blog/${s.slug}`),
     lastModified: new Date(s.publishedAt),
@@ -37,7 +35,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.72,
   }));
 
-  // Portfolio slugs from seed data (canonical projects)
   const portfolioSlugs = [
     "abud-platform",
     "3bud-erp",
@@ -55,53 +52,59 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
   }));
 
-  let blogRoutes: MetadataRoute.Sitemap = [];
-  let portfolioRoutes: MetadataRoute.Sitemap = [];
-  let serviceRoutes: MetadataRoute.Sitemap = [];
+  let dbBlogRoutes: MetadataRoute.Sitemap = [];
+  let dbPortfolioRoutes: MetadataRoute.Sitemap = [];
+  let dbServiceRoutes: MetadataRoute.Sitemap = [];
   const dbBlogSlugs = new Set<string>();
 
-  try {
-    const posts = await prisma.blogPost.findMany({
-      where: { status: "published" },
-      select: { slug: true, updatedAt: true },
-      orderBy: { updatedAt: "desc" },
-    });
-    blogRoutes = posts.map((p) => {
-      dbBlogSlugs.add(p.slug);
-      return {
-        url: siteUrl(`/blog/${p.slug}`),
+  // Only try DB if DATABASE_URL is available (avoids Prisma init crash during static generation)
+  if (process.env.DATABASE_URL) {
+    try {
+      // Dynamic import prevents PrismaClient from being instantiated at module load time
+      const { prisma } = await import("@/lib/prisma");
+
+      const posts = await prisma.blogPost.findMany({
+        where: { status: "published" },
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      dbBlogRoutes = posts.map((p) => {
+        dbBlogSlugs.add(p.slug);
+        return {
+          url: siteUrl(`/blog/${p.slug}`),
+          lastModified: p.updatedAt,
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+        };
+      });
+
+      const projects = await prisma.portfolioProject.findMany({
+        where: { status: "published" },
+        select: { slug: true, updatedAt: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      dbPortfolioRoutes = projects.map((p) => ({
+        url: siteUrl(`/portfolio/${p.slug}`),
         lastModified: p.updatedAt,
+        changeFrequency: "monthly" as const,
+        priority: 0.65,
+      }));
+
+      const services = await prisma.service.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+        orderBy: [{ order: "asc" }, { updatedAt: "desc" }],
+      });
+
+      dbServiceRoutes = services.map((service) => ({
+        url: siteUrl(`/services/${service.slug}`),
+        lastModified: service.updatedAt,
         changeFrequency: "weekly" as const,
-        priority: 0.8,
-      };
-    });
-
-    const projects = await prisma.portfolioProject.findMany({
-      where: { status: "published" },
-      select: { slug: true, updatedAt: true },
-      orderBy: { updatedAt: "desc" },
-    });
-    portfolioRoutes = projects.map((p) => ({
-      url: siteUrl(`/portfolio/${p.slug}`),
-      lastModified: p.updatedAt,
-      changeFrequency: "monthly" as const,
-      priority: 0.65,
-    }));
-
-    const services = await prisma.service.findMany({
-      where: { isActive: true },
-      select: { slug: true, updatedAt: true },
-      orderBy: [{ order: "asc" }, { updatedAt: "desc" }],
-    });
-
-    serviceRoutes = services.map((service) => ({
-      url: siteUrl(`/services/${service.slug}`),
-      lastModified: service.updatedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.72,
-    }));
-  } catch {
-    // DB unreachable — fall back entirely to seed data (already prepared above)
+        priority: 0.72,
+      }));
+    } catch {
+      // DB unreachable — seed data below covers everything
+    }
   }
 
   // Deduplicate: use DB routes when present, otherwise seed routes
@@ -110,23 +113,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     (s) => !dbBlogSlugsArray.some((slug) => s.url.endsWith(`/blog/${slug}`))
   );
 
-  const dbPortfolioSlugs = portfolioRoutes.map((p) => p.url.split("/").pop());
+  const dbPortfolioSlugs = dbPortfolioRoutes.map((p) => p.url.split("/").pop());
   const dedupedSeedPortfolio = seedPortfolioRoutes.filter(
     (s) => !dbPortfolioSlugs.some((slug) => s.url.endsWith(`/portfolio/${slug}`))
   );
 
-  const dbServiceSlugs = serviceRoutes.map((s) => s.url.split("/").pop());
+  const dbServiceSlugs = dbServiceRoutes.map((s) => s.url.split("/").pop());
   const dedupedSeedService = seedServiceRoutes.filter(
     (s) => !dbServiceSlugs.some((slug) => s.url.endsWith(`/services/${slug}`))
   );
 
   return [
     ...staticRoutes,
-    ...blogRoutes,
+    ...dbBlogRoutes,
     ...dedupedSeedBlog,
-    ...portfolioRoutes,
+    ...dbPortfolioRoutes,
     ...dedupedSeedPortfolio,
-    ...serviceRoutes,
+    ...dbServiceRoutes,
     ...dedupedSeedService,
   ];
 }
